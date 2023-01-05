@@ -24,8 +24,11 @@ namespace ft
     The template function needs to findd the most specific category of its iterator
     argument so that it can use the most efficient algorithm at compile time.
     */
-
-    struct random_access_iterator_tag { };
+    struct input_iterator_tag { };
+    struct output_iterator_tag { };
+    struct forward_iterator_tag : public input_iterator_tag { };
+    struct bidirectional_iterator_tag : public forward_iterator_tag { };
+    struct random_access_iterator_tag : public bidirectional_iterator_tag { };
     /*
     Member types of iterator_traits
     */
@@ -52,6 +55,18 @@ namespace ft
         typedef T& reference;
         typedef ft::random_access_iterator_tag iterator_category;
     };
+    /*
+    For const T* specialization member types
+    */
+   template<class T>
+   struct iterator_traits<const T*>
+   {
+        typedef T value_type;
+        typedef ptrdiff_t difference_type;
+        typedef const T* pointer;
+        typedef const T& reference;
+        typedef ft::random_access_iterator_tag iterator_category;
+   };
 }
 
 #endif
