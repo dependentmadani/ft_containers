@@ -56,6 +56,21 @@ namespace ft
             ~vector();
 
             vector& operator= (const vector& other );
+
+            reference at ( size_type pos );
+            const_reference at ( size_type pos ) const;
+
+            reference operator[] (size_type pos );
+            const_reference operator[] ( size_type pos ) const;
+
+            reference front();
+            const_reference front() const;
+
+            reference back();
+            const_reference back() const;
+
+            T* data();
+            const T* data() const;
             
             iterator begin();
             const_iterator begin() const;
