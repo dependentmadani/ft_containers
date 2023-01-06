@@ -23,8 +23,6 @@ namespace ft
     template<class T, class Allocator = std::allocator<T>>
     class vector
     {
-        private:
-
         public:
             typedef T                                                   value_type;
             typedef Allocator                                           allocator_type;
@@ -38,10 +36,15 @@ namespace ft
             typedef typename ft::random_access_iterator<const_pointer>  const_iterator;
             typedef typename ft::reverse_iterator<iterator>             reverse_iterator;
             typedef typename ft::reverse_iterator<const_iterator>       const_reverse_iterator;
-    
+        protected:
+            pointer                                                     _begin;
+            pointer                                                     _end;
+            
+        public:
+            
             //The default constructor. Creates a vector of length zero. The vector will use the 
             //allocator alloc for all storage management.
-            explicit vector( const allocator_type& alloc = allocator_type()) {};
+            explicit vector( const allocator_type& alloc = allocator_type()):_begin(nullptr), _end(nullptr)  {};
             //Creates a vector of length count, containing n copies of the default value for type T.
             //Requires that T have a default constructor. The vector will use the allocator Allocator()
             //for all storage management.
