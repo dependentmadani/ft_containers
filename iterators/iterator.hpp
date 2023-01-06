@@ -14,11 +14,12 @@
 # define IERATOR_HPP
 
 # include <cstddef>
+#include <algorithm>
 
 namespace ft
 {
     template<class It>
-    class random_access_iterator
+    class random_access_iterator: public ft::iterator<ft::random_access_iterator_tag>
     {
         private:
             It *it;
