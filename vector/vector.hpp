@@ -39,16 +39,35 @@ namespace ft
         protected:
             pointer                                                     _begin;
             pointer                                                     _end;
-            
+            std::allocator<T>                                           _allocator;
+            size_type                                                   _capacity;
+            size_type                                                   _size;
         public:
             
             //The default constructor. Creates a vector of length zero. The vector will use the 
             //allocator alloc for all storage management.
-            explicit vector( const allocator_type& alloc = allocator_type()):_begin(nullptr), _end(nullptr)  {};
+            explicit vector( const allocator_type& alloc = allocator_type())
+            {
+                _begin = nullptr;
+                _end = nullptr;
+                _allocator = alloc;
+                _capacity = 0;
+                _size = 0;
+            };
             //Creates a vector of length count, containing n copies of the default value for type T.
             //Requires that T have a default constructor. The vector will use the allocator Allocator()
             //for all storage management.
-            explicit vector( size_type count, const T& value = T(), const Allocator& alloc = Allocator());
+            explicit vector( size_type count, const T& value = T(), const Allocator& alloc = Allocator())
+            {
+                if (count > max_size())
+                    throw std::length_error("vector");
+                _allocator = alloc;
+                pointer.allocate(count);
+                for (int i =0; i < count; i++)
+                    _allocate.construct(pointer + i, value);
+                _capacity = count;
+                _size = count;
+            }
             //Creates a vector of length last - first, filled with all values obtained by dereferencing
             //the InputIt oon the range [first, last). The vector will use the allocator alloc for all storage management.
             template<class InputIt>
