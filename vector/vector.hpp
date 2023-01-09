@@ -83,7 +83,8 @@ namespace ft
             //Creates a vector of length last - first, filled with all values obtained by dereferencing
             //the InputIt oon the range [first, last). The vector will use the allocator alloc for all storage management.
             template<class InputIt>
-            vector( InputIt first, InputIt last, const Allocator& alloc = Allocator())
+            vector( InputIt first, InputIt last, const Allocator& alloc = Allocator(),
+            typename ft::enable_if<ft::is_integral<T>::value, T>::type* = nullptr)
             {
                 _data = nullptr;
                 _begin = nullptr;
