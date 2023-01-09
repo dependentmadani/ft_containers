@@ -14,9 +14,11 @@
 # define VECTOR_HPP
 
 # include <memory>
+# include <stdexcept>
 # include "../iterators/iterator.hpp"
 # include "../iterators/iterator_traits.hpp"
 # include "../iterators/reverse_iterator.hpp"
+# include "../utility.hpp"
 
 namespace ft
 {
@@ -39,6 +41,7 @@ namespace ft
         protected:
             pointer                                                     _begin;
             pointer                                                     _end;
+            pointer                                                     _data;
             std::allocator<T>                                           _allocator;
             size_type                                                   _capacity;
             size_type                                                   _size;
@@ -48,6 +51,7 @@ namespace ft
             //allocator alloc for all storage management.
             explicit vector( const allocator_type& alloc = allocator_type())
             {
+                _data = nullptr;
                 _begin = nullptr;
                 _end = nullptr;
                 _allocator = alloc;
@@ -59,21 +63,49 @@ namespace ft
             //for all storage management.
             explicit vector( size_type count, const T& value = T(), const Allocator& alloc = Allocator())
             {
-                if (count > max_size())
-                    throw std::length_error("vector");
+                _data = nullptr;
+                _begin = nullptr;
+                _end = nullptr;
+                _size = 0;
+                _capacity = 0;
                 _allocator = alloc;
-                pointer.allocate(count);
+                if (count > max_size())
+                    throw std::length_error("length error");
+                _data = _allocator.allocate(count);
+                _begin = _data;
+                if (_data)
                 for (int i =0; i < count; i++)
-                    _allocate.construct(pointer + i, value);
+                    _allocate.construct(_data + i, value);
+                _end = _data + count;
                 _capacity = count;
                 _size = count;
             }
             //Creates a vector of length last - first, filled with all values obtained by dereferencing
             //the InputIt oon the range [first, last). The vector will use the allocator alloc for all storage management.
             template<class InputIt>
-            vector( InputIt first, InputIt last, const Allocator& alloc = Allocator());
+            vector( InputIt first, InputIt last, const Allocator& alloc = Allocator())
+            {
+                _data = nullptr;
+                _begin = nullptr;
+                _end = nullptr;
+                _size = 0;
+                _capacity = 0;
+                _allocator = alloc;
+                _capacity = difference_type(last - first);
+                _data = _allocator.allocate(_size);
+                for (; first != last; ++first)
+                {
+                    _allocate.construct(_data + size, *first);
+                    _size++;
+                }
+                _begin = first;
+                _end = last;
+            }
             // Creates a copy of other
-            vector( const vector& other);
+            vector( const vector& other)
+            {
+                vector(other.begin(), other.end(), Allocator());
+            }
             // destructs the vector
             ~vector();
 
