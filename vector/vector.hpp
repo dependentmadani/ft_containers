@@ -84,7 +84,7 @@ namespace ft
             //the InputIt oon the range [first, last). The vector will use the allocator alloc for all storage management.
             template<class InputIt>
             vector( InputIt first, InputIt last, const Allocator& alloc = Allocator(),
-            typename ft::enable_if<ft::is_integral<T>::value, T>::type* = nullptr)
+            typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = nullptr)
             {
                 _data = nullptr;
                 _begin = nullptr;
@@ -105,38 +105,134 @@ namespace ft
             // Creates a copy of other
             vector( const vector& other)
             {
-                vector(other.begin(), other.end(), Allocator());
+                *this = other;
             }
             // destructs the vector
-            ~vector();
+            ~vector()
+            {
+                if (_size > 0)
+                {
+                    for (int i = 0; i > _size; i++)
+                        _allocator.destroy(_data + i);
+                }
+                if (_begin != nullptr)
+                    _allocator.deallocate(_data, _size);
+                _size = 0;
+                _capacity = 0;
+            }
 
-            vector& operator= (const vector& other );
+            vector& operator= (const vector& other )
+            {
+                if (*this != other)
+                {
+                    for (int i = 0; i > _size; i++)
+                        _allocator.destroy(_data + i);
+                    if (_begin != nullptr)
+                        _allocator.deallocate(_data, _size);
+                    _size = 0;
+                    _capacity = 0;
+                    _allocator = Allocator();
+                    _data = _allocator.allocate(other.size());
+                    iterator it = other.begin();
+                    _begin = it;
+                    for (; it != other.end(); it++)
+                    {
+                        _allocator.construct(_data + i, it);
+                        _size++;
+                    }
+                    _end= it;
+                    _capacity = _size;
+                }
+                return *this;
+            }
 
-            reference at ( size_type pos );
-            const_reference at ( size_type pos ) const;
+            reference at ( size_type pos )
+            {
+                if (pos >= size())
+                    std::out_of_range("position out of range");
+                return (this->_begin[pos]);
+            }
+            const_reference at ( size_type pos ) const
+            {
+                if (pos >= size())
+                    std::out_of_range("position out of range");
+                return (this->_begin[pos]);
+            }
 
-            reference operator[] (size_type pos );
-            const_reference operator[] ( size_type pos ) const;
+            reference operator[] (size_type pos )
+            {
+                return (this->_begin[pos]);
+            }
+            const_reference operator[] ( size_type pos ) const
+            {
+                return (this->_begin[pos]);
+            }
 
-            reference front();
-            const_reference front() const;
+            reference front()
+            {
+                return *(this->_begin);
+            }
+            const_reference front() const
+            {
+                return *(this->_begin);
+            }
 
-            reference back();
-            const_reference back() const;
+            reference back()
+            {
+                return *(this->_end - 1);
+            }
+            const_reference back() const
+            {
 
-            T* data();
-            const T* data() const;
+                return *(this->_end - 1);
+            }
+
+            T* data()
+            {
+                return this->_data;
+            }
+            const T* data() const
+            {
+                return this->_data;
+            }
             
-            iterator begin();
-            const_iterator begin() const;
-            iterator end();
-            const_iterator end() const;
-            reverse_iterator rbegin();
-            const_reverse_iterator rbegin() const;
-            reverse_iterator rend();
-            const_reverse_iterator rend() const;
+            iterator begin()
+            {
+                return iterator(this->_begin);
+            }
+            const_iterator begin() const
+            {
+                return const_iterator(this->_begin);
+            }
+            iterator end()
+            {
+                return iterator(this->_end);
+            }
+            const_iterator end() const
+            {
+                return const_iterator(this->_end);
+            }
+            reverse_iterator rbegin()
+            {
+                return reverse_iterator(end());
+            }
+            const_reverse_iterator rbegin() const
+            {
+                return const_reverse_iterator(end());
+            }
+            reverse_iterator rend()
+            {
+                return reverse_iterator(begin());
+            }
+            const_reverse_iterator rend() const
+            {
+                return const_reverse_iterator(begin());
+            }
 
-            void assign( size_type count, const T& value);
+            void assign( size_type count, const T& value)
+            {
+                
+            }
             template<class InputIt>
             void assign( InputIt first, InputIt last);
 
