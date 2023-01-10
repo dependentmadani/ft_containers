@@ -295,11 +295,35 @@ namespace ft
 
             void reserve( size_type new_cap )
             {
-                
+                if (new_cap > this->max_size())
+                    std::length_error("vector");
+                if (new_cap > _capacity)
+                {
+                    T* newElements = _allocator.allocate(new_cap);
+                    for (int i = 0; i < this->size(); i++)
+                    {
+                        newElements[i] = _begin[i];
+                    }
+                    for (int i = 0; i < this->size(); i++)
+                        _allocator.destroy(_data + i);
+                    _allocator.deallocate(_data, this->size());
+                    _data = newElements;
+                    _begin = _data;
+                    _end = _data + this->size();
+                    _capacity = new_cap;
+                }
             }
-            size_type capacity() const;
+            size_type capacity() const
+            {
+                return _capacity;
+            }
 
-            void clear();
+            void clear()
+            {
+                for (int i = 0; i < this->size(); ++i)
+                    _allocator.destroy(_data + i);
+                _size = 0;
+            }
 
             //insert value before pos, It returns iterator pointing to the inserted value
             iterator insert ( const_iterator pos, const T& value );
