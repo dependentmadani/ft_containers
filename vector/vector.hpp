@@ -74,7 +74,7 @@ namespace ft
                 _data = _allocator.allocate(count);
                 _begin = _data;
                 if (_data)
-                for (int i =0; i < count; i++)
+                for (int i =0; i < count; ++i)
                     _allocate.construct(_data + i, value);
                 _end = _data + count;
                 _capacity = count;
@@ -94,13 +94,13 @@ namespace ft
                 _allocator = alloc;
                 _capacity = difference_type(last - first);
                 _data = _allocator.allocate(_size);
+                _begin = _data;
                 for (; first != last; ++first)
                 {
-                    _allocate.construct(_data + size, *first);
-                    _size++;
+                    _allocate.construct(_data + _size, *first);
+                    ++_size;
                 }
-                _begin = first;
-                _end = last;
+                _end = _data + _size;
             }
             // Creates a copy of other
             vector( const vector& other)
@@ -119,6 +119,8 @@ namespace ft
                     _allocator.deallocate(_data, _size);
                 _size = 0;
                 _capacity = 0;
+                _begin = nullptr;
+                _end = nullptr;
             }
 
             vector& operator= (const vector& other )
@@ -138,7 +140,7 @@ namespace ft
                     for (; it != other.end(); it++)
                     {
                         _allocator.construct(_data + i, it);
-                        _size++;
+                        ++_size;
                     }
                     _end= it;
                     _capacity = _size;
@@ -231,19 +233,70 @@ namespace ft
 
             void assign( size_type count, const T& value)
             {
-                
+                if (this->size() > 0)
+                {
+                    for (int i = 0; i < this->size(); i++)
+                        _allocator.destroy(_data + i);
+                    _allocator.deallocate(_data, this->size());
+                }
+                _allocator = Allocator();
+                _data = _allocator.allocate(count);
+                _begin = _data;
+                _capacity = count;
+                _size = 0;
+                for (int i = 0; i < count; i++)
+                {
+                    _allocator.construct(_data + i, value);
+                    ++_size;
+                }
+                _end = _data + _size;
             }
             template<class InputIt>
-            void assign( InputIt first, InputIt last);
+            void assign( InputIt first, InputIt last,
+            typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = nullptr)
+            {
+                if (this->size() > 0)
+                {
+                    for (int i = 0; i < this->size(); i++)
+                        _allocator.destroy(_data + i);
+                    _allocator.deallocate(_data, this->size());
+                }
+                _allocator = Allocator();
+                _data = _allocator.allocate(difference_type(last - first));
+                _begin = _data;
+                _capacity = difference_type(last - first);
+                _size = 0;
+                for (; first != last; ++first)
+                {
+                    _allocator.construct(_data + _size, *first);
+                    ++_size;
+                }
+                _end = _data + _size;
+            }
 
-            allocator_type get_allocator() const;
+            allocator_type get_allocator() const
+            {
+                return this->_allocator;
+            }
 
-            bool empty() const;
+            bool empty() const
+            {
+                return (this->begin() == this->end());
+            }
 
-            size_type size() const;
-            size_type max_size() const;
+            size_type size() const
+            {
+                return this->_size;
+            }
+            size_type max_size() const
+            {
+                return this->_allocator.max_size();
+            }
 
-            void reserve( size_type new_cap );
+            void reserve( size_type new_cap )
+            {
+                
+            }
             size_type capacity() const;
 
             void clear();
