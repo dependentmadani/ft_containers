@@ -326,60 +326,239 @@ namespace ft
             }
 
             //insert value before pos, It returns iterator pointing to the inserted value
-            iterator insert ( const_iterator pos, const T& value );
+            iterator insert ( iterator pos, const T& value )
+            {
+                size_t position = pos - this->begin();
+                
+                insert(pos, 1, position);
+                return iterator(this->begin() + position);
+            }
             //insert count copies of the value before pos, it returns iterator pointing to the first element
             //inserted, or pos if count == 0.
-            iterator insert ( const_iterator pos, size_type count, const T& value);
+            void insert ( iterator pos, size_type count, const T& value)
+            {
+                size_t old_position = this->end() - this->begin();
+                size_t position = pos - this->begin();
+
+                if ( count == 0 )
+                    return ;
+                resize(_size + count);
+                iterator old_end = old_position + this->begin();
+                pos = position + this->begin();
+                iterator new_end = this->end();
+                while (old_end != pos)
+                    *--new_end = *--old_end;
+                
+                while (count > 0)
+                {
+                    *pos++ = val;
+                    count--;
+                }
+            }
             //insert elements from range [first,last) before pos
             //this overload has the same effect as ovverload of previous function if InputIt is an intergral type.
             //The behavior is undefined if first and last are iterators into *this.
             //It returns iteratorpoiting to the first element inserted, or pos if first == last.
             template<class InputIt>
-            iterator insert ( const_iterator pos, InputIt firstm InputUt last );
+            iterator insert ( iterator pos, InputIt first, InputUt last,
+            typename if_enable<!ft::is_integral<InputIt>::value, InputIt>::type* = nullptr)
+            {
+                size_t old_position = this->end() - this->begin();
+                size_t position = pos - this->begin();
+
+                if ( count == 0 )
+                    return ;
+                difference_type len = last - first;
+                resize(_size + len);
+                iterator old_end = old_position + this->begin();
+                pos = position + this->begin();
+                iterator new_end = this->end();
+                while (old_end != pos)
+                    *--new_end = *--old_end;
+                
+                for (; first != last; ++first)
+                    *pos++ = *first;
+            }
 
             //removes the element at pos
-            iterator erase( iterator pos );
+            iterator erase( iterator pos )
+            {
+                return (this->erase(pos, pos + 1));
+            }
             //removes the elements in the range [first, last)
-            iterator erase( iterator first , iterator last );
+            iterator erase( iterator first , iterator last )
+            {
+                iterator new_last = first;
+                size_t size_tmp = _size - (difference_type)(last - first);
+                T tmp;
 
-            void push_back( const T& value );
+                while (last != end())
+                {
+                    tmp = *last;
+                    *last = *first;
+                    *first = tmp;
+                    last++;
+                    first++;
+                }
+                _size = size_tmp;
+                return new_last;
 
-            void pop_back();
+            }
+
+            void push_back( const T& value )
+            {
+                if (_size >= _capacity)
+                {
+                    if (_size == 0)
+                        reserve(1);
+                    else
+                        reserve(_size * 2);
+                }
+                _allocator.construct(&_begin[_size], val);
+                _size++;
+            }
+
+            void pop_back()
+            {
+                if (!empty())
+                {
+                    _allocator.destroy(&_begin[_size - 1]);
+                    _size--;
+                }
+            }
 
             //resize the container to contain count elements.
-            void resize( size_type count, T value = T() );
+            void resize( size_type count, T value = T() )
+            {
+                size_t new_capacity;
 
-            void swap ( vector& other );
+                if (count < _size)
+                {
+                    while (_size != count)
+                        this->pop_back();
+                }
+                else (count > size)
+                {
+                    if (n > _capacity)
+                    {
+                        if (_capacity == 0)
+                            new_capacity = 1;
+                        else
+                            new_capacity = _capacity * 2;
+                        if (new_capacity < n)
+                            new_capacity = n;
+                        this->reserve(new_capacity);
+                    }
+                    while (_size != count)
+                    {
+                        _allocator.construct(&_begin[_size], val);
+                        _size++;
+                    }
+                }
+            }
+
+            void swap ( vector& other )
+            {
+                pointer tmp_begin = other._begin;
+                pointer tmp_end = other._end;
+                pointer tmp_data = other._data;
+                allocator_type tmp_allocator = other._allocator;
+                size_type tmp_capacity = other._capacity;
+                size_type tmp_size = other._size;
+
+                other._begin = _begin;
+                other._end = _end;
+                other._data = _data;
+                other._allocator = _allocator;
+                other._capacity = _capacity;
+                other._size = _size;
+
+                _begin = tmp_begin;
+                _end = tmp_end;
+                _data = tmp_data;
+                _allocator = tmp_allocator;
+                _capacity = tmp_capacity;
+                _size = tmp_size;
+                
+            }
     };
 
     template<class T , class Alloc>
     inline bool operator== (const ft::vector<T, Alloc>& lhs,
-                            const ft::vector<T,Alloc>&rhs);
+                            const ft::vector<T,Alloc>& rhs)
+    {
+        size_t i = 0;
+
+        if (lhs.size() != rhs.size())
+            return false;
+        while (i < rhs.size())
+        {
+            if (lhs[i] != rhs[i])
+                return false;
+            i++;
+        }
+        return true;
+    }
 
     template<class T, class Alloc>
     inline bool operator!= (const ft::vector<T, Alloc>& lhs,
-                            const ft::vector<T,Alloc>&rhs);
+                            const ft::vector<T,Alloc>& rhs)
+    {
+        if (lhs == rhs)
+            return false;
+        return true;
+    }
     
     template<class T, class Alloc>
     inline bool operator< (const ft::vector<T, Alloc>& lhs,
-                            const ft::vector<T,Alloc>&rhs);
+                            const ft::vector<T,Alloc>& rhs)
+    {
+        if (lhs.size() < rhs.size())
+            return true;
+        else if (lhs.size() > rhs.size())
+            return false;
+        for (size_t i = 0; i < lhs.size(); i++)
+        {
+            if (lhs[i] < rhs[i])
+                return true;
+            else if (lhs[i] > rhs[i])
+                return false;
+        }
+        return false;
+    }
     
     template<class T, class Alloc>
     inline bool operator<= (const ft::vector<T, Alloc>& lhs,
-                            const ft::vector<T,Alloc>&rhs);
+                            const ft::vector<T,Alloc>& rhs)
+    {
+        if (lhs < rhs)
+            return false;
+        return true;
+    }
     
     template<class T, class Alloc>
     inline bool operator> (const ft::vector<T, Alloc>& lhs,
-                            const ft::vector<T,Alloc>&rhs);
+                            const ft::vector<T,Alloc>& rhs)
+    {
+        if (rhs < lhs)
+            return true;
+        return false;
+    }
 
     template<class T, class Alloc>
     inline bool operator>= (const ft::vector<T, Alloc>& lhs,
-                            const ft::vector<T,Alloc>&rhs);
+                            const ft::vector<T,Alloc>& rhs)
+    {
+        if (lhs > rhs)
+            return false;
+        return true;
+    }
     
     template<class T, class Alloc>
-    inline void swap (ft::vector<T, Alloc>& lhs, ft::vector<T, Alloc>& rhs);
+    inline void swap (ft::vector<T, Alloc>& lhs, ft::vector<T, Alloc>& rhs)
+    {
+        lhs.swap(rhs);
+    }
 }
-
-#include <vector>
 
 #endif
