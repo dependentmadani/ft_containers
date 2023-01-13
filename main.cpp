@@ -39,14 +39,13 @@ int		main(void)
 	}
 	printSize(vct);
 
-	std::cout << "###############################################" << std::endl;
 	TESTED_NAMESPACE::vector<TESTED_TYPE> const vct_c(vct);
 
 	std::cout << "front(): " << vct.front() << " " << vct_c.front() << std::endl;
 	std::cout << "back(): " << vct.back() << " " <<  vct_c.back() << std::endl;
 
 	for (unsigned long int i = 0; i < vct_c.size(); ++i)
-		std::cout << "vct_c.at(): " << vct_c.at(i) << std::endl;
+		std::cout << "vct_c.at(" << i << "): " << vct_c.at(i) << std::endl;
 	try {
 		std::cout << vct_c.at(10) << std::endl;
 	}

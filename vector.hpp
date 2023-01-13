@@ -150,13 +150,13 @@ namespace ft
             reference at ( size_type pos )
             {
                 if (pos >= size())
-                    std::out_of_range("position out of range");
+                    throw std::out_of_range("position out of range");
                 return (this->_begin[pos]);
             }
             const_reference at ( size_type pos ) const
             {
                 if (pos >= size())
-                    std::out_of_range("position out of range");
+                    throw std::out_of_range("position out of range");
                 return (this->_begin[pos]);
             }
 
