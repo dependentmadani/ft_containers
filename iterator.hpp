@@ -34,7 +34,7 @@ namespace ft
             random_access_iterator(const random_access_iterator& rhs) { it = rhs.it; };
             random_access_iterator(pointer ptr): it(ptr) {};
             random_access_iterator& operator=(const random_access_iterator& rhs) { *it = rhs.it; return *this; };
-            ~random_access_iterator() { delete it; };
+            ~random_access_iterator() { };
             pointer get_private_pointer(void) const {return it;};
 
             reference operator*() const { return *it; };

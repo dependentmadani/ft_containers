@@ -19,6 +19,7 @@
 # include "iterator_traits.hpp"
 # include "reverse_iterator.hpp"
 # include "utility.hpp"
+#include <iostream>
 
 namespace ft
 {
@@ -136,13 +137,13 @@ namespace ft
                     _allocator = Allocator();
                     _data = _allocator.allocate(other.size());
                     iterator it = other.begin();
-                    _begin = it;
+                    _begin = _data;
                     for (; it != other.end(); it++)
                     {
                         _allocator.construct(_data + _size, it);
                         ++_size;
                     }
-                    _end= it;
+                    _end= _data + _size;
                     _capacity = _size;
                 }
                 return *this;
@@ -251,27 +252,23 @@ namespace ft
                 }
                 _end = _data + _size;
             }
+            
             template<class InputIt>
             void assign( InputIt first, InputIt last,
             typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = NULL)
             {
-                if (this->size() > 0)
+                size_t size = 0;
+                InputIt tmp = first;
+
+                while (tmp != last)
                 {
-                    for (size_t i = 0; i < this->size(); i++)
-                        _allocator.destroy(_data + i);
-                    _allocator.deallocate(_data, this->size());
+                    tmp++;
+                    size++;
                 }
-                _allocator = Allocator();
-                _data = _allocator.allocate(difference_type(last - first));
-                _begin = _data;
-                _capacity = difference_type(last - first);
-                _size = 0;
+                this->clear();
+                this->reserve(size);
                 for (; first != last; ++first)
-                {
-                    _allocator.construct(_data + _size, *first);
-                    ++_size;
-                }
-                _end = _data + _size;
+                    this->push_back(*first);
             }
 
             allocator_type get_allocator() const
@@ -412,8 +409,9 @@ namespace ft
                     else
                         reserve(_size * 2);
                 }
-                _allocator.construct(&_begin[_size], value);
+                _allocator.construct(&_data[_size], value);
                 _size++;
+                _end = _begin + _size;
             }
 
             void pop_back()
