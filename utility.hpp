@@ -15,6 +15,22 @@
 
 namespace ft
 {
+    const                         /* this is a const object...     */
+    class nullptr_t
+    {
+    public:
+       template<class T>          /* convertible to any type       */
+       operator T*() const        /* of null non-member            */
+          { return 0; }           /* pointer...                    */
+
+       template<class C, class T> /* or any type of null           */
+          operator T C::*() const /* member pointer...             */
+          { return 0; }   
+
+    private:
+       void operator&() const;    /* Can't take address of nullptr */
+
+    } nullptr = {};
     /*
     enable_if
     It is used to allow function overloading based on
@@ -35,15 +51,13 @@ namespace ft
     template <typename T> struct is_integral
     {
         static bool const value = false;
-        operator value_type()
-        {
-            return value;
-        };
+        // operator value_type()
+        // {
+        //     return value;
+        // };
     };
     template <> struct is_integral<bool> { static bool const value = true;};
     template <> struct is_integral<char> { static bool const value = true;};
-    template <> struct is_integral<char16_t> { static bool const value = true;};
-    template <> struct is_integral<char32_t> { static bool const value = true;};
     template <> struct is_integral<wchar_t> { static bool const value = true;};
     template <> struct is_integral<signed char> { static bool const value = true;};
     template <> struct is_integral<short int> { static bool const value = true;};
@@ -105,7 +119,7 @@ namespace ft
         {
             if (*first1 < *first2)
                 return true;
-            if (*first 2 < *first1)
+            if (*first2 < *first1)
                 return false;
         }
         return (first1 == last1) && (first2 == last2);
@@ -155,7 +169,7 @@ namespace ft
     template<class T1, class T2>
     inline bool operator== (const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs)
     {
-        return (lhs.first == rhs.first && lhs.second == rhs.second)
+        return (lhs.first == rhs.first && lhs.second == rhs.second);
     }
 
     template<class T1, class T2>

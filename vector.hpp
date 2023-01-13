@@ -15,29 +15,29 @@
 
 # include <memory>
 # include <stdexcept>
-# include "iterators/iterator.hpp"
-# include "iterators/iterator_traits.hpp"
-# include "iterators/reverse_iterator.hpp"
+# include "iterator.hpp"
+# include "iterator_traits.hpp"
+# include "reverse_iterator.hpp"
 # include "utility.hpp"
 
 namespace ft
 {
-    template<class T, class Allocator = std::allocator<T>>
+    template<class T, class Allocator = std::allocator<T> >
     class vector
     {
         public:
-            typedef T                                                   value_type;
-            typedef Allocator                                           allocator_type;
-            typedef size_t                                              size_type;
-            typedef ptrdiff_t                                           difference_type;
-            typedef value_type&                                         reference;
-            typedef const value_type&                                   const_reference;
-            typedef typename Allocator::pointer                         pointer;
-            typedef typename Allocator::const_pointer                   const_pointer;
-            typedef typename ft::random_access_iterator<pointer>        iterator;
-            typedef typename ft::random_access_iterator<const_pointer>  const_iterator;
-            typedef typename ft::reverse_iterator<iterator>             reverse_iterator;
-            typedef typename ft::reverse_iterator<const_iterator>       const_reverse_iterator;
+            typedef T                                                       value_type;
+            typedef Allocator                                               allocator_type;
+            typedef size_t                                                  size_type;
+            typedef ptrdiff_t                                               difference_type;
+            typedef value_type&                                             reference;
+            typedef const value_type&                                       const_reference;
+            typedef typename Allocator::pointer                             pointer;
+            typedef typename Allocator::const_pointer                       const_pointer;
+            typedef typename ft::random_access_iterator<value_type>         iterator;
+            typedef typename ft::random_access_iterator<const value_type>   const_iterator;
+            typedef typename ft::reverse_iterator<iterator>                 reverse_iterator;
+            typedef typename ft::reverse_iterator<const_iterator>           const_reverse_iterator;
         protected:
             pointer                                                     _begin;
             pointer                                                     _end;
@@ -74,8 +74,8 @@ namespace ft
                 _data = _allocator.allocate(count);
                 _begin = _data;
                 if (_data)
-                for (int i =0; i < count; ++i)
-                    _allocate.construct(_data + i, value);
+                for (size_t i =0; i < count; ++i)
+                    _allocator.construct(_data + i, value);
                 _end = _data + count;
                 _capacity = count;
                 _size = count;
@@ -84,7 +84,7 @@ namespace ft
             //the InputIt oon the range [first, last). The vector will use the allocator alloc for all storage management.
             template<class InputIt>
             vector( InputIt first, InputIt last, const Allocator& alloc = Allocator(),
-            typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = nullptr)
+            typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = NULL)
             {
                 _data = nullptr;
                 _begin = nullptr;
@@ -97,7 +97,7 @@ namespace ft
                 _begin = _data;
                 for (; first != last; ++first)
                 {
-                    _allocate.construct(_data + _size, *first);
+                    _allocator.construct(_data + _size, *first);
                     ++_size;
                 }
                 _end = _data + _size;
@@ -112,7 +112,7 @@ namespace ft
             {
                 if (_size > 0)
                 {
-                    for (int i = 0; i > _size; i++)
+                    for (size_t i = 0; i > _size; i++)
                         _allocator.destroy(_data + i);
                 }
                 if (_begin != nullptr)
@@ -127,7 +127,7 @@ namespace ft
             {
                 if (*this != other)
                 {
-                    for (int i = 0; i > _size; i++)
+                    for (size_t i = 0; i > _size; i++)
                         _allocator.destroy(_data + i);
                     if (_begin != nullptr)
                         _allocator.deallocate(_data, _size);
@@ -139,7 +139,7 @@ namespace ft
                     _begin = it;
                     for (; it != other.end(); it++)
                     {
-                        _allocator.construct(_data + i, it);
+                        _allocator.construct(_data + _size, it);
                         ++_size;
                     }
                     _end= it;
@@ -235,7 +235,7 @@ namespace ft
             {
                 if (this->size() > 0)
                 {
-                    for (int i = 0; i < this->size(); i++)
+                    for (size_t i = 0; i < this->size(); i++)
                         _allocator.destroy(_data + i);
                     _allocator.deallocate(_data, this->size());
                 }
@@ -244,7 +244,7 @@ namespace ft
                 _begin = _data;
                 _capacity = count;
                 _size = 0;
-                for (int i = 0; i < count; i++)
+                for (size_t i = 0; i < count; i++)
                 {
                     _allocator.construct(_data + i, value);
                     ++_size;
@@ -253,11 +253,11 @@ namespace ft
             }
             template<class InputIt>
             void assign( InputIt first, InputIt last,
-            typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = nullptr)
+            typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = NULL)
             {
                 if (this->size() > 0)
                 {
-                    for (int i = 0; i < this->size(); i++)
+                    for (size_t i = 0; i < this->size(); i++)
                         _allocator.destroy(_data + i);
                     _allocator.deallocate(_data, this->size());
                 }
@@ -300,11 +300,11 @@ namespace ft
                 if (new_cap > _capacity)
                 {
                     T* newElements = _allocator.allocate(new_cap);
-                    for (int i = 0; i < this->size(); i++)
+                    for (size_t i = 0; i < this->size(); i++)
                     {
                         newElements[i] = _begin[i];
                     }
-                    for (int i = 0; i < this->size(); i++)
+                    for (size_t i = 0; i < this->size(); i++)
                         _allocator.destroy(_data + i);
                     _allocator.deallocate(_data, this->size());
                     _data = newElements;
@@ -320,7 +320,7 @@ namespace ft
 
             void clear()
             {
-                for (int i = 0; i < this->size(); ++i)
+                for (size_t i = 0; i < this->size(); ++i)
                     _allocator.destroy(_data + i);
                 _size = 0;
             }
@@ -330,7 +330,7 @@ namespace ft
             {
                 size_t position = pos - this->begin();
                 
-                insert(pos, 1, position);
+                insert(pos, 1, value);
                 return iterator(this->begin() + position);
             }
             //insert count copies of the value before pos, it returns iterator pointing to the first element
@@ -351,7 +351,7 @@ namespace ft
                 
                 while (count > 0)
                 {
-                    *pos++ = val;
+                    *pos++ = value;
                     count--;
                 }
             }
@@ -360,14 +360,12 @@ namespace ft
             //The behavior is undefined if first and last are iterators into *this.
             //It returns iteratorpoiting to the first element inserted, or pos if first == last.
             template<class InputIt>
-            iterator insert ( iterator pos, InputIt first, InputUt last,
-            typename if_enable<!ft::is_integral<InputIt>::value, InputIt>::type* = nullptr)
+            iterator insert ( iterator pos, InputIt first, InputIt last,
+            typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = NULL)
             {
                 size_t old_position = this->end() - this->begin();
                 size_t position = pos - this->begin();
 
-                if ( count == 0 )
-                    return ;
                 difference_type len = last - first;
                 resize(_size + len);
                 iterator old_end = old_position + this->begin();
@@ -414,7 +412,7 @@ namespace ft
                     else
                         reserve(_size * 2);
                 }
-                _allocator.construct(&_begin[_size], val);
+                _allocator.construct(&_begin[_size], value);
                 _size++;
             }
 
@@ -437,21 +435,21 @@ namespace ft
                     while (_size != count)
                         this->pop_back();
                 }
-                else (count > size)
+                else if (count > _size)
                 {
-                    if (n > _capacity)
+                    if (count > _capacity)
                     {
                         if (_capacity == 0)
                             new_capacity = 1;
                         else
                             new_capacity = _capacity * 2;
-                        if (new_capacity < n)
-                            new_capacity = n;
+                        if (new_capacity < count)
+                            new_capacity = count;
                         this->reserve(new_capacity);
                     }
                     while (_size != count)
                     {
-                        _allocator.construct(&_begin[_size], val);
+                        _allocator.construct(&_begin[_size], value);
                         _size++;
                     }
                 }

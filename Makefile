@@ -2,9 +2,9 @@ NAME = ft_containers
 
 SRCS = main.cpp
 
-INCLUDE = iterators/iterator.hpp \
-	iterators/iterator_traits.hpp \
-	iterators/reverse_iterator.hpp \
+INCLUDE = iterator.hpp \
+	iterator_traits.hpp \
+	reverse_iterator.hpp \
 	utility.hpp \
 	vector.hpp
 
