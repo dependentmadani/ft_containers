@@ -15,10 +15,10 @@
 
 # include <memory>
 # include <stdexcept>
-# include "../iterators/iterator.hpp"
-# include "../iterators/iterator_traits.hpp"
-# include "../iterators/reverse_iterator.hpp"
-# include "../utility.hpp"
+# include "iterators/iterator.hpp"
+# include "iterators/iterator_traits.hpp"
+# include "iterators/reverse_iterator.hpp"
+# include "utility.hpp"
 
 namespace ft
 {
@@ -42,7 +42,7 @@ namespace ft
             pointer                                                     _begin;
             pointer                                                     _end;
             pointer                                                     _data;
-            std::allocator<T>                                           _allocator;
+            allocator_type                                              _allocator;
             size_type                                                   _capacity;
             size_type                                                   _size;
         public:

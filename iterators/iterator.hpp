@@ -28,7 +28,7 @@ namespace ft
             typedef ptrdiff_t difference_type;
             typedef value_type* pointer;
             typedef value_type& reference;
-            typedef ft::random_access_iterator_tag iterator_category;
+            typedef typename ft::random_access_iterator_tag iterator_category;
 
             random_access_iterator() {it = nullptr;};
             random_access_iterator(const random_access_iterator& rhs) { *it = rhs.it; };
@@ -73,5 +73,7 @@ namespace ft
     // };
 
 }
+
+#include <iterator>
 
 #endif
