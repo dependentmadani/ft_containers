@@ -31,39 +31,31 @@ void	printSize(TESTED_NAMESPACE::vector<T> const &vct, bool print_content = true
 int		main(void)
 {
 	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(7);
-	TESTED_NAMESPACE::vector<TESTED_TYPE> vct_two(4);
-	TESTED_NAMESPACE::vector<TESTED_TYPE> vct_three;
-	TESTED_NAMESPACE::vector<TESTED_TYPE> vct_four;
 
 	for (unsigned long int i = 0; i < vct.size(); ++i)
-		vct[i] = (vct.size() - i) * 3;
-	for (unsigned long int i = 0; i < vct_two.size(); ++i)
-		vct_two[i] = (vct_two.size() - i) * 5;
+	{
+		vct.at(i) = (vct.size() - i) * 3;
+		std::cout << "vct[]: " << vct[i] << std::endl;
+	}
 	printSize(vct);
-	printSize(vct_two);
 
-	vct_three.assign(vct.begin(), vct.end());
-	vct.assign(vct_two.begin(), vct_two.end());
-	vct_two.assign(2, 42);
-	vct_four.assign(4, 21);
+	std::cout << "###############################################" << std::endl;
+	TESTED_NAMESPACE::vector<TESTED_TYPE> const vct_c(vct);
 
-	std::cout << "\t### After assign(): ###" << std::endl;
+	std::cout << "front(): " << vct.front() << " " << vct_c.front() << std::endl;
+	std::cout << "back(): " << vct.back() << " " <<  vct_c.back() << std::endl;
 
-	printSize(vct);
-	printSize(vct_two);
-	printSize(vct_three);
-	printSize(vct_four);
-
-	vct_four.assign(6, 84);
-	printSize(vct_four);
-
-	std::cout << "\t### assign() on enough capacity and low size: ###" << std::endl;
-
-	vct.assign(5, 53);
-	vct_two.assign(vct_three.begin(), vct_three.begin() + 3);
-
-	printSize(vct);
-	printSize(vct_two);
-
+	for (unsigned long int i = 0; i < vct_c.size(); ++i)
+		std::cout << "vct_c.at(): " << vct_c.at(i) << std::endl;
+	try {
+		std::cout << vct_c.at(10) << std::endl;
+	}
+	catch (std::out_of_range &e) {
+		std::cout << "Catch out_of_range exception!" << std::endl;
+	}
+	catch (std::exception &e) {
+		std::cout << "Catch exception: " << e.what() << std::endl;
+	}
+	printSize(vct_c);
 	return (0);
 }

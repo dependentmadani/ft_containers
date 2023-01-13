@@ -93,7 +93,7 @@ namespace ft
                 _size = 0;
                 _capacity = 0;
                 _allocator = alloc;
-                _capacity = difference_type(last - first);
+                _capacity = difference_type(last - first); //check this, maybe error
                 _data = _allocator.allocate(_size);
                 _begin = _data;
                 for (; first != last; ++first)
@@ -106,6 +106,8 @@ namespace ft
             // Creates a copy of other
             vector( const vector& other)
             {
+                _capacity = 0;
+                _size = 0;
                 *this = other;
             }
             // destructs the vector
@@ -117,7 +119,7 @@ namespace ft
                         _allocator.destroy(_data + i);
                 }
                 if (_begin != nullptr)
-                    _allocator.deallocate(_data, _size);
+                    _allocator.deallocate(_data, _capacity);
                 _size = 0;
                 _capacity = 0;
                 _begin = nullptr;
@@ -130,21 +132,17 @@ namespace ft
                 {
                     for (size_t i = 0; i > _size; i++)
                         _allocator.destroy(_data + i);
-                    if (_begin != nullptr)
-                        _allocator.deallocate(_data, _size);
-                    _size = 0;
-                    _capacity = 0;
-                    _allocator = Allocator();
-                    _data = _allocator.allocate(other.size());
-                    iterator it = other.begin();
+                    if (_capacity != 0)
+                        _allocator.deallocate(_data, _capacity);
+                    _capacity = other.capacity();
+                    _size = other.size();
+                    _data = _allocator.allocate(_capacity);
                     _begin = _data;
-                    for (; it != other.end(); it++)
+                    for (size_t i = 0; i < _size; ++i)
                     {
-                        _allocator.construct(_data + _size, it);
-                        ++_size;
+                        _allocator.construct(&_data[i], other._data[i]);
                     }
                     _end= _data + _size;
-                    _capacity = _size;
                 }
                 return *this;
             }
@@ -238,7 +236,7 @@ namespace ft
                 {
                     for (size_t i = 0; i < this->size(); i++)
                         _allocator.destroy(_data + i);
-                    _allocator.deallocate(_data, this->size());
+                    _allocator.deallocate(_data, this->capacity());
                 }
                 _allocator = Allocator();
                 _data = _allocator.allocate(count);
@@ -303,7 +301,7 @@ namespace ft
                     }
                     for (size_t i = 0; i < this->size(); i++)
                         _allocator.destroy(_data + i);
-                    _allocator.deallocate(_data, this->size());
+                    _allocator.deallocate(_data, this->capacity());
                     _data = newElements;
                     _begin = _data;
                     _end = _data + this->size();
