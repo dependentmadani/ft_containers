@@ -27,34 +27,26 @@ void	printSize(TESTED_NAMESPACE::vector<T> const &vct, bool print_content = true
 }
 
 #define TESTED_TYPE int
+#include <list>
 
 int		main(void)
 {
-	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(7);
+	std::list<TESTED_TYPE> lst;
+	std::list<TESTED_TYPE>::iterator lst_it;
+	for (int i = 1; i < 5; ++i)
+		lst.push_back(i * 3);
 
-	for (unsigned long int i = 0; i < vct.size(); ++i)
-	{
-		vct.at(i) = (vct.size() - i) * 3;
-		std::cout << "vct[]: " << vct[i] << std::endl;
-	}
+	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(lst.begin(), lst.end());
 	printSize(vct);
 
-	TESTED_NAMESPACE::vector<TESTED_TYPE> const vct_c(vct);
+	lst_it = lst.begin();
+	for (int i = 1; lst_it != lst.end(); ++i)
+		*lst_it++ = i * 5;
+	vct.assign(lst.begin(), lst.end());
+	printSize(vct);
 
-	std::cout << "front(): " << vct.front() << " " << vct_c.front() << std::endl;
-	std::cout << "back(): " << vct.back() << " " <<  vct_c.back() << std::endl;
-
-	for (unsigned long int i = 0; i < vct_c.size(); ++i)
-		std::cout << "vct_c.at(" << i << "): " << vct_c.at(i) << std::endl;
-	try {
-		std::cout << vct_c.at(10) << std::endl;
-	}
-	catch (std::out_of_range &e) {
-		std::cout << "Catch out_of_range exception!" << std::endl;
-	}
-	catch (std::exception &e) {
-		std::cout << "Catch exception: " << e.what() << std::endl;
-	}
-	printSize(vct_c);
+	vct.insert(vct.end(), lst.rbegin(), lst.rend());
+	std::cout << "###############################################" << std::endl;
+	printSize(vct);
 	return (0);
 }

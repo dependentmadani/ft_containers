@@ -93,15 +93,7 @@ namespace ft
                 _size = 0;
                 _capacity = 0;
                 _allocator = alloc;
-                _capacity = difference_type(last - first); //check this, maybe error
-                _data = _allocator.allocate(_size);
-                _begin = _data;
-                for (; first != last; ++first)
-                {
-                    _allocator.construct(_data + _size, *first);
-                    ++_size;
-                }
-                _end = _data + _size;
+                this->assign(first, last);
             }
             // Creates a copy of other
             vector( const vector& other)
@@ -332,8 +324,8 @@ namespace ft
             //inserted, or pos if count == 0.
             void insert ( iterator pos, size_type count, const T& value)
             {
-                size_t old_position = this->end() - this->begin();
-                size_t position = pos - this->begin();
+                difference_type old_position = this->end() - this->begin();
+                difference_type position = pos - this->begin();
 
                 if ( count == 0 )
                     return ;
@@ -355,22 +347,26 @@ namespace ft
             //The behavior is undefined if first and last are iterators into *this.
             //It returns iteratorpoiting to the first element inserted, or pos if first == last.
             template<class InputIt>
-            iterator insert ( iterator pos, InputIt first, InputIt last,
+            void insert ( iterator pos, InputIt first, InputIt last,
             typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = NULL)
             {
-                size_t old_position = this->end() - this->begin();
-                size_t position = pos - this->begin();
+                size_type old_position = Iterator_difference(_begin, _end);
+                size_type position = 0;
+                iterator tmp = _begin;
+                while (tmp != pos)
+                {
+                    ++tmp;
+                    position++;
+                }
 
-                difference_type len = last - first;
-                resize(_size + len);
-                iterator old_end = old_position + this->begin();
-                pos = position + this->begin();
+                resize(_size + Iterator_difference(first, last));
+                iterator old_end = this->begin() + old_position;
+                pos = this->begin() + position;
                 iterator new_end = this->end();
                 while (old_end != pos)
                     *--new_end = *--old_end;
-                
-                for (; first != last; ++first)
-                    *pos++ = *first;
+                for (; first != last;)
+                    *pos++ = *first++;
             }
 
             //removes the element at pos

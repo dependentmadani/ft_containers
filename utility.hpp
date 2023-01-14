@@ -71,6 +71,15 @@ namespace ft
     template <> struct is_integral<unsigned long long int> { static bool const value = true;};
 
 
+    template <class InputIt>
+    size_t Iterator_difference(InputIt first, InputIt last)
+    {
+        size_t i = 0;
+        for (; first != last; ++first)
+            i++;
+
+        return i;
+    }
     /*
     Compares the elements in the range [first1m last1) with those in the range
     beginning at first2, and returns true if all of the elements in both ranges match.
