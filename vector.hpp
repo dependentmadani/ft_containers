@@ -367,6 +367,7 @@ namespace ft
                     *--new_end = *--old_end;
                 for (; first != last;)
                     *pos++ = *first++;
+                _end = _begin + _size;
             }
 
             //removes the element at pos

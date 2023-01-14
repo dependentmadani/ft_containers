@@ -30,12 +30,14 @@ namespace ft
             typedef value_type& reference;
             typedef typename ft::random_access_iterator_tag iterator_category;
 
-            random_access_iterator() {it = NULL;};
-            random_access_iterator(const random_access_iterator& rhs) { it = rhs.it; };
+            random_access_iterator(): it(NULL) {};
+            random_access_iterator(const random_access_iterator& rhs) { it = NULL; *this = rhs; };
             random_access_iterator(pointer ptr): it(ptr) {};
-            random_access_iterator& operator=(const random_access_iterator& rhs) { it = rhs.it; return *this; };
-            ~random_access_iterator() { };
+            random_access_iterator& operator=(const random_access_iterator & rhs) { it = rhs.get_private_pointer(); return *this; };
+            virtual ~random_access_iterator() { };
             pointer get_private_pointer(void) const {return it;};
+            operator random_access_iterator<const It>(void) const { return random_access_iterator<const It>(this->it);}
+
 
             reference operator*() const { return *it; };
             pointer operator->() const { return it; };
@@ -55,19 +57,19 @@ namespace ft
     // random_access_iterator<It>& operator= (const It& rhs) { *it = rhs; return *this; }; // to reconsider
 
     template<class It>
-    bool operator==(const ft::random_access_iterator<It>& lhs, const ft::random_access_iterator<It>& rhs) { return lhs.get_private_pointer() == rhs.get_private_pointer(); }
+    inline bool operator==(const ft::random_access_iterator<It>& lhs, const ft::random_access_iterator<It>& rhs) { return lhs.get_private_pointer() == rhs.get_private_pointer(); }
     template<class It>
-    bool operator!=(const random_access_iterator<It>& lhs, const random_access_iterator<It>& rhs) { return !(lhs.get_private_pointer() == rhs.get_private_pointer()); };
+    inline bool operator!=(const ft::random_access_iterator<It>& lhs, const ft::random_access_iterator<It>& rhs) { return !(lhs.get_private_pointer() == rhs.get_private_pointer()); };
     template<class It>
-    bool operator< (const random_access_iterator<It>& lhs, const random_access_iterator<It>& rhs) {return (lhs.get_private_pointer() < rhs.get_private_pointer());};
+    inline bool operator< (const ft::random_access_iterator<It>& lhs, const ft::random_access_iterator<It>& rhs) {return (lhs.get_private_pointer() < rhs.get_private_pointer());};
     template<class It>
-    bool operator> (const random_access_iterator<It>& lhs, const random_access_iterator<It>& rhs) {return (lhs.get_private_pointer() > rhs.get_private_pointer());};
+    inline bool operator> (const ft::random_access_iterator<It>& lhs, const ft::random_access_iterator<It>& rhs) {return (lhs.get_private_pointer() > rhs.get_private_pointer());};
     template<class It>
-    bool operator<= (const random_access_iterator<It>& lhs, const random_access_iterator<It>& rhs) {return (lhs.get_private_pointer() <= rhs.get_private_pointer());};
+    inline bool operator<= (const ft::random_access_iterator<It>& lhs, const ft::random_access_iterator<It>& rhs) {return (lhs.get_private_pointer() <= rhs.get_private_pointer());};
     template<class It>
-    bool operator>= (const random_access_iterator<It>& lhs, const random_access_iterator<It>& rhs) {return (lhs.get_private_pointer() >= rhs.get_private_pointer());};
+    inline bool operator>= (const ft::random_access_iterator<It>& lhs, const ft::random_access_iterator<It>& rhs) {return (lhs.get_private_pointer() >= rhs.get_private_pointer());};
     template<class It>
-    typename random_access_iterator<It>::difference_type operator- (const random_access_iterator<It>& lhs, const random_access_iterator<It>& rhs) {ptrdiff_t temp = lhs - rhs; return temp;};
+    inline typename ft::random_access_iterator<It>::difference_type operator- (const ft::random_access_iterator<It>& lhs, const ft::random_access_iterator<It>& rhs) {ptrdiff_t temp = lhs - rhs; return temp;};
     
     /*
     The iterator structure is a base class from which all other iterator types can be derived.
