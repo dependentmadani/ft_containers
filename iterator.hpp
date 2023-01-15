@@ -48,9 +48,9 @@ namespace ft
             random_access_iterator& operator-- () {--it; return *this;};
             random_access_iterator operator-- (int) {random_access_iterator tmp(*this); --it; return tmp;};
             random_access_iterator operator+ (const difference_type& rhs) const {return random_access_iterator(it + rhs);};
-            difference_type operator+ (const random_access_iterator<const Iterator>& rhs) const {return it + rhs.it;};
+            difference_type operator+ (const random_access_iterator<const Iterator>& rhs) const {return it + rhs.base();};
             random_access_iterator operator- (const difference_type& rhs) const {return random_access_iterator(it - rhs);};
-            difference_type operator- (const random_access_iterator<const Iterator>& rhs) const {return it - rhs.it;};
+            difference_type operator- (const random_access_iterator<const Iterator>& rhs) const {return it - rhs.base();};
             reference operator[] (const difference_type _n) const {return *(*this + _n);};
             random_access_iterator& operator+= (const difference_type rhs) {(it += rhs); return *this;};
             random_access_iterator& operator-= (const difference_type rhs) {(it -= rhs); return *this;};
