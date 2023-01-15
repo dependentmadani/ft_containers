@@ -381,20 +381,23 @@ namespace ft
             //removes the elements in the range [first, last)
             iterator erase( iterator first , iterator last )
             {
-                iterator new_last = first;
-                size_t size_tmp = _size - (difference_type)(last - first);
-                T tmp;
+                size_type range = last - first, start = first - begin();
 
-                while (last != end())
-                {
-                    tmp = *last;
-                    *last = *first;
-                    *first = tmp;
-                    last++;
-                    first++;
-                }
-                _size = size_tmp;
-                return new_last;
+				for (size_type i=0; (i < range && i < _size); i++)
+				{
+					_allocator.destroy(_data +start + i);
+					if (start + range + i < _size)
+						_allocator.construct(&_data[i + start], _data[i+start+range]);
+				}
+				for (size_type i = start + range; i < _size; i++)
+				{
+					_allocator.destroy(_data + i);
+					if (range + i < _size)
+						_allocator.construct(&_data[i], _data[i+range]);
+				}
+				_size -= range;
+                _end = _begin + _size;
+				return iterator(_data + start);
 
             }
 
@@ -416,8 +419,9 @@ namespace ft
             {
                 if (!empty())
                 {
-                    _allocator.destroy(&_begin[_size - 1]);
-                    _size--;
+                    _allocator.destroy(&_data[_size]);
+                    _end = _end - 1;
+                    --_size;
                 }
             }
 

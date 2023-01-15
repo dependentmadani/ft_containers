@@ -108,77 +108,72 @@ void	printSize(TESTED_NAMESPACE::vector<T> const &vct, bool print_content = true
 // 	return (0);
 // }
 
-#define TESTED_TYPE int
+#define TESTED_TYPE std::string
+
+void	checkErase(TESTED_NAMESPACE::vector<TESTED_TYPE> const &vct,
+					TESTED_NAMESPACE::vector<TESTED_TYPE>::const_iterator const &it)
+{
+	static int i = 0;
+	std::cout << "[" << i++ << "] " << "erase: " << it - vct.begin() << std::endl;
+	printSize(vct);
+}
 
 int		main(void)
 {
-	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(5);
-	TESTED_NAMESPACE::vector<TESTED_TYPE>::iterator it = vct.begin(), ite = vct.end();
+	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(10);
 
-	std::cout << "len: " << (ite - it) << std::endl;
-	for (; it != ite; ++it)
-		*it = (ite - it);
-
-	it = vct.begin();
-	TESTED_NAMESPACE::vector<TESTED_TYPE> vct_range(it, --(--ite));
-	for (int i = 0; it != ite; ++it)
-		*it = ++i * 5;
-
-	it = vct.begin();
-	TESTED_NAMESPACE::vector<TESTED_TYPE> vct_copy(vct);
-	for (int i = 0; it != ite; ++it)
-		*it = ++i * 7;
-	vct_copy.push_back(42);
-	vct_copy.push_back(21);
-
-	std::cout << "\t-- PART ONE --" << std::endl;
+	for (unsigned long int i = 0; i < vct.size(); ++i)
+		vct[i] = std::string((vct.size() - i), i + 65);
 	printSize(vct);
-	printSize(vct_range);
-	printSize(vct_copy);
 
-	vct = vct_copy;
-	vct_copy = vct_range;
-	vct_range.clear();
+	checkErase(vct, vct.erase(vct.begin() + 2));
 
-	std::cout << "\t-- PART TWO --" << std::endl;
+	checkErase(vct, vct.erase(vct.begin()));
+	checkErase(vct, vct.erase(vct.end() - 1));
+
+	checkErase(vct, vct.erase(vct.begin(), vct.begin() + 3));
+	checkErase(vct, vct.erase(vct.end() - 3, vct.end() - 1));
+
+	vct.push_back("Hello");
+	vct.push_back("Hi there");
 	printSize(vct);
-	printSize(vct_range);
-	printSize(vct_copy);
+	checkErase(vct, vct.erase(vct.end() - 3, vct.end()));
 
-	// std::cout << "test the std *******************" << std::endl;
+	vct.push_back("ONE");
+	vct.push_back("TWO");
+	vct.push_back("THREE");
+	vct.push_back("FOUR");
+	printSize(vct);
+	checkErase(vct, vct.erase(vct.begin(), vct.end()));
 
-	// #define TESTED_NAMESPACE std
-	// TESTED_NAMESPACE::vector<TESTED_TYPE> vct1(5);
-	// TESTED_NAMESPACE::vector<TESTED_TYPE>::iterator it = vct1.begin(), ite = vct1.end();
-
-	// std::cout << "len: " << (ite - it) << std::endl;
-	// for (; it != ite; ++it)
-	// 	*it = (ite - it);
-
-	// it = vct.begin();
-	// TESTED_NAMESPACE::vector<TESTED_TYPE> vct_range1(it, --(--ite));
-	// for (int i = 0; it != ite; ++it)
-	// 	*it = ++i * 5;
-
-	// it = vct.begin();
-	// TESTED_NAMESPACE::vector<TESTED_TYPE> vct_copy1(vct1);
-	// for (int i = 0; it != ite; ++it)
-	// 	*it = ++i * 7;
-	// vct_copy1.push_back(42);
-	// vct_copy1.push_back(21);
-
-	// std::cout << "\t-- PART ONE --" << std::endl;
-	// printSize(vct1);
-	// printSize(vct_range1);
-	// printSize(vct_copy1);
-
-	// vct1 = vct_copy1;
-	// vct_copy1 = vct_range1;
-	// vct_range1.clear();
-
-	// std::cout << "\t-- PART TWO --" << std::endl;
-	// printSize(vct1);
-	// printSize(vct_range1);
-	// printSize(vct_copy1);
 	return (0);
 }
+
+// #define TESTED_TYPE std::string
+
+// int		main(void)
+// {
+// 	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(8);
+// 	TESTED_NAMESPACE::vector<TESTED_TYPE> vct2;
+// 	TESTED_NAMESPACE::vector<TESTED_TYPE>::iterator it = vct.begin();
+
+// 	for (unsigned long int i = 0; i < vct.size(); ++i)
+// 		it[i] = std::string((vct.size() - i), i + 65);
+// 	printSize(vct, true);
+
+// 	std::cout << "push_back():\n" << std::endl;
+
+// 	vct.push_back("One long string");
+// 	vct2.push_back("Another long string");
+
+// 	printSize(vct);
+// 	printSize(vct2);
+
+// 	vct.pop_back();
+// 	vct2.pop_back();
+
+// 	printSize(vct);
+// 	printSize(vct2);
+
+// 	return (0);
+// }
