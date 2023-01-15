@@ -154,7 +154,7 @@ namespace ft
     the destructor of pair is trivial.
     */
     template<class T1, class T2>
-    class pair
+    struct pair
     {
         public:
             typedef T1 first_type;
@@ -163,11 +163,12 @@ namespace ft
             T1 first;
             T2 second;
 
-            pair();
-            pair( const T1& x, const T2& y );
-            template<class U1, class U2> pair(const pair<U1, U2>& p);
-            pair( const pair& p);
-            pair& operator= (const pair& other);
+            pair(): first(), second() {};
+            pair( const T1& x, const T2& y ) {first = x; second = y;};
+            template<class U1, class U2> pair(const pair<U1, U2>& p): first(p.first), second(p.second) {};
+            pair( const pair& p) {first = p.first; second =p.second;};
+            ~pair() {};
+            pair& operator= (const pair& other) {first = other.first; second = other.second; return *this;};
     };
     template<class T1, class T2>
     ft::pair<T1, T2> make_pair(T1 t, T2 u)
@@ -176,37 +177,37 @@ namespace ft
     }
 
     template<class T1, class T2>
-    inline bool operator== (const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs)
+    bool operator== (const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs)
     {
         return (lhs.first == rhs.first && lhs.second == rhs.second);
     }
 
     template<class T1, class T2>
-    inline bool operator!= (const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs)
+    bool operator!= (const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs)
     {
         return !(lhs == rhs);
     }
 
     template<class T1, class T2>
-    inline bool operator< (const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs)
+    bool operator< (const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs)
     {
         return lhs < rhs || (!(rhs.first < lhs.first) && lhs.second < rhs.second);
     }
     
     template<class T1, class T2>
-    inline bool operator<= (const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs)
+    bool operator<= (const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs)
     {
         return !(rhs < lhs);
     }
     
     template<class T1, class T2>
-    inline bool operator> (const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs)
+    bool operator> (const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs)
     {
         return rhs < lhs;
     }
 
     template<class T1, class T2>
-    inline bool operator>= (const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs)
+    bool operator>= (const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs)
     {
         return !(lhs < rhs);
     }
