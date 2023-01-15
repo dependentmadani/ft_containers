@@ -432,8 +432,10 @@ namespace ft
 
                 if (count < _size)
                 {
-                    while (_size != count)
-                        this->pop_back();
+                    for (size_t i = count; i < _size ; i++)
+                        _allocator.destroy(_data + i);
+                    _end = _begin + count;
+                    _size = count;
                 }
                 else if (count > _size)
                 {
@@ -447,11 +449,10 @@ namespace ft
                             new_capacity = count;
                         this->reserve(new_capacity);
                     }
-                    while (_size != count)
-                    {
-                        _allocator.construct(&_begin[_size], value);
-                        _size++;
-                    }
+                    for (size_t i = _size; i < count; i++)
+                        _allocator.construct(_data + i, value);
+                    _end = _begin + count;
+                    _size = count;
                 }
             }
 

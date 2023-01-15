@@ -83,97 +83,51 @@ void	printSize(TESTED_NAMESPACE::vector<T> const &vct, bool print_content = true
 	std::cout << "###############################################" << std::endl;
 }
 
-// #define TESTED_TYPE int
-// #include <list>
+#define TESTED_TYPE int
 
-// int		main(void)
-// {
-// 	std::list<TESTED_TYPE> lst;
-// 	std::list<TESTED_TYPE>::iterator lst_it;
-// 	for (int i = 1; i < 5; ++i)
-// 		lst.push_back(i * 3);
-
-// 	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(lst.begin(), lst.end());
-// 	printSize(vct);
-
-// 	lst_it = lst.begin();
-// 	for (int i = 1; lst_it != lst.end(); ++i)
-// 		*lst_it++ = i * 5;
-// 	vct.assign(lst.begin(), lst.end());
-// 	printSize(vct);
-
-// 	vct.insert(vct.end(), lst.rbegin(), lst.rend());
-// 	printSize(vct);
-// 	std::cout << "###############################################" << std::endl;
-// 	return (0);
-// }
-
-#define TESTED_TYPE std::string
-
-void	checkErase(TESTED_NAMESPACE::vector<TESTED_TYPE> const &vct,
-					TESTED_NAMESPACE::vector<TESTED_TYPE>::const_iterator const &it)
+void	is_empty(TESTED_NAMESPACE::vector<TESTED_TYPE> const &vct)
 {
-	static int i = 0;
-	std::cout << "[" << i++ << "] " << "erase: " << it - vct.begin() << std::endl;
-	printSize(vct);
+	std::cout << "is_empty: " << vct.empty() << std::endl;
 }
 
 int		main(void)
 {
-	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(10);
+	const int start_size = 7;
+	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(start_size, 20);
+	TESTED_NAMESPACE::vector<TESTED_TYPE> vct2;
+	TESTED_NAMESPACE::vector<TESTED_TYPE>::iterator it = vct.begin();
 
-	for (unsigned long int i = 0; i < vct.size(); ++i)
-		vct[i] = std::string((vct.size() - i), i + 65);
-	printSize(vct);
+	for (int i = 2; i < start_size; ++i)
+		it[i] = (start_size - i) * 3;
+	printSize(vct, true);
 
-	checkErase(vct, vct.erase(vct.begin() + 2));
+	vct.resize(10, 42);
+	printSize(vct, true);
 
-	checkErase(vct, vct.erase(vct.begin()));
-	checkErase(vct, vct.erase(vct.end() - 1));
+	vct.resize(18, 43);
+	printSize(vct, true);
+	vct.resize(10);
+	printSize(vct, true);
+	vct.resize(23, 44);
+	printSize(vct, true);
+	vct.resize(5);
+	printSize(vct, true);
+	vct.reserve(5);
+	vct.reserve(3);
+	printSize(vct, true);
+	vct.resize(87);
+	vct.resize(5);
+	printSize(vct, true);
 
-	checkErase(vct, vct.erase(vct.begin(), vct.begin() + 3));
-	checkErase(vct, vct.erase(vct.end() - 3, vct.end() - 1));
+	is_empty(vct2);
+	vct2 = vct;
+	is_empty(vct2);
+	vct.reserve(vct.capacity() + 1);
+	printSize(vct, true);
+	printSize(vct2, true);
 
-	vct.push_back("Hello");
-	vct.push_back("Hi there");
-	printSize(vct);
-	checkErase(vct, vct.erase(vct.end() - 3, vct.end()));
-
-	vct.push_back("ONE");
-	vct.push_back("TWO");
-	vct.push_back("THREE");
-	vct.push_back("FOUR");
-	printSize(vct);
-	checkErase(vct, vct.erase(vct.begin(), vct.end()));
-
+	vct2.resize(0);
+	is_empty(vct2);
+	printSize(vct2, true);
 	return (0);
 }
-
-// #define TESTED_TYPE std::string
-
-// int		main(void)
-// {
-// 	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(8);
-// 	TESTED_NAMESPACE::vector<TESTED_TYPE> vct2;
-// 	TESTED_NAMESPACE::vector<TESTED_TYPE>::iterator it = vct.begin();
-
-// 	for (unsigned long int i = 0; i < vct.size(); ++i)
-// 		it[i] = std::string((vct.size() - i), i + 65);
-// 	printSize(vct, true);
-
-// 	std::cout << "push_back():\n" << std::endl;
-
-// 	vct.push_back("One long string");
-// 	vct2.push_back("Another long string");
-
-// 	printSize(vct);
-// 	printSize(vct2);
-
-// 	vct.pop_back();
-// 	vct2.pop_back();
-
-// 	printSize(vct);
-// 	printSize(vct2);
-
-// 	return (0);
-// }
