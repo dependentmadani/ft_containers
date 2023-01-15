@@ -306,9 +306,13 @@ namespace ft
 
             void clear()
             {
-                for (size_t i = 0; i < this->size(); ++i)
+                for (size_t i = 0; i < _size; i++)
                     _allocator.destroy(_data + i);
+                _allocator.deallocate(_data, _size);
+                _data = _allocator.allocate(_capacity);
+                _begin = _data;
                 _size = 0;
+                _end = _data + _size;
             }
 
             //insert value before pos, It returns iterator pointing to the inserted value
