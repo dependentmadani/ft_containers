@@ -19,7 +19,6 @@
 # include "iterator_traits.hpp"
 # include "reverse_iterator.hpp"
 # include "utility.hpp"
-#include <iostream>
 
 namespace ft
 {
@@ -52,9 +51,9 @@ namespace ft
             //allocator alloc for all storage management.
             explicit vector( const allocator_type& alloc = allocator_type())
             {
-                _data = nullptr;
-                _begin = nullptr;
-                _end = nullptr;
+                _data = NULL;
+                _begin = NULL;
+                _end = NULL;
                 _allocator = alloc;
                 _capacity = 0;
                 _size = 0;
@@ -64,9 +63,9 @@ namespace ft
             //for all storage management.
             explicit vector( size_type count, const T& value = T(), const Allocator& alloc = Allocator())
             {
-                _data = nullptr;
-                _begin = nullptr;
-                _end = nullptr;
+                _data = NULL;
+                _begin = NULL;
+                _end = NULL;
                 _size = 0;
                 _capacity = 0;
                 _allocator = alloc;
@@ -87,9 +86,9 @@ namespace ft
             vector( InputIt first, InputIt last, const Allocator& alloc = Allocator(),
             typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = NULL)
             {
-                _data = nullptr;
-                _begin = nullptr;
-                _end = nullptr;
+                _data = NULL;
+                _begin = NULL;
+                _end = NULL;
                 _size = 0;
                 _capacity = 0;
                 _allocator = alloc;
@@ -110,12 +109,12 @@ namespace ft
                     for (size_t i = 0; i > _size; i++)
                         _allocator.destroy(_data + i);
                 }
-                if (_begin != nullptr)
+                if (_begin != NULL)
                     _allocator.deallocate(_data, _capacity);
                 _size = 0;
                 _capacity = 0;
-                _begin = nullptr;
-                _end = nullptr;
+                _begin = NULL;
+                _end = NULL;
             }
 
             vector& operator= (const vector& other )

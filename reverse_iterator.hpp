@@ -104,9 +104,13 @@ namespace ft
         return lhs.base() <= rhs.base();
     };
 
-    template<class Iter> ft::reverse_iterator<Iter> operator+ (typename ft::reverse_iterator<Iter>::difference_type n, const ft::reverse_iterator<Iter>& it)
+    template<class Iterator> reverse_iterator<Iterator> operator+ (typename reverse_iterator<Iterator>::difference_type n, const reverse_iterator<Iterator>& it)
     {
-        return ft::reverse_iterator<Iter>(it.base() - n);
+        return it + n;
+    };
+    template<class Iterator1, class iterator2> bool operator+ (typename reverse_iterator<Iterator1>::difference_type n, const reverse_iterator<iterator2>& it)
+    {
+        return it + n;
     };
 
     template<class Iterator1, class Iterator2> typename reverse_iterator<Iterator1>::difference_type operator- (const ft::reverse_iterator<Iterator1>& lhs, const ft::reverse_iterator<Iterator2>& rhs)
