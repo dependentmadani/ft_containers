@@ -44,9 +44,9 @@ namespace ft
             reference operator*() const { return *it; };
             pointer operator->() const { return it; };
             random_access_iterator& operator++ () {++it; return *this;};
-            random_access_iterator operator++ (int) {random_access_iterator tmp(*this); ++(*this); return *this;};
+            random_access_iterator operator++ (int) {random_access_iterator tmp(*this); ++it; return tmp;};
             random_access_iterator& operator-- () {--it; return *this;};
-            random_access_iterator operator-- (int) {random_access_iterator tmp(*this); --(*this); return *this;};
+            random_access_iterator operator-- (int) {random_access_iterator tmp(*this); --it; return tmp;};
             random_access_iterator operator+ (const difference_type& rhs) const {return random_access_iterator(it + rhs);};
             difference_type operator+ (const random_access_iterator<const Iterator>& rhs) const {return it + rhs.it;};
             random_access_iterator operator- (const difference_type& rhs) const {return random_access_iterator(it - rhs);};
