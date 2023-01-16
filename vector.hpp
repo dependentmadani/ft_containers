@@ -333,8 +333,8 @@ namespace ft
                 if ( count == 0 )
                     return ;
                 resize(_size + count);
-                iterator old_end = old_position + this->begin();
-                pos = position + this->begin();
+                iterator old_end = this->begin() + old_position;
+                pos = this->begin() + position;
                 iterator new_end = this->end();
                 while (old_end != pos)
                     *--new_end = *--old_end;

@@ -85,49 +85,29 @@ void	printSize(TESTED_NAMESPACE::vector<T> const &vct, bool print_content = true
 
 #define TESTED_TYPE int
 
-void	is_empty(TESTED_NAMESPACE::vector<TESTED_TYPE> const &vct)
-{
-	std::cout << "is_empty: " << vct.empty() << std::endl;
-}
-
 int		main(void)
 {
-	const int start_size = 7;
-	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(start_size, 20);
+	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(5);
 	TESTED_NAMESPACE::vector<TESTED_TYPE> vct2;
-	TESTED_NAMESPACE::vector<TESTED_TYPE>::iterator it = vct.begin();
+	const int cut = 3;
 
-	for (int i = 2; i < start_size; ++i)
-		it[i] = (start_size - i) * 3;
-	printSize(vct, true);
+	for (unsigned long int i = 0; i < vct.size(); ++i)
+		vct[i] = (vct.size() - i) * 7;
+	printSize(vct);
 
-	vct.resize(10, 42);
-	printSize(vct, true);
+	vct2.insert(vct2.begin(), vct.begin(), vct.begin() + cut);
+	printSize(vct2);
+	vct2.insert(vct2.begin(), vct.begin() + cut, vct.end());
+	printSize(vct2);
+	vct2.insert(vct2.end(), vct.begin(), vct.begin() + cut);
+	printSize(vct2);
 
-	vct.resize(18, 43);
-	printSize(vct, true);
-	vct.resize(10);
-	printSize(vct, true);
-	vct.resize(23, 44);
-	printSize(vct, true);
-	vct.resize(5);
-	printSize(vct, true);
-	vct.reserve(5);
-	vct.reserve(3);
-	printSize(vct, true);
-	vct.resize(87);
-	vct.resize(5);
-	printSize(vct, true);
+	std::cout << "insert return:" << std::endl;
 
-	is_empty(vct2);
-	vct2 = vct;
-	is_empty(vct2);
-	vct.reserve(vct.capacity() + 1);
-	printSize(vct, true);
-	printSize(vct2, true);
+	std::cout << *vct2.insert(vct2.end(), 42) << std::endl;
+	std::cout << *vct2.insert(vct2.begin() + 5, 84) << std::endl;
+	std::cout << "----------------------------------------" << std::endl;
 
-	vct2.resize(0);
-	is_empty(vct2);
-	printSize(vct2, true);
+	printSize(vct2);
 	return (0);
 }
