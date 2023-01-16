@@ -39,7 +39,7 @@ namespace ft
             {current = other.base(); return *this;};
             iterator_type base() const {return current;};
             reference operator* () const {return *current;};
-            pointer operator-> () const {return current;};
+            pointer operator-> () const {return &(operator*());};
             reference operator[] (difference_type n) const {return *(*this + n);};
             reverse_iterator& operator++ () {--current; return *this;};
             reverse_iterator operator++ (int) {reverse_iterator temp(*this); --current; return temp;};
