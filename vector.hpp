@@ -416,7 +416,7 @@ namespace ft
                     _allocator.destroy(&_data[_size]);
                     if (_end != _begin)
                         _end = _end - 1;
-                // }
+                }
             }
 
             //resize the container to contain count elements.
