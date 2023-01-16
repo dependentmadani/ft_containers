@@ -115,7 +115,7 @@ namespace ft
             if (*first2 < *first1)
                 return false;
         }
-        return (first1 == last1) && (first2 == last2);
+        return (first1 == last1) && (first2 != last2);
     }
 
     template<class InputIt1, class InputIt2, class Compare >
