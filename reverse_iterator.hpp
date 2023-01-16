@@ -37,7 +37,7 @@ namespace ft
             template<class U> reverse_iterator( const reverse_iterator<U>& other ): current(other.base()) {};
             template<class U> reverse_iterator& operator=( const reverse_iterator<U>& other )
             {current = other.base(); return *this;};
-            iterator_type base() const {return current;};
+            iterator_type base() const {return iterator_type(current);};
             reference operator* () const {Iter tmp = current; return *--tmp;};
             pointer operator-> () const {return &(operator*());};
             reference operator[] (difference_type n) const {return *(*this + n);};

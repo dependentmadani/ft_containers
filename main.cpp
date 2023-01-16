@@ -59,7 +59,7 @@ T	dec(T it, int n)
 #include <iostream>
 
 #define T_SIZE_TYPE typename TESTED_NAMESPACE::vector<T>::size_type
-#define TESTED_NAMESPACE std
+#define TESTED_NAMESPACE ft
 
 template <typename T>
 void	printSize(TESTED_NAMESPACE::vector<T> const &vct, bool print_content = true)
@@ -93,7 +93,10 @@ int		main(void)
 	TESTED_NAMESPACE::vector<TESTED_TYPE>::const_reverse_iterator ite(vct.rend());
 
 	for (int i = 1; it != ite; ++i)
+	{
 		*it++ = (i * 7);
+		std::cout << i * 7 << std::endl;
+	}
 	printSize(vct, 1);
 
 	it = vct.rbegin();
