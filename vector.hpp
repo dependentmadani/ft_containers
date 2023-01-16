@@ -223,17 +223,9 @@ namespace ft
 
             void assign( size_type count, const T& value)
             {
-                if (this->size() > 0)
-                {
-                    for (size_t i = 0; i < this->size(); i++)
-                        _allocator.destroy(_data + i);
-                    _allocator.deallocate(_data, this->capacity());
-                }
-                _allocator = Allocator();
-                _data = _allocator.allocate(count);
-                _begin = _data;
-                _capacity = count;
-                _size = 0;
+                if (count > this->capacity())
+                    this->reserve(count);
+                this->clear();
                 for (size_t i = 0; i < count; i++)
                 {
                     _allocator.construct(_data + i, value);
@@ -282,20 +274,21 @@ namespace ft
             void reserve( size_type new_cap )
             {
                 if (new_cap > this->max_size())
-                    std::length_error("vector");
+                    throw std::length_error("vector");
                 if (new_cap > _capacity)
                 {
                     T* newElements = _allocator.allocate(new_cap);
-                    for (size_t i = 0; i < this->size(); i++)
+                    for (size_t i = 0; i < _size; i++)
                     {
-                        newElements[i] = _begin[i];
+                        _allocator.construct(newElements + i, _data[i]);
                     }
                     for (size_t i = 0; i < this->size(); i++)
                         _allocator.destroy(_data + i);
-                    _allocator.deallocate(_data, this->capacity());
+                    if (_data)
+                        _allocator.deallocate(_data, this->capacity());
                     _data = newElements;
                     _begin = _data;
-                    _end = _data + this->size();
+                    _end = _data + _size;
                     _capacity = new_cap;
                 }
             }
@@ -417,12 +410,13 @@ namespace ft
 
             void pop_back()
             {
-                if (!empty())
+                if (!this->empty())
                 {
-                    _allocator.destroy(&_data[_size]);
-                    _end = _end - 1;
                     --_size;
-                }
+                    _allocator.destroy(&_data[_size]);
+                    if (_end != _begin)
+                        _end = _end - 1;
+                // }
             }
 
             //resize the container to contain count elements.
