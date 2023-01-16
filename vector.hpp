@@ -206,19 +206,19 @@ namespace ft
             }
             reverse_iterator rbegin()
             {
-                return reverse_iterator(end());
+                return reverse_iterator(this->_end - 1);
             }
             const_reverse_iterator rbegin() const
             {
-                return const_reverse_iterator(end());
+                return const_reverse_iterator(this->_end - 1);
             }
             reverse_iterator rend()
             {
-                return reverse_iterator(begin());
+                return reverse_iterator(this->_begin);
             }
             const_reverse_iterator rend() const
             {
-                return const_reverse_iterator(begin());
+                return const_reverse_iterator(this->_begin);
             }
 
             void assign( size_type count, const T& value)
