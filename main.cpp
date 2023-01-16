@@ -59,7 +59,7 @@ T	dec(T it, int n)
 #include <iostream>
 
 #define T_SIZE_TYPE typename TESTED_NAMESPACE::vector<T>::size_type
-#define TESTED_NAMESPACE ft
+#define TESTED_NAMESPACE std
 
 template <typename T>
 void	printSize(TESTED_NAMESPACE::vector<T> const &vct, bool print_content = true)
