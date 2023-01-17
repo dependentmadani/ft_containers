@@ -24,7 +24,7 @@ namespace ft
             }
 
             //copy constructor:
-            stack(const Container& other)
+            stack(const stack& other)
             {
                 c = other.c;
             }
