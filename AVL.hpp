@@ -40,7 +40,18 @@ namespace ft
         public:
 
             avl_tree( ): root(NULL), node_number(0) {};
-            ~avl_tree( ): { this->clear(); };
+            ~avl_tree( ): { 
+                if (root != NULL)
+                {
+                    _allocator.destroy(root->value);
+                    if (root->right_child != NULL)
+                        clean(root->left_child);
+                    if (root->left_child != NULL)
+                        clean(root->left_child);
+                    _allocator_node.deallocate(root, 1);
+                }
+                root = NULL;
+            };
             avl_tree( const avl_tree& other) { *this = other; };
             avl_tree& operator= (const avl_tree& other) {
                 _compare = other._compare;
@@ -74,6 +85,22 @@ namespace ft
                 return NULL;
             }
 
+            //return the max value in the tree map
+            T max(node_type* node) const
+            {
+                while (root->right != NULL)
+                    root = root->right;
+                return root->value;
+            }
+
+            //return the min value in the tree map
+            T min(node_type* node) const
+            {
+                while (root->left != NULL)
+                    root = root->left;
+                return root->value;
+            }
+
             //this function checks if a value of type T does exist in the tree or not
             bool available_in_tree(T value) const
             {
@@ -86,7 +113,29 @@ namespace ft
                 return available_in_tree(root, value);
             }
 
+            //get the height of a tree root, which is the number of edges between the root and the last leaf
+            int height() const
+            {
+                if (root != NULL)
+                    return root->height;
+                return 0;
+            }
+
+            //check if the tree is empty or not
+            bool empty() const
+            {
+                return node_number;
+            }
+
+            //return number of nodes in the tree
+            int size_tree() const
+            {
+                return node_number;
+            }
+
+
         private:
+
             //this private function checks if a value of type T does exist in the tree or not
             bool available_in_tree(node_type* node, T value) const
             {
@@ -145,7 +194,100 @@ namespace ft
                 update_bf_height(node);
                 return balance_tree(node);
             }
-            
+
+            //it updates the values of height and balanced factor each time there is modification in the tree
+            void update_bf_height(node_type* node)
+            {
+                int left_side_height;
+                int right_side_height;
+
+                if (node->left_child == NULL)
+                    left_side_height = -1;
+                else
+                    left_side_height = node->left_child->height;
+                if (node->right_child == NULL)
+                    right_side_height = -1;
+                else
+                    right_side_height = node->right_child->height;
+                node->balanced_factor = right_side_height - left_side_height;
+                node->height = std::max(right_side_height, left_side_height) + 1;
+            }            
+
+            //make a right rotation to fix the balance
+            node_type* right_rotation(node_type* node)
+            {
+                node_type* new_parent;
+                new_parent = node->left_child;
+                node->left_child = new_parent->right_child;
+                new_parent->right_child = node; //to check it ????
+                new_parent->parent = node->parent; //to check it ????
+                node->parent = new_parent;
+                if (node->left_child != NULL)
+                    node->left_child->right_child = new_parent->right_child;
+                update(new_parent);
+                update(node);
+                return new_parent;
+            }
+
+            //make a left rotation to help fix the balance of tree
+            node_type* left_rotation(node_type* node)
+            {
+                node_type* new_parent;
+                new_parent = node->right_child;
+                node->left_child = new_parent->left_child;
+                new_parent->right_child = node; // to check it ??
+                new_parent->parent = node->parent; // to check it ???
+                node->parent = new_parent;
+                if (node->right_child != NULL)
+                    node->right_child->right_child = new_parent->left_child;
+                update(new_parent);
+                update(node);
+                return new_parent;
+            }
+
+            //implement three cases of rotation
+            node_type* left_left_case(node_type* node)
+            {
+                return right_rotation(node);
+            }
+
+            node_type* right_right_case(node_type* node)
+            {
+                return left_rotation(node);
+            }
+
+            node_type* right_left_case(node_type* node)
+            {
+                node->right_child = right_rotation(node->right_child);
+                return left_rotation(node);
+            }
+
+            node_type* left_right_case(node_type* node)
+            {
+                node->left_child = left_rotation(node);
+                return right_rotation(node);
+            }
+
+            //balancing the tree map
+            node_type* balance(node_type* node)
+            {
+                if (node->balanced_factor == 2)
+                {
+                    if (node->right_child->balanced_factor >= 0)
+                        return right_right_case(node);
+                    else
+                        return right_left_case(node);
+                }
+                else if (node->balanced_factor == -2)
+                {
+                    if (node->left_child->balanced_factor <= 0)
+                        return left_left_case(node);
+                    else
+                        return left_right_case(node);
+                }
+                return node;
+            }
+
     };
 
 }
