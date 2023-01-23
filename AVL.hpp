@@ -40,18 +40,7 @@ namespace ft
         public:
 
             avl_tree( ): root(NULL), node_number(0) {};
-            ~avl_tree( ): { 
-                if (root != NULL)
-                {
-                    _allocator.destroy(root->value);
-                    if (root->right_child != NULL)
-                        clean(root->left_child);
-                    if (root->left_child != NULL)
-                        clean(root->left_child);
-                    _allocator_node.deallocate(root, 1);
-                }
-                root = NULL;
-            };
+            ~avl_tree( ): { this->clear(); };
             avl_tree( const avl_tree& other) { *this = other; };
             avl_tree& operator= (const avl_tree& other) {
                 _compare = other._compare;
@@ -133,8 +122,47 @@ namespace ft
                 return node_number;
             }
 
+            //clear the tree for allocation and value
+            void clear()
+            {
+                node_number = 0;
+                this->clear(root);
+            }
+
+            //return the value where there is the value
+            map_value* searching(key_type& value)
+            {
+                return searching(root, value);
+            }
+
+            //return the node where there is the value
+            node_type* find_node(T value) const
+            {
+                return find_node(root, value.first);
+            }
+
+            node_type* find_node(key_type value) const
+            {
+                return find_node(root, value);
+            }
+
 
         private:
+
+            //private function of clear to use private attribe root to clear it
+            void clear(node_type* node)
+            {
+                if (node != NULL)
+                {
+                    _allocator.destroy(node->value);
+                    if (node->right_child != NULL)
+                        clean(node->left_child);
+                    if (node->left_child != NULL)
+                        clean(node->left_child);
+                    _allocator_node.deallocate(node, 1);
+                }
+                node = NULL;
+            }
 
             //this private function checks if a value of type T does exist in the tree or not
             bool available_in_tree(node_type* node, T value) const
@@ -289,16 +317,28 @@ namespace ft
             }
 
             //private function of searching for a key
-            map_value* search(node_type* node, key_type& value)
+            map_value* searching(node_type* node, key_type& value)
             {
                 if (node == NULL)
                     return 0;
                 if (node->value.first == key)
                     return &(node->value.second);
                 if (_compare(node->value.first, value) == false)
-                    return search(node->left_child, value);
+                    return searching(node->left_child, value);
                 else
-                    return search(node->right_child, value);
+                    return searching(node->right_child, value);
+            }
+
+            node_type* find_node(node_type* node, key_type value) const
+            {
+                if (node == NULL)
+                    return 0;
+                if (node->value.first == key)
+                    return (node);
+                if (_compare(node->value.first, value) == false)
+                    return find_node(node->left_child, value);
+                else
+                    return find_node(node->right_child, value);    
             }
 
     };
