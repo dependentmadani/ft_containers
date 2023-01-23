@@ -288,6 +288,19 @@ namespace ft
                 return node;
             }
 
+            //private function of searching for a key
+            map_value* search(node_type* node, key_type& value)
+            {
+                if (node == NULL)
+                    return 0;
+                if (node->value.first == key)
+                    return &(node->value.second);
+                if (_compare(node->value.first, value) == false)
+                    return search(node->left_child, value);
+                else
+                    return search(node->right_child, value);
+            }
+
     };
 
 }
