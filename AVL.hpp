@@ -8,6 +8,7 @@
 
 namespace ft
 {
+    #define SPACE 10
     template<class Pair>
     struct AVL
     {
@@ -157,6 +158,19 @@ namespace ft
                 return 0;
             }
 
+            void print2D(node_type* node, int space)
+            {
+                if (node == NULL)
+                  return;
+                space += SPACE;
+                print2D(node->right_child, space);
+                cout << endl;
+                for (int i = SPACE; i < space; i++)
+                  cout << " ";
+                cout << node->value.first << "\n";
+                print2D(node->left_child, space);
+            }
+
 
         private:
 
@@ -245,36 +259,60 @@ namespace ft
                 node->height = std::max(right_side_height, left_side_height) + 1;
             }            
 
+            // node_type* right_rotation(node_type* node)
+            // {
+            //     node_type* new_parent;
+            //     new_parent = node->left_child;
+            //     node->left_child = new_parent->right_child;
+            //     new_parent->right_child = node; //to check it ????
+            //     new_parent->parent = node->parent; //to check it ????
+            //     node->parent = new_parent;
+            //     if (node->left_child != NULL)
+            //         node->left_child->right_child = new_parent->right_child;
+            //     update(new_parent);
+            //     update(node);
+            //     return new_parent;
+            // }
+
+            // node_type* left_rotation(node_type* node)
+            // {
+            //     node_type* new_parent;
+            //     new_parent = node->right_child;
+            //     node->left_child = new_parent->left_child;
+            //     new_parent->right_child = node; // to check it ??
+            //     new_parent->parent = node->parent; // to check it ???
+            //     node->parent = new_parent;
+            //     if (node->right_child != NULL)
+            //         node->right_child->right_child = new_parent->left_child;
+            //     update(new_parent);
+            //     update(node);
+            //     return new_parent;
+            // }
+
             //make a right rotation to fix the balance
             node_type* right_rotation(node_type* node)
             {
-                node_type* new_parent;
-                new_parent = node->left_child;
-                node->left_child = new_parent->right_child;
-                new_parent->right_child = node; //to check it ????
-                new_parent->parent = node->parent; //to check it ????
-                node->parent = new_parent;
-                if (node->left_child != NULL)
-                    node->left_child->right_child = new_parent->right_child;
-                update(new_parent);
+                node_type* x_node = node->left_child;
+                node_type* y_node = node->right_child;
+
+                x_node->right_child = node;
+                node->left_child = y_node;
+                update(x_node);
                 update(node);
-                return new_parent;
+                return x_node;
             }
 
-            //make a left rotation to help fix the balance of tree
+            // //make a left rotation to help fix the balance of tree
             node_type* left_rotation(node_type* node)
             {
-                node_type* new_parent;
-                new_parent = node->right_child;
-                node->left_child = new_parent->left_child;
-                new_parent->right_child = node; // to check it ??
-                new_parent->parent = node->parent; // to check it ???
-                node->parent = new_parent;
-                if (node->right_child != NULL)
-                    node->right_child->right_child = new_parent->left_child;
-                update(new_parent);
+                node_type* x_node = node->right_child;
+                node_type* y_node = node->left_child;
+
+                x_node->left_child = node;
+                node->right_child = y_node;
+                update(x_node);
                 update(node);
-                return new_parent;
+                return x_node;
             }
 
             //implement three cases of rotation
