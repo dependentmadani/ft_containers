@@ -219,19 +219,12 @@ namespace ft
                     return (root);
                 }
                 if (_compare(value.first, node->value.first) == true)
-                {
-                    node_type* left_node = insertion(node->left_child, value);
-                    node->left_child = left_node;
-                    left_node->parent = node; // unuseful
-                }
+                    node->left_child = insertion(node->left_child, value);
                 else
-                {
-                    node_type* right_node = insertion(node->right_child, value);
-                    node->right_child = right_node;
-                    right_node->parent = node; // unuseful
-                }
+                    node->right_child = nsertion(node->right_child, value);
                 update_bf_height(node);
-                return balance_tree(node);
+                balance_tree(node);
+                return node;
             }
 
             //it updates the values of height and balanced factor each time there is modification in the tree
@@ -310,20 +303,19 @@ namespace ft
             //balancing the tree map
             node_type* balance(node_type* node)
             {
-                if (node->balanced_factor == 2)
-                {
-                    if (node->right_child->balanced_factor >= 0)
-                        return right_right_case(node);
-                    else
-                        return right_left_case(node);
-                }
-                else if (node->balanced_factor == -2)
-                {
-                    if (node->left_child->balanced_factor <= 0)
-                        return left_left_case(node);
-                    else
-                        return left_right_case(node);
-                }
+                //right right case of balance
+                if (node->balanced_factor > 1 && node->right_child->balanced_factor >= 0)
+                    return right_right_case(node);
+                //right left case of balance
+                else if (node->balanced_factor > 1 && node->right_child->balanced_factor < 0)
+                    return right_left_case(node);
+                //left left case of balance
+                else if (node->balanced_factor > 1 && node->left_child->balanced_factor <= 0)
+                    return left_left_case(node);
+                //left right case of balance
+                else if (node->balanced_factor > 1 && node->left_child->balanced_factor > 0)
+                    return left_right_case(node);
+                //return the node pointer if no balance is needed
                 return node;
             }
 
@@ -352,66 +344,100 @@ namespace ft
                     return find_node(node->right_child, value);    
             }
 
+            // node_type* deletion(node_type* node, key_type value)
+            // {
+            //     if (node == NULL)
+            //         return NULL;
+            //     if (_compare(value, node->value.first) == true && node->left_child != NULL)
+            //         node->left_child = deletion(node->left_child, value); // remove node->left_child != NULL if it didnt work
+            //     else if (_compare(value, node->value.first) == false && node->right_child != NULL)
+            //         node->right_child = deletion(node->right_child, value); // check node->value.first != key if it didnt work
+            //     else
+            //     {
+            //         //the case when there is one child, either left or right child
+            //         if ( node->left_child != NULL && node->right_child == NULL )
+            //         {
+            //             root = node->left_child;
+            //             root->parent = node->parent;
+            //             _allocator.destroy(&(node->value));
+            //             _allocator_node.deallocate(node, 1);
+            //             node = NULL;
+            //             return root;
+            //         }
+            //         else if ( node->left_child == NULL && node->right_child != NULL )
+            //         {
+            //             root = node->right_child;
+            //             root->parent = node->parent;
+            //             _allocator.destroy(&(node->value));
+            //             _allocator_node.deallocate(node, 1);
+            //             node = NULL;
+            //             return root;
+            //         }
+            //         // the case where the node has 2 children, we should replace the content of the nodes
+            //         // with its successor and it reduces to the deletion of the node with either one child
+            //         // or none.
+            //         else if ( node->left_child != NULL && node->right_child != NULL )
+            //         {
+            //             node_type* parent = node->parent;
+            //             if (node->left_child->height >= node->right_child->height)
+            //             {
+            //                 T s = max(node->left_child);
+            //                 _allocator.construct(&node->value, s);
+            //                 node->parent = parent;
+            //                 node->left_child = deletion(node->left_child, s.first);
+            //             }
+            //             else
+            //             {
+            //                 T s = min(node->right_child);
+            //                 _allocator.construct(&node->value, s);
+            //                 node->parent = parent;
+            //                 node->right_child = deletion(node->right_child, s.first);
+            //             }
+            //         }
+            //         else
+            //         {
+            //             _allocator.destroy(&(node->value));
+            //             _allocator_node.deallocate(node, 1);
+            //             node = NULL;
+            //             return node;
+            //         }
+            //         update(node);
+            //         balance(node);
+            //         return (node);
+            //     }
+            // }
             node_type* deletion(node_type* node, key_type value)
             {
                 if (node == NULL)
                     return NULL;
-                if (_compare(value, node->value.first) == true && node->left_child != NULL)
-                    node->left_child = deletion(node->left_child, value); // remove node->left_child != NULL if it didnt work
-                else if (_compare(value, node->value.first) == false && node->right_child != NULL)
-                    node->right_child = deletion(node->right_child, value); // check node->value.first != key if it didnt work
+                else if (_compare(value, node->value.first))
+                    node->left_child = deletion(node->left_child, value);
+                else if (_compare(value, node->value.first) == false )
+                    node->right_child = deletion(node->right_child, value);
                 else
                 {
-                    //the case when there is one child, either left or right child
-                    if ( node->left_child != NULL && node->right_child == NULL )
+                    if (node->left_child == NULL)
                     {
-                        root = node->left_child;
-                        root->parent = node->parent;
+                        node_type* temp = node->right_child;
                         _allocator.destroy(&(node->value));
                         _allocator_node.deallocate(node, 1);
                         node = NULL;
-                        return root;
+                        return temp;
                     }
-                    else if ( node->left_child == NULL && node->right_child != NULL )
+                    else if (node->right_child == NULL)
                     {
-                        root = node->right_child;
-                        root->parent = node->parent;
+                        node_type* temp = node->left_child;
                         _allocator.destroy(&(node->value));
                         _allocator_node.deallocate(node, 1);
                         node = NULL;
-                        return root;
-                    }
-                    // the case where the node has 2 children, we should replace the content of the nodes
-                    // with its successor and it reduces to the deletion of the node with either one child
-                    // or none.
-                    else if ( node->left_child != NULL && node->right_child != NULL )
-                    {
-                        node_type* parent = node->parent;
-                        if (node->left_child->height >= node->right_child->height)
-                        {
-                            T s = max(node->left_child);
-                            _allocator.construct(&node->value, s);
-                            node->parent = parent;
-                            node->left_child = deletion(node->left_child, s.first);
-                        }
-                        else
-                        {
-                            T s = min(node->right_child);
-                            _allocator.construct(&node->value, s);
-                            node->parent = parent;
-                            node->right_child = deletion(node->right_child, s.first);
-                        }
+                        return temp;
                     }
                     else
                     {
-                        _allocator.destroy(&(node->value));
-                        _allocator_node.deallocate(node, 1);
-                        node = NULL;
-                        return node;
+                        node_type* temp = min(node->right_child);
+                        node->value = temp->value;
+                        node->right_child = deletion(node->right_child, temp->value);
                     }
-                    update(node);
-                    balance(node);
-                    return (node);
                 }
             }
 
