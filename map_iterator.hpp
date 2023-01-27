@@ -3,10 +3,11 @@
 
 # include <memory>
 # include "utility.hpp"
+# include "AVL.hpp"
 
 namespace ft
 {
-    template<class T, class Category, class tree, class node>
+    template<class T, class Category, class tree_t, class node_t>
     class Bidirectional_iterator
     {
         public:
@@ -15,24 +16,24 @@ namespace ft
             typedef ptrdiff_t   difference_type;
             typedef T*          pointer;
             typedef T&          reference;
-            typedef tree        tree_type;
-            typedef node        node_type;
+            typedef tree_t        tree_type;
+            typedef node_t        node_type;
         
         private:
             //the address of avl object associated with the iterator.
-            tree_type*  tree;
+            tree_type*  _tree;
             //the current location in the tree
             node_type*  node;
 
         public:
-            Bidirectional_iterator(): tree(NULL), node(NULL) { };
-            Bidirectional_iterator(node_type* n, tree_type* t): node(n), tree(t) { };
+            Bidirectional_iterator(): _tree(NULL), node(NULL) { };
+            Bidirectional_iterator(node_type* n, tree_type* t): node(n), _tree(t) { };
             Bidirectional_iterator(const Bidirectional_iterator& other) {*this = other;};
             ~Bidirectional_iterator() {};
             Bidirectional_iterator& operator= (const Bidirectional_iterator& other) {
                 if (*this != other)
                 {
-                    tree = other.tree;
+                    _tree = other._tree;
                     node = other.node;
                 }
                 return (*this);
@@ -44,9 +45,9 @@ namespace ft
             reference operator* () const {return node->value;};
             pointer operator-> () const {return &(node->value);};
 
-            operator Bidirectional_iterator<const value_type, iterator_category, const tree_type, const node_type>() 
+            operator Bidirectional_iterator<const T, iterator_category, const tree_type, const node_type>() const
             {
-                return Bidirectional_iterator<const value_type, iterator_category, const tree_type, const node_type>(node, tree);
+                return Bidirectional_iterator<const T, iterator_category, const tree_type, const node_type>(node, _tree);
             };
 
             Bidirectional_iterator& operator++ ()
@@ -54,7 +55,7 @@ namespace ft
                 node_type*   tmp;
                 if (node == NULL)
                 {
-                    node = tree->root;
+                    node = _tree->root;
                     while (node != NULL)
                         node = node->left_child;
                 }
@@ -80,7 +81,7 @@ namespace ft
                 return *this;
             }
 
-            Bidirectional_iterator& operator++ (int)
+            Bidirectional_iterator operator++ (int)
             {
                 Bidirectional_iterator tmp = *this;
                 ++(*this);
@@ -92,7 +93,7 @@ namespace ft
                 node_type*   tmp;
                 if (node == NULL)
                 {
-                    node = tree->root;
+                    node = _tree->root;
                     while (node != NULL)
                         node = node->right_child;
                 }
@@ -118,7 +119,7 @@ namespace ft
                 return *this;
             }
 
-            Bidirectional_iterator& operator--(int)
+            Bidirectional_iterator operator--(int)
             {
                 Bidirectional_iterator tmp = *this;
                 --(*this);

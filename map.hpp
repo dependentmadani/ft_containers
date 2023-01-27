@@ -1,6 +1,7 @@
 #ifndef MAP_HPP
 # define MAP_HPP
 
+# include <exception>
 # include "AVL.hpp"
 # include "utility.hpp"
 # include "vector.hpp"
@@ -14,18 +15,18 @@ namespace ft
     class map
     {
         public:
-            typedef Key                                 key_type;
-            typedef T                                   mapped_type;
-            typedef typename ft::pair<cont Key, T>      value_type;
-            typedef size_t                              size_type;
-            typedef ptrdiff_t                           difference_type;
-            typedef Compare                             key_compare;
-            typedef Allocator                           allocator_type;
-            typedef value_type&                         reference;
-            typedef const value_type&                   const_reference;
-            typedef typename Allocator::pointer         pointer;
-            typedef typename Allocator::const_pointer   const_pointer;
-            typedef typename ft::AVL<ft::pair<const Key, T>>    node_type;
+            typedef Key                                                                                                                         key_type;
+            typedef T                                                                                                                           mapped_type;
+            typedef typename ft::pair<const Key, T>                                                                                             value_type;
+            typedef size_t                                                                                                                      size_type;
+            typedef ptrdiff_t                                                                                                                   difference_type;
+            typedef Compare                                                                                                                     key_compare;
+            typedef Allocator                                                                                                                   allocator_type;
+            typedef value_type&                                                                                                                 reference;
+            typedef const value_type&                                                                                                           const_reference;
+            typedef typename Allocator::pointer                                                                                                 pointer;
+            typedef typename Allocator::const_pointer                                                                                           const_pointer;
+            typedef typename ft::AVL<ft::pair<const Key, T> >                                                                                   node_type;
             typedef typename ft::avl_tree<ft::pair<const Key, T>, Compare, Allocator>                                                           tree_type;
             typedef typename ft::Bidirectional_iterator<value_type, std::bidirectional_iterator_tag, tree_type, node_type>                      iterator;
             typedef typename ft::Bidirectional_iterator<const value_type, std::bidirectional_iterator_tag, const tree_type, const node_type>    const_iterator;
@@ -57,21 +58,20 @@ namespace ft
         public:
 
             //constructors
-            explicit map(const Compare& comp, const Allocator& alloc = Allocator()): _compare(key_compare()), _allocator(alloc), _tree(NULL) { };
+            explicit map(const Compare& comp = Compare(), const Allocator& alloc = Allocator()): _compare(comp), _allocator(alloc), _tree() { };
 
             //construct using iterators
             template<class InputIt>
-            map( InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator() )
+            map( InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator() ): _compare(comp), _allocator(alloc)
             {
-                while (first != last)
+                for (;first != last; ++first)
                 {
                     _tree.insertion(*first);
-                    ++first;
                 }
             };
 
             //copy constructor
-            map(const map& other): _tree(NULL) { *this = other; };
+            map(const map& other): _tree() { *this = other; };
 
             //destructor that use tree destructor
             ~map() { };
@@ -100,7 +100,7 @@ namespace ft
             {
                 iterator tmp = lower_bound(key);
                 if (tmp == end() || key_compare()(key, (*tmp).first))
-                    throw out_of_range("map::at");
+                    throw std::out_of_range("map::at");
                 return (*tmp).second;
             };
 
@@ -108,7 +108,7 @@ namespace ft
             {
                 const_iterator tmp = lower_bound(key);
                 if (tmp == end() || key_compare()(key, (*tmp).first))
-                    throw out_of_range("map::at");
+                    throw std::out_of_range("map::at");
                 return (*tmp).second;
             };
 
@@ -256,7 +256,7 @@ namespace ft
             //returns iterator to an element with key equivalent to key
             iterator find(const Key& key)
             {
-                if (this->count())
+                if (this->count(key))
                     return iterator(_tree.find_node(key), &_tree);
                 return this->end();
             }
@@ -361,7 +361,7 @@ namespace ft
             //return the key comparison function object
             key_compare key_comp() const
             {
-                key_comp k = _compare;
+                key_compare k = _compare;
 
                 return k;
             }

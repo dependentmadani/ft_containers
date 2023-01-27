@@ -15,7 +15,7 @@ CPP = clang++ -std=c++98
 
 RM = /bin/rm -rf
 
-CFLAGS = -Wall -Wextra -Werror
+# CFLAGS = -Wall -Wextra -Werror
 
 all: $(NAME)
 

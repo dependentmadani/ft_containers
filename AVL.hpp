@@ -28,7 +28,7 @@ namespace ft
             typedef AVL<T>                                                  node_type;
             typedef typename T::first_type                                  key_type;
             typedef typename T::second_type                                 map_value;
-            typedef typename Allocator::rebind<node_type>::other            Allocator_node;
+            typedef typename Allocator::template rebind<node_type>::other            Allocator_node;
 
             node_type   *root;
             int         node_number;
@@ -40,8 +40,8 @@ namespace ft
         
         public:
 
-            avl_tree( ): root(NULL), node_number(0) {};
-            ~avl_tree( ): { this->clear(); };
+            avl_tree(): root(NULL), node_number(0) {};
+            ~avl_tree() { this->clear(); };
             avl_tree( const avl_tree& other) { *this = other; };
             avl_tree& operator= (const avl_tree& other) {
                 _compare = other._compare;
@@ -56,19 +56,21 @@ namespace ft
             void insert_all_nodes(node_type *node)
             {
                 if (node != NULL)
+                {
                     insertion(node->value);
                     if (node->left_child != NULL)
                         insert_all_nodes(node->left_child);
                     else if (node->right_child != NULL)
                         insert_all_nodes(node->right_child);
+                }
             }
 
             // this function takes the values of a type and insert it the root
             node_type* insertion(T value)
             {
-                if (!available(root, value))
+                if (!available_in_tree(root, value))
                 {
-                    root = insert(root, value);
+                    root = insertion(root, value);
                     node_number++;
                     return root;
                 }
@@ -78,17 +80,17 @@ namespace ft
             //return the max value in the tree map
             T max(node_type* node) const
             {
-                while (root->right != NULL)
-                    root = root->right;
-                return root->value;
+                while (node->right != NULL)
+                    node = node->right;
+                return node->value;
             }
 
             //return the min value in the tree map
             T min(node_type* node) const
             {
-                while (root->left != NULL)
-                    root = root->left;
-                return root->value;
+                while (node->left_child != NULL)
+                    node = node->left_child;
+                return node->value;
             }
 
             //this function checks if a value of type T does exist in the tree or not
@@ -151,7 +153,7 @@ namespace ft
             {
                 if (available_in_tree(root, value))
                 {
-                    root = deletion(root, key);
+                    root = deletion(root, value);
                     --node_number;
                     return 1;
                 }
@@ -173,10 +175,10 @@ namespace ft
                   return;
                 space += SPACE;
                 print2D(node->right_child, space);
-                cout << endl;
+                std::cout << std::endl;
                 for (int i = SPACE; i < space; i++)
-                  cout << " ";
-                cout << node->value.first << "\n";
+                  std::cout << " ";
+                std::cout << node->value.first << std::endl;
                 print2D(node->left_child, space);
             }
 
@@ -188,11 +190,11 @@ namespace ft
             {
                 if (node != NULL)
                 {
-                    _allocator.destroy(node->value);
+                    _allocator.destroy(&(node->value));
                     if (node->right_child != NULL)
-                        clean(node->left_child);
+                        clear(node->left_child);
                     if (node->left_child != NULL)
-                        clean(node->left_child);
+                        clear(node->left_child);
                     _allocator_node.deallocate(node, 1);
                 }
                 node = NULL;
@@ -217,11 +219,11 @@ namespace ft
             {
                 if (node != NULL)
                     return false;
-                if (node->value.first == value.first)
+                if (node->value.first == value)
                     return true;
-                if (_compare(value.first, node->value.first) == true)
+                if (_compare(value, node->value.first) == true)
                     return available_in_tree(node->left_child, value);
-                if (_compare(value.first, node->value.first) == false)
+                if (_compare(value, node->value.first) == false)
                     return available_in_tree(node->right_child, value);
                 return true;
             }
@@ -244,9 +246,9 @@ namespace ft
                 if (_compare(value.first, node->value.first) == true)
                     node->left_child = insertion(node->left_child, value);
                 else
-                    node->right_child = nsertion(node->right_child, value);
+                    node->right_child = insertion(node->right_child, value);
                 update_bf_height(node);
-                balance_tree(node);
+                balance(node);
                 return node;
             }
 
@@ -306,8 +308,8 @@ namespace ft
 
                 x_node->right_child = node;
                 node->left_child = y_node;
-                update(x_node);
-                update(node);
+                update_bf_height(x_node);
+                update_bf_height(node);
                 return x_node;
             }
 
@@ -319,8 +321,8 @@ namespace ft
 
                 x_node->left_child = node;
                 node->right_child = y_node;
-                update(x_node);
-                update(node);
+                update_bf_height(x_node);
+                update_bf_height(node);
                 return x_node;
             }
 
@@ -371,7 +373,7 @@ namespace ft
             {
                 if (node == NULL)
                     return 0;
-                if (node->value.first == key)
+                if (node->value.first == value)
                     return &(node->value.second);
                 if (_compare(node->value.first, value) == false)
                     return searching(node->left_child, value);
@@ -383,7 +385,7 @@ namespace ft
             {
                 if (node == NULL)
                     return 0;
-                if (node->value.first == key)
+                if (node->value.first == value)
                     return (node);
                 if (_compare(node->value.first, value) == false)
                     return find_node(node->left_child, value);
@@ -481,11 +483,12 @@ namespace ft
                     }
                     else
                     {
-                        node_type* temp = min(node->right_child);
-                        node->value = temp->value;
-                        node->right_child = deletion(node->right_child, temp->value);
+                        T temp = min(node->right_child);
+                        node->value = temp;
+                        node->right_child = deletion(node->right_child, temp.first);
                     }
                 }
+                return node;
             }
 
     };
