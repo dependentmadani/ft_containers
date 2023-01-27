@@ -281,15 +281,148 @@ namespace ft
             //than key. If no such element is found, end() is returned
             iterator lower_bound( const Key& key)
             {
-                
+                iterator tmp = this->end();
+                if (this->count(key))
+                    return this->find(key);
+                else if (_compare(key, this->begin()->first) > 0)
+                    return this->begin();
+                else
+                {
+                    iterator it = this->begin();
+                    iterator ite = this->end();
+                    for (;it != ite; ++it)
+                    {
+                        if (_compare(key, it->first))
+                            tmp = it;
+                    }
+                }
+                return tmp;
             }
 
             const_iterator lower_bound( const Key& key) const
             {
+                const_iterator tmp = this->end();
+                if (this->count(key))
+                    return this->find(key);
+                else if (_compare(key, this->begin()->first) > 0)
+                    return this->begin();
+                else
+                {
+                    const_iterator cit = this->begin();
+                    const_iterator cite = this->end();
+                    for (;cit != cite; ++cit)
+                    {
+                        if (_compare(key, cit->first))
+                            tmp = cit;
+                    }
+                }
+                return tmp;
+            }
 
+            //return first element which is > value. If not, return end()
+            iterator upper_bound(const Key& key)
+            {
+                if (this->count(key))
+                    return ++iterator(_tree.find_node(key), &_tree);
+                else if (_compare(key, this->begin()->first) > 0)
+                    return this->begin();
+                else
+                {
+                    iterator it = this->begin();
+                    iterator ite = this->end();
+                    for (; it != ite; ++it)
+                    {
+                        if (_compare(key, it->first))
+                            return it;
+                    }
+                }
+                return this->end();
+            }
+
+            const_iterator upper_bound(const Key& key) const
+            {
+                if (this->count(key))
+                    return ++const_iterator(_tree.find_node(key), &_tree);
+                else if (_compare(key, this->begin()->first) > 0)
+                    return this->begin();
+                else
+                {
+                    const_iterator it = this->begin();
+                    const_iterator ite = this->end();
+                    for (; it != ite; ++it)
+                    {
+                        if (_compare(key, it->first))
+                            return it;
+                    }
+                }
+                return this->end();
+            }
+
+            //return the key comparison function object
+            key_compare key_comp() const
+            {
+                key_comp k = _compare;
+
+                return k;
+            }
+
+            //return the value comparison function object
+            value_compare value_comp() const
+            {
+                return value_compare(_compare);
             }
 
     };
+
+    template<class Key, class T, class Compare, class Alloc>
+    bool operator==( const ft::map<Key, T, Compare, Alloc>& lhs,
+                     const ft::map<Key, T, Compare, Alloc>& rhs)
+    {
+        if (lhs.size() != rhs.size())
+					return false;
+		return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+    };
+
+    template<class Key, class T, class Compare, class Alloc>
+    bool operator!=( const ft::map<Key, T, Compare, Alloc>& lhs,
+                     const ft::map<Key, T, Compare, Alloc>& rhs)
+    {
+        return !(lhs == rhs);
+    };
+
+    template<class Key, class T, class Compare, class Alloc>
+    bool operator<( const ft::map<Key, T, Compare, Alloc>& lhs,
+                     const ft::map<Key, T, Compare, Alloc>& rhs)
+    {
+        return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+    };
+
+    template<class Key, class T, class Compare, class Alloc>
+    bool operator<=( const ft::map<Key, T, Compare, Alloc>& lhs,
+                     const ft::map<Key, T, Compare, Alloc>& rhs)
+    {
+        return !(rhs < lhs);
+    };
+
+    template<class Key, class T, class Compare, class Alloc>
+    bool operator>( const ft::map<Key, T, Compare, Alloc>& lhs,
+                     const ft::map<Key, T, Compare, Alloc>& rhs)
+    {
+        return rhs < lhs;
+    };
+
+    template<class Key, class T, class Compare, class Alloc>
+    bool operator>=( const ft::map<Key, T, Compare, Alloc>& lhs,
+                     const ft::map<Key, T, Compare, Alloc>& rhs)
+    {
+        return !(lhs < rhs);
+    };
+    
+    template<class Key, class T, class Compare, class Alloc>
+    void swap(ft::map<Key, T, Compare, Alloc>& lhs, ft::map<Key, T, Compare, Alloc>& rhs)
+    {
+        lhs.swap(rhs);
+    }
 }
 #include <map>
 

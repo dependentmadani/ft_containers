@@ -44,9 +44,9 @@ namespace ft
             reference operator* () const {return node->value;};
             pointer operator-> () const {return &(node->value);};
 
-            operator Bidirectional_iterator<const value_type, const iterator_category, const tree_type, const node_type>() 
+            operator Bidirectional_iterator<const value_type, iterator_category, const tree_type, const node_type>() 
             {
-                return Bidirectional_iterator<const value_type, const iterator_category, const tree_type, const node_type>(node, tree);
+                return Bidirectional_iterator<const value_type, iterator_category, const tree_type, const node_type>(node, tree);
             };
 
             Bidirectional_iterator& operator++ ()
