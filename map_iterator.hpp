@@ -125,7 +125,10 @@ namespace ft
                 return tmp;
             }
 
-            
+            node_type* get_node()
+            {
+                return node;
+            }
     };
 }
 

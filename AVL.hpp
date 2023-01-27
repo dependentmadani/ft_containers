@@ -158,6 +158,15 @@ namespace ft
                 return 0;
             }
 
+            void    swap( avl_tree &avl )
+            {
+                std::swap(_allocator, avl._allocator);
+                std::swap(_allocator_node, avl._allocator_node);
+                std::swap(_compare, avl._compare);
+                std::swap(root, avl.root);
+                std::swap(node_number, avl.node_number);
+            }
+
             void print2D(node_type* node, int space)
             {
                 if (node == NULL)
