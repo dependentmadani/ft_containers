@@ -26,7 +26,7 @@ namespace ft
             node_type*  node;
 
         public:
-            Bidirectional_iterator(): _tree(NULL), node(NULL) { };
+            Bidirectional_iterator(): _tree(), node() { };
             Bidirectional_iterator(node_type* n, tree_type* t): node(n), _tree(t) { };
             Bidirectional_iterator(const Bidirectional_iterator& other) {*this = other;};
             ~Bidirectional_iterator() {};
@@ -64,7 +64,7 @@ namespace ft
                     if (node->right_child != NULL)
                     {
                         node = node->right_child;
-                        while (node->left_child != NULL)
+                        while (node->left_child != NULL && node->left_child != NULL)
                             node = node->left_child;
                     }
                     else
@@ -94,7 +94,7 @@ namespace ft
                 if (node == NULL)
                 {
                     node = _tree->root;
-                    while (node != NULL)
+                    while (node != NULL && node->right_child != NULL)
                         node = node->right_child;
                 }
                 else
