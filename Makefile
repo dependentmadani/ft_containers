@@ -11,7 +11,7 @@ INCLUDE = iterator.hpp \
 
 OBJCS = $(SRCS:.cpp=.o)
 
-CPP = clang++ -std=c++98
+CPP = clang++ #-std=c++98
 
 RM = /bin/rm -rf
 

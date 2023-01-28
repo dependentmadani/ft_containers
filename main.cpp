@@ -22,7 +22,7 @@
 #define RESET "\e[0m"
 
 #define EQUAL(x) ((x) ? (std::cout << "\033[1;32mAC\033[0m\n") : (std::cout << "\033[1;31mWA\033[0m\n"))
-#define TIME_FAC 4 // the ft::map methods can be slower up to std::map methods * TIME_FAC (MAX 20)
+#define TIME_FAC 3 // the ft::map methods can be slower up to std::map methods * TIME_FAC (MAX 20)
 
 typedef std::pair<std::map<int, std::string>::iterator, std::map<int, std::string>::iterator> iter_def;
 typedef ft::pair<ft::map<int, std::string>::iterator, ft::map<int, std::string>::iterator> ft_iter_def;
@@ -250,6 +250,7 @@ void iterator_tests(void)
             ft::map<int, std::string>::iterator ft_it = --ft_m.end();
             for (; ft_it != ft_m.begin(); --ft_it)
                 ;
+            std::cout << "good here llooooooooooll" << std::endl;
             ualarm(0, 0);
         }
         int res(0);
@@ -2216,7 +2217,6 @@ int main()
 
     std::cout << YELLOW << "Testing Iterators;" << RESET << std::endl;
     TEST_CASE(iterator_tests);
-    std::cout << "chouf hnaaaa *****************" << std::endl;
     TEST_CASE(const_iterator_tests);
     TEST_CASE(reverse_iterator_tests);
     std::cout << std::endl;

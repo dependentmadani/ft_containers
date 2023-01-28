@@ -56,7 +56,7 @@ namespace ft
                 if (node == NULL)
                 {
                     node = _tree->root;
-                    while (node != NULL)
+                    while (node != NULL && node->left_child != NULL)
                         node = node->left_child;
                 }
                 else
@@ -64,7 +64,7 @@ namespace ft
                     if (node->right_child != NULL)
                     {
                         node = node->right_child;
-                        while (node->left_child != NULL && node->left_child != NULL)
+                        while (node->left_child != NULL)
                             node = node->left_child;
                     }
                     else
@@ -97,24 +97,21 @@ namespace ft
                     while (node != NULL && node->right_child != NULL)
                         node = node->right_child;
                 }
+                else if (node->left_child != NULL)
+                {
+                    node = node->left_child;
+                    while (node->right_child != NULL)
+                        node = node->right_child;
+                }
                 else
                 {
-                    if (node->left_child != NULL)
+                    tmp = node->parent;
+                    while (tmp != NULL && node == tmp->left_child)
                     {
-                        node = node->left_child;
-                        while (node->right_child != NULL)
-                            node = node->right_child;
-                    }
-                    else
-                    {
-                        tmp = node->parent;
-                        while (tmp != NULL && node == tmp->right_child)
-                        {
-                            node = tmp;
-                            tmp = tmp->parent;
-                        }
                         node = tmp;
+                        tmp = tmp->parent;
                     }
+                    node = tmp;
                 }
                 return *this;
             }

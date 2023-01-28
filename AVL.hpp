@@ -197,7 +197,7 @@ namespace ft
             //private function of clear to use private attribe root to clear it
             void clear(node_type* node)
             {
-                if (node != NULL)
+                if (node == NULL)
                 {
                     _allocator.destroy(&(node->value));
                     if (node->right_child != NULL)
@@ -212,13 +212,10 @@ namespace ft
             //this private function checks if a value of type T does exist in the tree or not
             bool available_in_tree(node_type* node, T value) const
             {
-                if (node != NULL)
+                if (node == NULL)
                     return false;
                 if (node->value.first == value.first)
-                {
-                    std::cout << "allll goooood tillll now*******"<< value.first << std::endl;
                     return true;
-                }
                 if (_compare(value.first, node->value.first) == true)
                     return available_in_tree(node->left_child, value);
                 if (_compare(value.first, node->value.first) == false)
