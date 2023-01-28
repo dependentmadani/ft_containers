@@ -151,7 +151,8 @@ namespace ft
 
             pair() : first(), second() {};
             pair(  const first_type &a, const second_type &b ) : first(a), second(b) {};
-            template<typename X, typename Y> pair( const pair<X,Y> &pr ) : first(pr.first), second(pr.second) {};
+            template<typename X, typename Y>
+            pair( const pair<X,Y> &pr ) : first(pr.first), second(pr.second) {};
             ~pair() {};
 
             pair& operator=( const pair& o )

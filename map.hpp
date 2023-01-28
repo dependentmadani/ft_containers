@@ -17,7 +17,7 @@ namespace ft
         public:
             typedef Key                                                                                                                         key_type;
             typedef T                                                                                                                           mapped_type;
-            typedef typename ft::pair<const Key, T>                                                                                             value_type;
+            typedef typename ft::pair<key_type, mapped_type>                                                                                             value_type;
             typedef size_t                                                                                                                      size_type;
             typedef ptrdiff_t                                                                                                                   difference_type;
             typedef Compare                                                                                                                     key_compare;
@@ -26,8 +26,8 @@ namespace ft
             typedef const value_type&                                                                                                           const_reference;
             typedef typename Allocator::pointer                                                                                                 pointer;
             typedef typename Allocator::const_pointer                                                                                           const_pointer;
-            typedef typename ft::AVL<ft::pair<const Key, T> >                                                                                   node_type;
-            typedef typename ft::avl_tree<ft::pair<const Key, T>, Compare, Allocator>                                                           tree_type;
+            typedef typename ft::AVL<ft::pair<key_type, mapped_type> >                                                                                   node_type;
+            typedef typename ft::avl_tree<ft::pair<key_type, mapped_type>, Compare, Allocator>                                                           tree_type;
             typedef typename ft::Bidirectional_iterator<value_type, std::bidirectional_iterator_tag, tree_type, node_type>                      iterator;
             typedef typename ft::Bidirectional_iterator<const value_type, std::bidirectional_iterator_tag, const tree_type, const node_type>    const_iterator;
             typedef typename ft::reverse_iterator<iterator>         reverse_iterator;
@@ -302,7 +302,7 @@ namespace ft
             const_iterator lower_bound( const Key& key) const
             {
                 const_iterator tmp = this->end();
-                if (this->count(key))
+                if (_tree.available_in_tree(key))
                     return this->find(key);
                 else if (_compare(key, this->begin()->first) > 0)
                     return this->begin();
@@ -341,7 +341,7 @@ namespace ft
 
             const_iterator upper_bound(const Key& key) const
             {
-                if (this->count(key))
+                if (_tree.available_in_tree(key))
                     return ++const_iterator(_tree.find_node(key), &_tree);
                 else if (_compare(key, this->begin()->first) > 0)
                     return this->begin();
