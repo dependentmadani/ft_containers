@@ -9,6 +9,7 @@
 namespace ft
 {
     #define SPACE 10
+
     template<class Pair>
     struct AVL
     {
@@ -18,6 +19,14 @@ namespace ft
         AVL* right_child;
         int height;
         int balanced_factor;
+
+        AVL(): Pair(), parent(NULL), left_child(NULL), right_child(NULL), height(0), balanced_factor(0) {};
+        ~AVL() {};
+        bool operator== (const AVL& rhs) const{
+			return (value == rhs.value && balanced_factor == rhs.balanced_factor && height == rhs.height
+				&& left_child == rhs.left_child && right_child == rhs.right_child
+					&& parent == rhs.parent);
+		}
         AVL (Pair& other): value(other) {};
     };
 
@@ -45,8 +54,8 @@ namespace ft
             avl_tree( const avl_tree& other) { *this = other; };
             avl_tree& operator= (const avl_tree& other) {
                 _compare = other._compare;
-                _allocator_node = other._allocator_node;
                 _allocator = other._allocator;
+                _allocator_node = other._allocator_node;
                 insert_all_nodes(other.root);
                 return (*this);
             }
@@ -206,7 +215,10 @@ namespace ft
                 if (node != NULL)
                     return false;
                 if (node->value.first == value.first)
+                {
+                    std::cout << "allll goooood tillll now*******"<< value.first << std::endl;
                     return true;
+                }
                 if (_compare(value.first, node->value.first) == true)
                     return available_in_tree(node->left_child, value);
                 if (_compare(value.first, node->value.first) == false)

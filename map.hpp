@@ -2,6 +2,7 @@
 # define MAP_HPP
 
 # include <exception>
+# include <iostream>
 # include "AVL.hpp"
 # include "utility.hpp"
 # include "vector.hpp"
@@ -198,7 +199,9 @@ namespace ft
             ft::pair<iterator, bool> insert (const value_type& value)
             {
                 if (_tree.available_in_tree(value))
+                {
                     return ft::make_pair(iterator(_tree.find_node(value), &_tree), false);
+                }
                 return ft::make_pair(iterator(_tree.insertion(value), &_tree), true);
             }
 
