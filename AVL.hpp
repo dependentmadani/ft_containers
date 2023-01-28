@@ -30,7 +30,7 @@ namespace ft
             typedef typename T::second_type                                 map_value;
             typedef typename Allocator::template rebind<node_type>::other            Allocator_node;
 
-            node_type   *root;
+            node_type*  root;
             int         node_number;
         
         private:

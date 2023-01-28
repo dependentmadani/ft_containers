@@ -36,25 +36,25 @@ namespace ft
 
     template <typename T> struct is_integral
     {
-        static bool const value = false;
+        static bool const val = false;
         // operator value_type()
         // {
         //     return value;
         // };
     };
-    template <> struct is_integral<bool> { static bool const value = true;};
-    template <> struct is_integral<char> { static bool const value = true;};
-    template <> struct is_integral<wchar_t> { static bool const value = true;};
-    template <> struct is_integral<signed char> { static bool const value = true;};
-    template <> struct is_integral<short int> { static bool const value = true;};
-    template <> struct is_integral<int> { static bool const value = true;};
-    template <> struct is_integral<long int> { static bool const value = true;};
-    template <> struct is_integral<long long int> { static bool const value = true;};
-    template <> struct is_integral<unsigned char> { static bool const value = true;};
-    template <> struct is_integral<unsigned short int> { static bool const value = true;};
-    template <> struct is_integral<unsigned int> { static bool const value = true;};
-    template <> struct is_integral<unsigned long int> { static bool const value = true;};
-    template <> struct is_integral<unsigned long long int> { static bool const value = true;};
+    template <> struct is_integral<bool> { static bool const val = true;};
+    template <> struct is_integral<char> { static bool const val = true;};
+    template <> struct is_integral<wchar_t> { static bool const val = true;};
+    template <> struct is_integral<signed char> { static bool const val = true;};
+    template <> struct is_integral<short int> { static bool const val = true;};
+    template <> struct is_integral<int> { static bool const val = true;};
+    template <> struct is_integral<long int> { static bool const val = true;};
+    template <> struct is_integral<long long int> { static bool const val = true;};
+    template <> struct is_integral<unsigned char> { static bool const val = true;};
+    template <> struct is_integral<unsigned short int> { static bool const val = true;};
+    template <> struct is_integral<unsigned int> { static bool const val = true;};
+    template <> struct is_integral<unsigned long int> { static bool const val = true;};
+    template <> struct is_integral<unsigned long long int> { static bool const val = true;};
 
 
     template <class InputIt>
@@ -139,21 +139,30 @@ namespace ft
     If neither T1 or T2 is a possibly cv-qualified class type with non-trivial destructor, or array thereof,
     the destructor of pair is trivial.
     */
-    template<class T1, class T2>
+    template<typename T1, typename T2>
     struct pair
     {
         public:
             typedef T1 first_type;
             typedef T2 second_type;
 
-            first_type  first;
+            first_type first;
             second_type second;
 
-            pair(): first(), second() {};
-            pair( const T1& x, const T2& y ) {first = x; second = y;};
-            template<class U1, class U2> pair(const pair<U1, U2>& p): first(p.first), second(p.second) {};
+            pair() : first(), second() {};
+            pair(  const first_type &a, const second_type &b ) : first(a), second(b) {};
+            template<typename X, typename Y> pair( const pair<X,Y> &pr ) : first(pr.first), second(pr.second) {};
             ~pair() {};
-            pair& operator= (const pair& other) {first = other.first; second = other.second; return *this;};
+
+            pair& operator=( const pair& o )
+            {
+                if (this != &o)
+                {
+                    first = o.first;
+                    second = o.second;
+                }
+                return *this;
+            };
     };
     template<class T1, class T2>
     ft::pair<T1, T2> make_pair(T1 t, T2 u)
