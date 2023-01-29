@@ -29,7 +29,7 @@ namespace ft
             typedef typename ft::iterator_traits<Iter>::pointer pointer;
             typedef typename ft::iterator_traits<Iter>::reference reference;
         protected:
-            Iter current;
+            iterator_type current;
         public:
 
             reverse_iterator(): current() {};
@@ -37,7 +37,7 @@ namespace ft
             template<class U> reverse_iterator( const reverse_iterator<U>& other ): current(other.base()) {};
             template<class U> reverse_iterator& operator=( const reverse_iterator<U>& other )
             {current = other.base(); return *this;};
-            iterator_type base() const {return iterator_type(current);};
+            iterator_type base() const {return current;};
             reference operator* () const {Iter tmp = current; return *--tmp;};
             pointer operator-> () const {return &(operator*());};
             reference operator[] (difference_type n) const {return *(*this + n);};

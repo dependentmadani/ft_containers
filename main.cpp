@@ -248,9 +248,8 @@ void iterator_tests(void)
 
             ualarm(diff * 1e3, 0);
             ft::map<int, std::string>::iterator ft_it = --ft_m.end();
-            for (; ft_it != ft_m.begin(); --ft_it){
-            std::cout << "good here llooooooooooll " << (*ft_it).first << std::endl;
-                ;}
+            for (; ft_it != ft_m.begin(); --ft_it)
+                ;
             ualarm(0, 0);
         }
         int res(0);
@@ -379,6 +378,7 @@ void reverse_iterator_tests(void)
         ft::map<int, char>::reverse_iterator my_rit2(my_m.end());
         ft::map<int, char>::const_reverse_iterator c_it, c_ob(my_m.end());
         c_it = my_rit2;
+        std::cout << "wachh hhnnnnaaaaaa ************************** " << c_it->first << std::endl;
         EQUAL(my_rit2->first == c_it->first && my_rit2->first == c_ob->first);
     }
     std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " base function "

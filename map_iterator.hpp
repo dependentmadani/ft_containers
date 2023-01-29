@@ -111,8 +111,8 @@ namespace ft
                     }
                     node = tmp;
                 }
-                    std::cout << "kan hna" << std::endl;
-                std::cout << "check value: " << node->value.first << std::endl;
+                    // std::cout << "kan hna" << std::endl;
+                // std::cout << "check value: " << "\n" << node->value.first << std::endl;
                 return *this;
             }
 

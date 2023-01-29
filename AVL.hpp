@@ -89,8 +89,8 @@ namespace ft
             //return the max value in the tree map
             T max(node_type* node) const
             {
-                while (node->right != NULL)
-                    node = node->right;
+                while (node->right_child != NULL)
+                    node = node->right_child;
                 return node->value;
             }
 
@@ -253,9 +253,17 @@ namespace ft
                     return (root);
                 }
                 if (_compare(value.first, node->value.first) == true)
-                    node->left_child = insertion(node->left_child, value);
+                {
+                    node_type* tmp = insertion(node->left_child, value);
+                    node->left_child = tmp;
+                    tmp->parent = node;
+                }
                 else
-                    node->right_child = insertion(node->right_child, value);
+                {
+                    node_type* tmp = insertion(node->right_child, value);
+                    node->right_child = tmp;
+                    tmp->parent = node;
+                }
                 update_bf_height(node);
                 balance(node);
                 return node;
@@ -289,8 +297,8 @@ namespace ft
             //     node->parent = new_parent;
             //     if (node->left_child != NULL)
             //         node->left_child->right_child = new_parent->right_child;
-            //     update(new_parent);
-            //     update(node);
+            //     update_bf_height(new_parent);
+            //     update_bf_height(node);
             //     return new_parent;
             // }
 
@@ -304,8 +312,8 @@ namespace ft
             //     node->parent = new_parent;
             //     if (node->right_child != NULL)
             //         node->right_child->right_child = new_parent->left_child;
-            //     update(new_parent);
-            //     update(node);
+            //     update_bf_height(new_parent);
+            //     update_bf_height(node);
             //     return new_parent;
             // }
 
@@ -313,23 +321,27 @@ namespace ft
             node_type* right_rotation(node_type* node)
             {
                 node_type* x_node = node->left_child;
-                node_type* y_node = node->right_child;
+                node_type* y_node = x_node->right_child;
 
                 x_node->right_child = node;
                 node->left_child = y_node;
+                x_node->parent = node->parent;
+                node->parent = x_node;
                 update_bf_height(x_node);
                 update_bf_height(node);
                 return x_node;
             }
 
-            // //make a left rotation to help fix the balance of tree
+            //make a left rotation to help fix the balance of tree
             node_type* left_rotation(node_type* node)
             {
                 node_type* x_node = node->right_child;
-                node_type* y_node = node->left_child;
+                node_type* y_node = x_node->left_child;
 
                 x_node->left_child = node;
                 node->right_child = y_node;
+                x_node->parent = node->parent;
+                node->parent = x_node;
                 update_bf_height(x_node);
                 update_bf_height(node);
                 return x_node;
@@ -459,11 +471,12 @@ namespace ft
             //             node = NULL;
             //             return node;
             //         }
-            //         update(node);
-            //         balance(node);
-            //         return (node);
             //     }
+            //     update_bf_height(node);
+            //     balance(node);
+            //     return (node);
             // }
+            
             node_type* deletion(node_type* node, key_type value)
             {
                 if (node == NULL)
@@ -497,6 +510,8 @@ namespace ft
                         node->right_child = deletion(node->right_child, temp.first);
                     }
                 }
+                update_bf_height(node);
+                balance(node);
                 return node;
             }
 
