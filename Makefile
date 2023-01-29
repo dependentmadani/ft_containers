@@ -7,7 +7,10 @@ INCLUDE = iterator.hpp \
 	reverse_iterator.hpp \
 	utility.hpp \
 	vector.hpp \
-	stack.hpp
+	stack.hpp \
+	AVL.hpp \
+	map.hpp \
+	map_iterator.hpp \
 
 OBJCS = $(SRCS:.cpp=.o)
 

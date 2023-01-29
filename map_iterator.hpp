@@ -39,8 +39,8 @@ namespace ft
                 return (*this);
             }
 
-            friend bool operator== (const Bidirectional_iterator& lhs, const Bidirectional_iterator& rhs) {return lhs.node == rhs.node;};
-            friend bool operator!= (const Bidirectional_iterator& lhs, const Bidirectional_iterator& rhs) {return !(lhs == rhs);};
+            bool operator== (const Bidirectional_iterator& rhs) {return node == rhs.node;};
+            bool operator!= (const Bidirectional_iterator& rhs) {return node != rhs.node;};
 
             reference operator* () const {return node->value;};
             pointer operator-> () const {return &(node->value);};
@@ -59,24 +59,21 @@ namespace ft
                     while (node != NULL && node->left_child != NULL)
                         node = node->left_child;
                 }
+                else if (node->right_child != NULL)
+                {
+                    node = node->right_child;
+                    while (node->left_child != NULL)
+                        node = node->left_child;
+                }
                 else
                 {
-                    if (node->right_child != NULL)
+                    tmp = node->parent;
+                    while (tmp != NULL && node == tmp->right_child)
                     {
-                        node = node->right_child;
-                        while (node->left_child != NULL)
-                            node = node->left_child;
-                    }
-                    else
-                    {
-                        tmp = node->parent;
-                        while (tmp != NULL && node == tmp->right_child)
-                        {
-                            node = tmp;
-                            tmp = tmp->parent;
-                        }
                         node = tmp;
+                        tmp = tmp->parent;
                     }
+                    node = tmp;
                 }
                 return *this;
             }
@@ -91,6 +88,7 @@ namespace ft
             Bidirectional_iterator& operator--()
             {
                 node_type*   tmp;
+                
                 if (node == NULL)
                 {
                     node = _tree->root;
@@ -113,6 +111,8 @@ namespace ft
                     }
                     node = tmp;
                 }
+                    std::cout << "kan hna" << std::endl;
+                std::cout << "check value: " << node->value.first << std::endl;
                 return *this;
             }
 

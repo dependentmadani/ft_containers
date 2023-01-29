@@ -248,9 +248,9 @@ void iterator_tests(void)
 
             ualarm(diff * 1e3, 0);
             ft::map<int, std::string>::iterator ft_it = --ft_m.end();
-            for (; ft_it != ft_m.begin(); --ft_it)
-                ;
-            std::cout << "good here llooooooooooll" << std::endl;
+            for (; ft_it != ft_m.begin(); --ft_it){
+            std::cout << "good here llooooooooooll " << (*ft_it).first << std::endl;
+                ;}
             ualarm(0, 0);
         }
         int res(0);
