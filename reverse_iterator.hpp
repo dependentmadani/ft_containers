@@ -36,7 +36,11 @@ namespace ft
             explicit reverse_iterator( iterator_type x ): current(x) {};
             template<class U> reverse_iterator( const reverse_iterator<U>& other ): current(other.base()) {};
             template<class U> reverse_iterator& operator=( const reverse_iterator<U>& other )
-            {current = other.base(); return *this;};
+            {
+
+                current = other.base();
+                return *this;
+            };
             iterator_type base() const {return current;};
             reference operator* () const {Iter tmp = current; return *--tmp;};
             pointer operator-> () const {return &(operator*());};
@@ -119,5 +123,7 @@ namespace ft
     };
 
 }
+
+#include <iterator>
 
 # endif
