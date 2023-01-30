@@ -14,33 +14,33 @@
 # define REVERSE_ITERATOR_HPP
 
 # include "iterator_traits.hpp"
-# include "iterator.hpp"
+# include "map_iterator.hpp"
+# include "utility.hpp"
 
 namespace ft
 {
-    template<class Iter>
+    template<typename Iter>
     class reverse_iterator
     {
         public:
-            typedef Iter iterator_type;
-            typedef typename ft::iterator_traits<Iter>::iterator_category iterator_category;
-            typedef typename ft::iterator_traits<Iter>::value_type value_type;
-            typedef typename ft::iterator_traits<Iter>::difference_type difference_type;
-            typedef typename ft::iterator_traits<Iter>::pointer pointer;
-            typedef typename ft::iterator_traits<Iter>::reference reference;
-        protected:
+            typedef Iter                                                    iterator_type;
+            typedef typename ft::iterator_traits<Iter>::iterator_category   iterator_category;
+            typedef typename ft::iterator_traits<Iter>::value_type          value_type;
+            typedef typename ft::iterator_traits<Iter>::difference_type     difference_type;
+            typedef typename ft::iterator_traits<Iter>::pointer             pointer;
+            typedef typename ft::iterator_traits<Iter>::reference           reference;
+        private:
             iterator_type current;
         public:
 
             reverse_iterator(): current() {};
             explicit reverse_iterator( iterator_type x ): current(x) {};
-            template<class U> reverse_iterator( const reverse_iterator<U>& other ): current(other.base()) {};
-            template<class U> reverse_iterator& operator=( const reverse_iterator<U>& other )
-            {
-
-                current = other.base();
-                return *this;
-            };
+            template<typename U> reverse_iterator( const reverse_iterator<U>& other ): current(other.base()) { };
+            // template<typename U> reverse_iterator& operator=( const reverse_iterator<U>& other )
+            // {
+            //     this->current = other.base();
+            //     return *this;
+            // };
             iterator_type base() const {return current;};
             reference operator* () const {Iter tmp = current; return *--tmp;};
             pointer operator-> () const {return &(operator*());};

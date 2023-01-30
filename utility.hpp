@@ -157,11 +157,8 @@ namespace ft
 
             pair& operator=( const pair& o )
             {
-                // if (this != &o)
-                // {
-                    first = o.first;
-                    second = o.second;
-                // }
+                first = o.first;
+                second = o.second;
                 return *this;
             };
     };

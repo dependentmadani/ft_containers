@@ -31,11 +31,8 @@ namespace ft
             Bidirectional_iterator(const Bidirectional_iterator& other) {*this = other;};
             ~Bidirectional_iterator() {};
             Bidirectional_iterator& operator= (const Bidirectional_iterator& other) {
-                if (*this != other)
-                {
-                    _tree = other._tree;
-                    node = other.node;
-                }
+                _tree = other._tree;
+                node = other.node;
                 return (*this);
             }
 

@@ -14,6 +14,7 @@
 #include <signal.h>
 #include <sys/time.h>
 #include <random>
+#include <typeinfo>
 
 #define BLUE "\e[0;34m"
 #define RED "\e[0;31m"
@@ -378,7 +379,6 @@ void reverse_iterator_tests(void)
         ft::map<int, char>::reverse_iterator my_rit2(my_m.end());
         ft::map<int, char>::const_reverse_iterator c_it, c_ob(my_m.end());
         c_it = my_rit2;
-        std::cout << "wachh hhnnnnaaaaaa ************************** " << "\n" << c_it->first << std::endl;
         EQUAL(my_rit2->first == c_it->first && my_rit2->first == c_ob->first);
     }
     std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " base function "

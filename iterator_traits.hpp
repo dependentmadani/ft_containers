@@ -20,7 +20,7 @@ namespace ft
     /*
     Member types of iterator_traits
     */
-    template<class Iter>
+    template<typename Iter>
     struct iterator_traits
     {
         typedef typename Iter::difference_type difference_type;
@@ -34,7 +34,7 @@ namespace ft
     This type trait may be specialized for user-provided types
     that may be used as iterators
     */
-    template<class T>
+    template<typename T>
     struct iterator_traits<T*>
     {
         typedef T value_type;
@@ -46,7 +46,7 @@ namespace ft
     /*
     For const T* specialization member types
     */
-   template<class T>
+   template<typename T>
    struct iterator_traits<const T*>
    {
         typedef T value_type;

@@ -33,7 +33,7 @@ namespace ft
             typedef typename ft::reverse_iterator<iterator>                                                                                     reverse_iterator;
             typedef typename ft::reverse_iterator<const_iterator>                                                                               const_reverse_iterator;
 
-            class value_compare: public std::binary_function<value_type, value_type, bool>
+            typedef class value_compare: public std::binary_function<value_type, value_type, bool>
             {
                 friend class map;
                 public:
@@ -47,8 +47,7 @@ namespace ft
                 protected:
                     Compare c;
                     value_compare( Compare cmp ): c(cmp) { };
-            };
-            typedef value_compare                   value_compare;
+            }                                                                                                                                   value_compare;
 
         private:
             key_compare                             _compare;
