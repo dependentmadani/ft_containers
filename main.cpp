@@ -570,6 +570,7 @@ void testConstructors()
 
         for (ft::map<int, char>::iterator it = copy_m.begin(); it != copy_m.end(); ++it) // fill res from copy_m
             res1 += it->second;
+        std::cout << "resultas hia: " << m1.size() << " and " << copy_m.size() << std::endl;
         EQUAL(res == res1);
     }
     std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " Constructors with costum compare "

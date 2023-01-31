@@ -78,13 +78,10 @@ namespace ft
             //copy assignment operator of map
             map& operator= (const map& other)
             {
-                if (*this != other)
-                {
-                    _tree.clear();
-                    _allocator = other._allocator;
-                    _compare = other._compare;
-                    _tree = other._tree;
-                }
+                _tree.clear();
+                _allocator = other._allocator;
+                _compare = other._compare;
+                _tree = other._tree;
                 return *this;
             };
 

@@ -69,7 +69,7 @@ namespace ft
                     insertion(node->value);
                     if (node->left_child != NULL)
                         insert_all_nodes(node->left_child);
-                    else if (node->right_child != NULL)
+                    if (node->right_child != NULL)
                         insert_all_nodes(node->right_child);
                 }
             }
@@ -80,7 +80,7 @@ namespace ft
                 if (!available_in_tree(root, value))
                 {
                     root = insertion(root, value);
-                    node_number++;
+                    node_number += 1;
                     return root;
                 }
                 return NULL;
@@ -138,7 +138,7 @@ namespace ft
             void clear()
             {
                 node_number = 0;
-                this->clear(root);
+                clear(root);
             }
 
             //return the value where there is the value
@@ -197,7 +197,7 @@ namespace ft
             //private function of clear to use private attribe root to clear it
             void clear(node_type* node)
             {
-                if (node == NULL)
+                if (node != NULL)
                 {
                     _allocator.destroy(&(node->value));
                     if (node->right_child != NULL)
@@ -252,7 +252,8 @@ namespace ft
                     root->parent = NULL;
                     return (root);
                 }
-                if (_compare(value.first, node->value.first) == true)
+                int checker = _compare(value.first, node->value.first);
+                if (checker == true)
                 {
                     node_type* tmp = insertion(node->left_child, value);
                     node->left_child = tmp;
@@ -277,11 +278,11 @@ namespace ft
 
                 if (node->left_child == NULL)
                     left_side_height = -1;
-                else
+                else if (node->left_child != NULL)
                     left_side_height = node->left_child->height;
                 if (node->right_child == NULL)
                     right_side_height = -1;
-                else
+                else if (node->right_child != NULL)
                     right_side_height = node->right_child->height;
                 node->balanced_factor = right_side_height - left_side_height;
                 node->height = std::max(right_side_height, left_side_height) + 1;
@@ -327,6 +328,8 @@ namespace ft
                 node->left_child = y_node;
                 x_node->parent = node->parent;
                 node->parent = x_node;
+                // // if (node->left_child != NULL)
+                // //     node->left_child->parent = x_node->right_child;
                 update_bf_height(x_node);
                 update_bf_height(node);
                 return x_node;
@@ -342,6 +345,8 @@ namespace ft
                 node->right_child = y_node;
                 x_node->parent = node->parent;
                 node->parent = x_node;
+                // // if (node->right_child != NULL)
+                // //     node->right_child->parent = x_node->left_child;
                 update_bf_height(x_node);
                 update_bf_height(node);
                 return x_node;
@@ -366,7 +371,7 @@ namespace ft
 
             node_type* left_right_case(node_type* node)
             {
-                node->left_child = left_rotation(node);
+                node->left_child = left_rotation(node->left_child);
                 return right_rotation(node);
             }
 
