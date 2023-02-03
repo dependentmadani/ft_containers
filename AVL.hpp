@@ -226,7 +226,7 @@ namespace ft
             //this function checks if a value of type key_type does exist in the tree or not
             bool available_in_tree(node_type* node, key_type value) const
             {
-                if (node != NULL)
+                if (node == NULL)
                     return false;
                 if (node->value.first == value)
                     return true;
@@ -382,13 +382,13 @@ namespace ft
                 if (node->balanced_factor > 1 && node->right_child->balanced_factor >= 0)
                     return right_right_case(node);
                 //right left case of balance
-                else if (node->balanced_factor > 1 && node->right_child->balanced_factor < 0)
+                else if (node->balanced_factor > 1)
                     return right_left_case(node);
                 //left left case of balance
-                else if (node->balanced_factor > 1 && node->left_child->balanced_factor <= 0)
+                else if (node->balanced_factor < -1 && node->left_child->balanced_factor <= 0)
                     return left_left_case(node);
                 //left right case of balance
-                else if (node->balanced_factor > 1 && node->left_child->balanced_factor > 0)
+                else if (node->balanced_factor < -1)
                     return left_right_case(node);
                 //return the node pointer if no balance is needed
                 return node;
