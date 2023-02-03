@@ -26,13 +26,6 @@ namespace ft
             typedef const value_type&                                                                                                           const_reference;
             typedef typename Allocator::pointer                                                                                                 pointer;
             typedef typename Allocator::const_pointer                                                                                           const_pointer;
-            typedef typename ft::AVL<ft::pair<key_type, mapped_type> >                                                                          node_type;
-            typedef typename ft::avl_tree<ft::pair<key_type, mapped_type>, Compare, Allocator>                                                  tree_type;
-            typedef typename ft::Bidirectional_iterator<value_type, std::bidirectional_iterator_tag, tree_type, node_type>                      iterator;
-            typedef typename ft::Bidirectional_iterator<const value_type, std::bidirectional_iterator_tag, const tree_type, const node_type>    const_iterator;
-            typedef typename ft::reverse_iterator<iterator>                                                                                     reverse_iterator;
-            typedef typename ft::reverse_iterator<const_iterator>                                                                               const_reverse_iterator;
-
             typedef class value_compare: public std::binary_function<value_type, value_type, bool>
             {
                 friend class map;
@@ -48,6 +41,13 @@ namespace ft
                     Compare c;
                     value_compare( Compare cmp ): c(cmp) { };
             }                                                                                                                                   value_compare;
+            typedef typename ft::AVL<ft::pair<key_type, mapped_type> >                                                                          node_type;
+            typedef typename ft::avl_tree<ft::pair<key_type, mapped_type>, Compare, Allocator>                                                  tree_type;
+            typedef typename ft::Bidirectional_iterator<value_type, std::bidirectional_iterator_tag, tree_type, node_type>                      iterator;
+            typedef typename ft::Bidirectional_iterator<const value_type, std::bidirectional_iterator_tag, const tree_type, const node_type>    const_iterator;
+            typedef typename ft::reverse_iterator<iterator>                                                                                     reverse_iterator;
+            typedef typename ft::reverse_iterator<const_iterator>                                                                               const_reverse_iterator;
+
 
         private:
             key_compare                             _compare;
