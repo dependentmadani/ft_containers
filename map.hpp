@@ -3,6 +3,7 @@
 
 # include <exception>
 # include <iostream>
+# include "vector.hpp"
 # include "AVL.hpp"
 # include "utility.hpp"
 # include "map_iterator.hpp"
@@ -226,6 +227,11 @@ namespace ft
             {
                 for (; first != last && first != end(); ++first)
                     _tree.deletion(first.get_node()->value.first);
+                // ft::vector<int> v;
+                // for (; first != last; first++)
+                //     v.push_back(first.get_node()->value.first);
+                // for(ft::vector<int>::iterator it = v .begin(); it < v.end(); it++)
+                //     _tree.deletion(*it);
             }
 
             //removes the element (if one exists) with the key equivalent to "key"
@@ -285,13 +291,13 @@ namespace ft
                 else if (_compare(key, this->rbegin()->first) > 0)
                 {
                     if (_tree.available_in_tree(key))
-                        return this->find(key);
+                        return iterator(_tree.find_node(key), &_tree);
                     iterator it = this->begin();
                     iterator ite = this->end();
                     for (;it != ite; ++it)
                     {
-                        if (_compare(key, it->first))
-                            tmp = it;
+                        if (_compare(key, it->first) || it->first == key)
+                            return it;
                     }
                 }
                 return tmp;
@@ -305,13 +311,13 @@ namespace ft
                 else if (_compare(key, this->rbegin()->first) > 0)
                 {
                     if (_tree.available_in_tree(key))
-                        return this->find(key);
+                        return const_iterator(_tree.find_node(key), &_tree);
                     const_iterator cit = this->begin();
                     const_iterator cite = this->end();
                     for (;cit != cite; ++cit)
                     {
-                        if (_compare(key, cit->first))
-                            tmp = cit;
+                        if (_compare(key, cit->first) || cit->first == key)
+                            return const_iterator(cit);
                     }
                 }
                 return tmp;
