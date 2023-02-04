@@ -254,7 +254,7 @@ namespace ft
             //returns iterator to an element with key equivalent to key
             iterator find(const Key& key)
             {
-                if (this->count(key))
+                if (_tree.available_in_tree(key))
                     return iterator(_tree.find_node(key), &_tree);
                 return this->end();
             }
@@ -280,12 +280,12 @@ namespace ft
             iterator lower_bound( const Key& key)
             {
                 iterator tmp = this->end();
-                if (this->count(key))
-                    return this->find(key);
-                else if (_compare(key, this->begin()->first) > 0)
+                if (_compare(key, this->begin()->first) > 0)
                     return this->begin();
-                else
+                else if (_compare(key, this->rbegin()->first) > 0)
                 {
+                    if (_tree.available_in_tree(key))
+                        return this->find(key);
                     iterator it = this->begin();
                     iterator ite = this->end();
                     for (;it != ite; ++it)
@@ -300,12 +300,12 @@ namespace ft
             const_iterator lower_bound( const Key& key) const
             {
                 const_iterator tmp = this->end();
-                if (_tree.available_in_tree(key))
-                    return this->find(key);
-                else if (_compare(key, this->begin()->first) > 0)
+                if (_compare(key, this->begin()->first) > 0)
                     return this->begin();
-                else
+                else if (_compare(key, this->rbegin()->first) > 0)
                 {
+                    if (_tree.available_in_tree(key))
+                        return this->find(key);
                     const_iterator cit = this->begin();
                     const_iterator cite = this->end();
                     for (;cit != cite; ++cit)

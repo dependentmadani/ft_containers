@@ -142,6 +142,7 @@ namespace ft
             {
                 node_number = 0;
                 clear(root);
+                root = NULL;
             }
 
             //return the value where there is the value
@@ -200,16 +201,12 @@ namespace ft
             //private function of clear to use private attribe root to clear it
             void clear(node_type* node)
             {
-                if (node != NULL)
-                {
-                    _allocator.destroy(&(node->value));
-                    if (node->right_child != NULL)
-                        clear(node->right_child);
-                    if (node->left_child != NULL)
-                        clear(node->left_child);
-                    _allocator_node.deallocate(node, 1);
-                }
-                node = NULL;
+                if (node == NULL)
+                    return ;
+                clear(node->left_child);
+                clear(node->right_child);
+                _allocator.destroy(node);
+                _allocator_node.deallocate(node, 1);
             }
 
             //this private function checks if a value of type T does exist in the tree or not
@@ -294,69 +291,69 @@ namespace ft
                 node->height = std::max(right_side_height, left_side_height) + 1;
             }            
 
-            node_type* right_rotation(node_type* node){
+            // node_type* right_rotation(node_type* node){
 
-				node_type *new_parent = node->left_child;
-				node->left_child = new_parent->right_child;
-				new_parent->right_child = node;
-				//? update parent
-				new_parent->parent = node->parent;
-				node->parent = new_parent;
-				if (node->left_child != NULL)
-					node->left_child->parent = new_parent->right_child;
-				update_bf_height(node);
-				update_bf_height(new_parent);
-				return (new_parent);
-			}
+			// 	node_type *new_parent = node->left_child;
+			// 	node->left_child = new_parent->right_child;
+			// 	new_parent->right_child = node;
+			// 	//? update parent
+			// 	new_parent->parent = node->parent;
+			// 	node->parent = new_parent;
+			// 	if (node->left_child != NULL)
+			// 		node->left_child->parent = new_parent->right_child;
+			// 	update_bf_height(node);
+			// 	update_bf_height(new_parent);
+			// 	return (new_parent);
+			// }
 
-			node_type* left_rotation(node_type* node){
+			// node_type* left_rotation(node_type* node){
 
-				node_type *new_parent = node->right_child;
-				node->right_child = new_parent->left_child;
-				new_parent->left_child = node;
-				//? update parent
-				new_parent->parent = node->parent;
-				node->parent = new_parent;
-				if (node->right_child != NULL)
-					node->right_child->parent = new_parent->left_child;
-				update_bf_height(node);
-				update_bf_height(new_parent);
-				return (new_parent);
-			}
+			// 	node_type *new_parent = node->right_child;
+			// 	node->right_child = new_parent->left_child;
+			// 	new_parent->left_child = node;
+			// 	//? update parent
+			// 	new_parent->parent = node->parent;
+			// 	node->parent = new_parent;
+			// 	if (node->right_child != NULL)
+			// 		node->right_child->parent = new_parent->left_child;
+			// 	update_bf_height(node);
+			// 	update_bf_height(new_parent);
+			// 	return (new_parent);
+			// }
 
             //make a right rotation to fix the balance
-            // node_type* right_rotation(node_type* node)
-            // {
-            //     node_type* x_node = node->left_child;
-            //     node_type* y_node = x_node->right_child;
+            node_type* right_rotation(node_type* node)
+            {
+                node_type* x_node = node->left_child;
+                node_type* y_node = x_node->right_child;
 
-            //     x_node->right_child = node;
-            //     node->left_child = y_node;
-            //     x_node->parent = node->parent;
-            //     node->parent = x_node;
-            //     // if (node->left_child != NULL)
-            //     //     node->left_child->parent = x_node->right_child;
-            //     update_bf_height(node);
-            //     update_bf_height(x_node);
-            //     return x_node;
-            // }
+                x_node->right_child = node;
+                node->left_child = y_node;
+                x_node->parent = node->parent;
+                node->parent = x_node;
+                if (node->left_child != NULL)
+                    node->left_child->parent = x_node->right_child;
+                update_bf_height(node);
+                update_bf_height(x_node);
+                return x_node;
+            }
 
-            // //make a left rotation to help fix the balance of tree
-            // node_type* left_rotation(node_type* node)
-            // {
-            //     node_type* x_node = node->right_child;
-            //     node_type* y_node = x_node->left_child;
+            //make a left rotation to help fix the balance of tree
+            node_type* left_rotation(node_type* node)
+            {
+                node_type* x_node = node->right_child;
+                node_type* y_node = x_node->left_child;
 
-            //     x_node->left_child = node;
-            //     node->right_child = y_node;
-            //     x_node->parent = node->parent;
-            //     node->parent = x_node;
-            //     // if (node->right_child != NULL)
-            //     //     node->right_child->parent = x_node->left_child;
-            //     update_bf_height(node);
-            //     update_bf_height(x_node);
-            //     return x_node;
-            // }
+                x_node->left_child = node;
+                node->right_child = y_node;
+                x_node->parent = node->parent;
+                node->parent = x_node;
+                if (node->right_child != NULL)
+                    node->right_child->parent = x_node->left_child;
+                update_bf_height(node);
+                update_bf_height(x_node);
+                return x_node;
+            }
 
             //implement three cases of rotation
             node_type* left_left_case(node_type* node)
