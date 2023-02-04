@@ -92,7 +92,7 @@ namespace ft
     template<class InputIt1,
             class InputIt2,
             class BinaryPredicate >
-    inline bool equal( InputIt1 first1, InputIt1 last1, InputIt2 first2, BinaryPredicate p)
+    bool equal( InputIt1 first1, InputIt1 last1, InputIt2 first2, BinaryPredicate p)
     {
         for (; first1 != last1; ++first1, (void)++first2)
         {
@@ -108,7 +108,7 @@ namespace ft
     - Elements are compared using the given binary comparison function comp.
     */
     template<class InputIt1, class InputIt2>
-    inline bool lexicographical_compare( InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2)
+    bool lexicographical_compare( InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2)
     {
         for (; (first1 != last1) && (first2 != last2); ++first1, (void) ++first2)
         {
@@ -121,7 +121,7 @@ namespace ft
     }
 
     template<class InputIt1, class InputIt2, class Compare >
-    inline bool lexicographical_compare( InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2, Compare comp)
+    bool lexicographical_compare( InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2, Compare comp)
     {
         for (; (first1!= last1) && (first2!= last2); ++first1, (void) ++first2)
         {
@@ -185,7 +185,7 @@ namespace ft
     template<class T1, class T2>
     bool operator< (const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs)
     {
-        return lhs < rhs || (!(rhs.first < lhs.first) && lhs.second < rhs.second);
+        return lhs.first < rhs.first || (!(rhs.first < lhs.first) && lhs.second < rhs.second);
     }
     
     template<class T1, class T2>
