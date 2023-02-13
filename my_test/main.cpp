@@ -1,270 +1,166 @@
-#include "../map.hpp"       // your map path.
-#include "../vector.hpp" // your Vector path.
-#include "../utility.hpp"  // path to ft::pair.
-// #include "map-test-helper.hpp"
-#include <map>
+#ifndef BASE_HPP
+# define BASE_HPP
 
-#include <vector>
-#include <iostream>
-#include <iterator>
-#include <utility>
-#include <ctime>
-#include <iomanip>
-#include <unistd.h>
-#include <signal.h>
-#include <sys/time.h>
-#include <random>
-#include <typeinfo>
+# if !defined(USING_STD)
+#  define TESTED_NAMESPACE ft
+# else
+#  define TESTED_NAMESPACE std
+# endif /* !defined(STD) */
 
-#define BLUE "\e[0;34m"
-#define RED "\e[0;31m"
-#define GREEN "\e[0;32m"
-#define YELLOW "\e[1;33m"
-#define RESET "\e[0m"
+# include <iostream>
+# include <string>
 
-#define EQUAL(x) ((x) ? (std::cout << "\033[1;32mAC\033[0m\n") : (std::cout << "\033[1;31mWA\033[0m\n"))
-#define TIME_FAC 5 // the ft::map methods can be slower up to std::map methods * TIME_FAC (MAX 20)
+// --- Class foo
+template <typename T>
+class foo {
+	public:
+		typedef T	value_type;
 
-typedef std::pair<std::map<int, std::string>::iterator, std::map<int, std::string>::iterator> iter_def;
-typedef ft::pair<ft::map<int, std::string>::iterator, ft::map<int, std::string>::iterator> ft_iter_def;
-typedef std::pair<std::map<int, std::string>::const_iterator, std::map<int, std::string>::const_iterator> const_iter_def;
-typedef ft::pair<ft::map<int, std::string>::const_iterator, ft::map<int, std::string>::const_iterator> ft_const_iter_def;
+		foo(void) : value(), _verbose(false) { };
+		foo(value_type src, const bool verbose = false) : value(src), _verbose(verbose) { };
+		foo(foo const &src, const bool verbose = false) : value(src.value), _verbose(verbose) { };
+		~foo(void) { if (this->_verbose) std::cout << "~foo::foo()" << std::endl; };
+		void m(void) { std::cout << "foo::m called [" << this->value << "]" << std::endl; };
+		void m(void) const { std::cout << "foo::m const called [" << this->value << "]" << std::endl; };
+		foo &operator=(value_type src) { this->value = src; return *this; };
+		foo &operator=(foo const &src) {
+			if (this->_verbose || src._verbose)
+				std::cout << "foo::operator=(foo) CALLED" << std::endl;
+			this->value = src.value;
+			return *this;
+		};
+		value_type	getValue(void) const { return this->value; };
+		void		switchVerbose(void) { this->_verbose = !(this->_verbose); };
 
-#define TEST_CASE(fn)                                                                                                             \
-    cout << GREEN << "\t======================================================================================" << RESET << endl; \
-    cout << endl;                                                                                                                 \
-    cout << BLUE << "\t   Running " << #fn << " ... \t\t\t\t\t\t" << RESET << std::endl;                                          \
-    fn();                                                                                                                         \
-    cout << endl;                                                                                                                 \
-    cout << GREEN << "\t======================================================================================" << RESET << endl;
-using namespace std;
-
-time_t get_time(void)
-{
-    struct timeval time_now;
-
-    gettimeofday(&time_now, NULL);
-    time_t msecs_time = (time_now.tv_sec * 1e3) + (time_now.tv_usec / 1e3);
-    return (msecs_time);
-}
-
-template <typename Iter1, typename Iter2>
-bool comparemaps(Iter1 first1, Iter1 last1, Iter2 first2, Iter2 last2)
-{
-    for (; (first1 != last1) && (first2 != last2); ++first1, ++first2)
-        if (first1->first != first2->first || first1->second != first2->second)
-            return false;
-    return true;
-}
-
-bool fncomp(char lhs, char rhs) { return lhs < rhs; }
-
-struct classcomp
-{
-    bool operator()(const char &lhs, const char &rhs) const
-    {
-        return lhs < rhs;
-    }
+		operator value_type(void) const {
+			return value_type(this->value);
+		}
+	private:
+		value_type	value;
+		bool		_verbose;
 };
 
-void testRetionalOperators()
+template <typename T>
+std::ostream	&operator<<(std::ostream &o, foo<T> const &bar) {
+	o << bar.getValue();
+	return o;
+}
+// --- End of class foo
+
+template <typename T>
+T	inc(T it, int n)
 {
-
-    /* ---------------  pretty simple tests --------------- */
-    std::map<char, int> foo, bar;
-    ft::map<char, int> ft_foo, ft_bar;
-    bool res;
-    bool ft_res;
-    foo['a'] = 100;
-    foo['b'] = 200;
-    bar['a'] = 10;
-    bar['z'] = 1000;
-
-    ft_foo['a'] = 100;
-    ft_foo['b'] = 200;
-    ft_bar['a'] = 10;
-    ft_bar['z'] = 1000;
-
-    std::map<int, std::string> m, m1;
-    ft::map<int, std::string> ft_m, ft_m1;
-    for (size_t i = 0; i < 1e6; ++i)
-    {
-        m.insert(std::make_pair(i, "value"));
-        ft_m.insert(ft::make_pair(i, "value"));
-    }
-    for (size_t i = 0; i < 1e6; ++i)
-    {
-        m1.insert(std::make_pair(i + 1, "value1"));
-        ft_m1.insert(ft::make_pair(i + 1, "value1"));
-    }
-
-    std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " operator == "
-              << "] --------------------]\t\t\033[0m";
-    /*---------------------------------- time limit test --------------------------------------------*/
-    {
-        time_t start, end, diff;
-        start = get_time();
-        res = m == m1;
-        end = get_time();
-        diff = end - start;
-        diff = (diff) ? (diff * TIME_FAC) : TIME_FAC;
-
-        ualarm(diff * 1e3, 0);
-        ft_res = ft_m == ft_m1;
-        ualarm(0, 0);
-    }
-
-    EQUAL(((foo == bar) == (ft_foo == ft_bar)) && res == ft_res);
-
-    std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " operator != "
-              << "] --------------------]\t\t\033[0m";
-    /*---------------------------------- time limit test --------------------------------------------*/
-    {
-        time_t start, end, diff;
-
-        start = get_time();
-        res = m != m1;
-        end = get_time();
-        diff = end - start;
-        diff = (diff) ? (diff * TIME_FAC) : TIME_FAC;
-
-        ualarm(diff * 1e3, 0);
-        ft_res = ft_m != ft_m1;
-        ualarm(0, 0);
-    }
-    EQUAL((foo != bar) == (ft_foo != ft_bar) && res == ft_res);
-
-    std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " operator > "
-              << "] --------------------]\t\t\033[0m";
-    /*---------------------------------- time limit test --------------------------------------------*/
-    {
-        time_t start, end, diff;
-        start = get_time();
-        res = m > m1;
-        end = get_time();
-        diff = end - start;
-        diff = (diff) ? (diff * TIME_FAC) : TIME_FAC;
-
-        ualarm(diff * 1e3, 0);
-        ft_res = ft_m > ft_m1;
-        ualarm(0, 0);
-    }
-    EQUAL(((foo > bar) == (ft_foo > ft_bar)) && (res == ft_res));
-
-    std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " operator >= "
-              << "] --------------------]\t\t\033[0m";
-    /*---------------------------------- time limit test --------------------------------------------*/
-    {
-        time_t start, end, diff;
-
-        start = get_time();
-        res = m >= m1;
-        end = get_time();
-        diff = end - start;
-        diff = (diff) ? (diff * TIME_FAC) : TIME_FAC;
-
-        ualarm(diff * 1e3, 0);
-        ft_res = ft_m >= ft_m1;
-        ualarm(0, 0);
-    }
-    EQUAL(((foo >= bar) == (ft_foo >= ft_bar)) && (res == ft_res));
-
-    std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " operator < "
-              << "] --------------------]\t\t\033[0m";
-    /*---------------------------------- time limit test --------------------------------------------*/
-    {
-        time_t start, end, diff;
-
-        start = get_time();
-        res = m < m1;
-        end = get_time();
-        diff = end - start;
-        diff = (diff) ? (diff * TIME_FAC) : TIME_FAC;
-
-        ualarm(diff * 1e3, 0);
-        ft_res = ft_m < ft_m1;
-        ualarm(0, 0);
-    }
-    EQUAL(((foo < bar) == (ft_foo < ft_bar)) && (res == ft_res));
-
-    std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " operator <= "
-              << "] --------------------]\t\t\033[0m";
-    /*---------------------------------- time limit test --------------------------------------------*/
-    {
-        time_t start, end, diff;
-
-        start = get_time();
-        res = m <= m1;
-        end = get_time();
-        diff = end - start;
-        diff = (diff) ? (diff * TIME_FAC) : TIME_FAC;
-
-        ualarm(diff * 1e3, 0);
-        ft_res = ft_m <= ft_m1;
-        ualarm(0, 0);
-    }
-    EQUAL(((foo <= bar) == (ft_foo <= ft_bar)) && (res == ft_res));
+	while (n-- > 0)
+		++it;
+	return (it);
 }
 
-void alarm_handler(int seg)
+template <typename T>
+T	dec(T it, int n)
 {
-    (void)seg;
-    std::cout << "\033[1;33mTLE\033[0m\n";
-    kill(getpid(), SIGINT);
+	while (n-- > 0)
+		--it;
+	return (it);
 }
 
-int main()
+#endif /* BASE_HPP */
+
+# include "../map.hpp"
+# include <map>
+
+#define _pair TESTED_NAMESPACE::pair
+
+template <typename T>
+std::string	printPair(const T &iterator, bool nl = true, std::ostream &o = std::cout)
 {
-
-    std::cout << RED << "________________________________________________________________________________________________________" << std::endl;
-    std::cout << RED << "**** The test is taking so much time to test the all cases and the time complexity of each method ****" << std::endl;
-    std::cout << RED << "--------------------------------------------------------------------------------------------------------" << RESET << std::endl;
-    signal(SIGALRM, alarm_handler);
-
-    // std::cout << YELLOW << "Testing Iterators;" << RESET << std::endl;
-    // TEST_CASE(iterator_tests);
-    // TEST_CASE(const_iterator_tests);
-    // TEST_CASE(reverse_iterator_tests);
-    // std::cout << std::endl;
-
-    // std::cout << YELLOW << "Testing Constructors;" << RESET << std::endl;
-    // TEST_CASE(testConstructors);
-    // std::cout << std::endl;
-
-    // std::cout << YELLOW << "Testing Iterator Methods;" << RESET << std::endl;
-    // TEST_CASE(testIterators);
-    // std::cout << std::endl;
-
-    // std::cout << YELLOW << "Testing Capacity Methods;" << RESET << std::endl;
-    // TEST_CASE(testCapacityMethods)
-    // std::cout << std::endl;
-
-    // std::cout << YELLOW << "Testing Access Element Methods; " << RESET << std::endl;
-    // TEST_CASE(testElementAccess);
-    // std::cout << std::endl;
-
-    // std::cout << YELLOW << "Testing Modifiers Methods;" << RESET << std::endl;
-    // TEST_CASE(testModifiers)
-    // std::cout << std::endl;
-
-    // std::cout << YELLOW << "Testing Observers Methods;" << RESET << std::endl;
-    // TEST_CASE(testObservers)
-    // std::cout << std::endl;
-
-    // std::cout << YELLOW << "Testing Operations Methods;" << RESET << std::endl;
-    // TEST_CASE(testOperations)
-    // std::cout << std::endl;
-
-    // std::cout << YELLOW << "Testing Allocator Methods;" << RESET << std::endl;
-    // TEST_CASE(testAllocatorMethodes)
-    // std::cout << std::endl;
-
-    std::cout << YELLOW << "Testing Retional Operators; " << RESET << std::endl;
-    TEST_CASE(testRetionalOperators);
-    std::cout << std::endl;
-
-    // std::cout << YELLOW << "Testing Non-Member Swap  ; " << RESET << std::endl;
-    // TEST_CASE(testNonMemberSwap);
-    // std::cout << std::endl;
-    return 0;
+	o << "key: " << iterator->first << " | value: " << iterator->second;
+	if (nl)
+		o << std::endl;
+	return ("");
 }
+
+template <typename T_MAP>
+void	printSize(T_MAP const &mp, bool print_content = 1)
+{
+	std::cout << "size: " << mp.size() << std::endl;
+	std::cout << "max_size: " << mp.max_size() << std::endl;
+	if (print_content)
+	{
+		typename T_MAP::const_iterator it = mp.begin(), ite = mp.end();
+		std::cout << std::endl << "Content is:" << std::endl;
+		for (; it != ite; ++it)
+			std::cout << "- " << printPair(it, false) << std::endl;
+	}
+	std::cout << "###############################################" << std::endl;
+}
+
+template <typename T1, typename T2>
+void	printReverse(TESTED_NAMESPACE::map<T1, T2> &mp)
+{
+	typename TESTED_NAMESPACE::map<T1, T2>::iterator it = mp.end(), ite = mp.begin();
+
+	std::cout << "printReverse:" << std::endl;
+	while (it != ite) {
+		it--;
+		std::cout << "-> " << printPair(it, false) << std::endl;
+	}
+	std::cout << "_______________________________________________" << std::endl;
+}
+
+#define T1 int
+#define T2 std::string
+
+TESTED_NAMESPACE::map<T1, T2> mp;
+TESTED_NAMESPACE::map<T1, T2>::iterator it = mp.end();
+
+void	ft_find(T1 const &k)
+{
+	TESTED_NAMESPACE::map<T1, T2>::iterator ret = mp.find(k);
+
+	if (ret != it)
+		printPair(ret);
+	else
+		std::cout << "map::find(" << k << ") returned end()" << std::endl;
+}
+
+void	ft_count(T1 const &k)
+{
+	std::cout << "map::count(" << k << ")\treturned [" << mp.count(k) << "]" << std::endl;
+}
+
+int		main(void)
+{
+	mp[42] = "fgzgxfn";
+	mp[25] = "funny";
+	mp[80] = "hey";
+	mp[12] = "no";
+	mp[27] = "bee";
+	mp[90] = "8";
+	printSize(mp);
+
+	std::cout << "\t-- FIND --" << std::endl;
+	ft_find(12);
+	ft_find(3);
+	ft_find(35);
+	ft_find(90);
+	ft_find(100);
+
+	std::cout << "\t-- COUNT --" << std::endl;
+	ft_count(-3);
+	ft_count(12);
+	ft_count(3);
+	ft_count(35);
+	ft_count(90);
+	ft_count(100);
+
+	mp.find(27)->second = "newly inserted mapped_value";
+
+	printSize(mp);
+
+	TESTED_NAMESPACE::map<T1, T2> const c_map(mp.begin(), mp.end());
+    std::cout << "reach heere " << std::endl;
+	std::cout << "const map.find(" << 42 << ")->second: [" << c_map.find(42)->second << "]" << std::endl;
+	std::cout << "const map.count(" << 80 << "): [" << c_map.count(80) << "]" << std::endl;
+	return (0);
+}
+

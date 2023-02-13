@@ -22,7 +22,7 @@ namespace ft
     class random_access_iterator
     {
         public:
-            typedef Iterator                                          value_type;
+            typedef Iterator                                    value_type;
             typedef ptrdiff_t                                   difference_type;
             typedef value_type*                                 pointer;
             typedef value_type&                                 reference;
@@ -95,7 +95,5 @@ namespace ft
     };
 
 }
-
-#include <iterator>
 
 #endif

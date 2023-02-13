@@ -27,7 +27,7 @@ namespace ft
 
         public:
             Bidirectional_iterator(): _tree(), node() { };
-            Bidirectional_iterator(node_type* n, tree_type* t): node(n), _tree(t) { };
+            Bidirectional_iterator(node_type* n, tree_type* t): _tree(t), node(n) { };
             Bidirectional_iterator(const Bidirectional_iterator& other) {*this = other;};
             ~Bidirectional_iterator() {};
             Bidirectional_iterator& operator= (const Bidirectional_iterator& other) {

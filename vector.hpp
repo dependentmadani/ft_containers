@@ -63,28 +63,28 @@ namespace ft
             //for all storage management.
             explicit vector( size_type count, const T& value = T(), const Allocator& alloc = Allocator())
             {
+                if (count > max_size())
+                    throw std::length_error("length error");
                 _data = NULL;
                 _begin = NULL;
                 _end = NULL;
-                _size = 0;
-                _capacity = 0;
+                _size = count;
+                _capacity = count;
                 _allocator = alloc;
-                if (count > max_size())
-                    throw std::length_error("length error");
-                _data = _allocator.allocate(count);
-                _begin = _data;
-                if (_data)
+                if (count)
+                    _data = _allocator.allocate(count);
+                else if (count == 0)
+                    _data = NULL;
                 for (size_t i =0; i < count; ++i)
                     _allocator.construct(_data + i, value);
-                _end = _data + count;
-                _capacity = count;
-                _size = count;
+                _begin = _data;
+                _end = _data + _size;
             }
             //Creates a vector of length last - first, filled with all values obtained by dereferencing
             //the InputIt oon the range [first, last). The vector will use the allocator alloc for all storage management.
             template<class InputIt>
             vector( InputIt first, InputIt last, const Allocator& alloc = Allocator(),
-            typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = NULL)
+            typename ft::enable_if<!ft::is_integral<InputIt>::val, InputIt>::type* = NULL)
             {
                 _data = NULL;
                 _begin = NULL;
@@ -104,15 +104,13 @@ namespace ft
             // destructs the vector
             ~vector()
             {
-                if (_size > 0)
-                {
-                    for (size_t i = 0; i > _size; i++)
-                        _allocator.destroy(_data + i);
-                }
-                if (_begin != NULL)
+                for (size_t i = 0; i < _size; ++i)
+                    _allocator.destroy(_data + i);
+                if (_capacity)
                     _allocator.deallocate(_data, _capacity);
                 _size = 0;
                 _capacity = 0;
+                _data = NULL;
                 _begin = NULL;
                 _end = NULL;
             }
@@ -121,9 +119,9 @@ namespace ft
             {
                 if (*this != other)
                 {
-                    for (size_t i = 0; i > _size; i++)
+                    for (size_t i = 0; i < _size; i++)
                         _allocator.destroy(_data + i);
-                    if (_capacity != 0)
+                    if (_capacity)
                         _allocator.deallocate(_data, _capacity);
                     _capacity = other.capacity();
                     _size = other.size();
@@ -223,9 +221,10 @@ namespace ft
 
             void assign( size_type count, const T& value)
             {
+                if (_size)
+                    this->clear();
                 if (count > this->capacity())
                     this->reserve(count);
-                this->clear();
                 for (size_t i = 0; i < count; i++)
                 {
                     _allocator.construct(_data + i, value);
@@ -236,20 +235,24 @@ namespace ft
             
             template<class InputIt>
             void assign( InputIt first, InputIt last,
-            typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = NULL)
+            typename ft::enable_if<!ft::is_integral<InputIt>::val, InputIt>::type* = NULL)
             {
                 size_t size = 0;
-                InputIt tmp = first;
+                vector tmp;
 
-                while (tmp != last)
-                {
-                    tmp++;
-                    size++;
-                }
-                this->clear();
-                this->reserve(size);
                 for (; first != last; ++first)
-                    this->push_back(*first);
+                    tmp.push_back(*first);
+                size = tmp.size();
+
+                if (_size)
+                    this->clear();
+                if (size > _capacity)
+                    this->reserve(size);
+                for (size_t i = 0; i < size ; ++i)
+                    _allocator.construct(_data + i, tmp[i]);
+                _begin = _data;
+                _end = _data + size;
+                _size = size;
             }
 
             allocator_type get_allocator() const
@@ -280,12 +283,12 @@ namespace ft
                     T* newElements = _allocator.allocate(new_cap);
                     for (size_t i = 0; i < _size; i++)
                     {
-                        _allocator.construct(newElements + i, _data[i]);
+                        _allocator.construct(newElements + i, *(_data + i));
                     }
                     for (size_t i = 0; i < this->size(); i++)
                         _allocator.destroy(_data + i);
-                    if (_data)
-                        _allocator.deallocate(_data, this->capacity());
+                    if (_capacity)
+                        _allocator.deallocate(_data, _capacity);
                     _data = newElements;
                     _begin = _data;
                     _end = _data + _size;
@@ -299,10 +302,10 @@ namespace ft
 
             void clear()
             {
+                // _allocator.deallocate(_data, _capacity);
                 for (size_t i = 0; i < _size; i++)
                     _allocator.destroy(_data + i);
-                _allocator.deallocate(_data, _size);
-                _data = _allocator.allocate(_capacity);
+                // _data = _allocator.allocate(_capacity);
                 _begin = _data;
                 _size = 0;
                 _end = _data + _size;
@@ -344,7 +347,7 @@ namespace ft
             //It returns iteratorpoiting to the first element inserted, or pos if first == last.
             template<class InputIt>
             void insert ( iterator pos, InputIt first, InputIt last,
-            typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = NULL)
+            typename ft::enable_if<!ft::is_integral<InputIt>::val, InputIt>::type* = NULL)
             {
                 size_type old_position = Iterator_difference(_begin, _end);
                 size_type position = 0;
@@ -374,11 +377,12 @@ namespace ft
             //removes the elements in the range [first, last)
             iterator erase( iterator first , iterator last )
             {
-                size_type range = last - first, start = first - begin();
+                size_type range = last - first;
+                size_type start = first - begin();
 
-				for (size_type i=0; (i < range && i < _size); i++)
+				for (size_type i = 0; (i < range && i < _size); i++)
 				{
-					_allocator.destroy(_data +start + i);
+					_allocator.destroy(_data + start + i);
 					if (start + range + i < _size)
 						_allocator.construct(&_data[i + start], _data[i+start+range]);
 				}
@@ -403,9 +407,9 @@ namespace ft
                     else
                         reserve(_size * 2);
                 }
-                _allocator.construct(&_data[_size], value);
-                _size++;
-                _end = _begin + _size;
+                _allocator.construct(_data + _size, value);
+                _size += 1;
+                _end = _data + _size;
             }
 
             void pop_back()

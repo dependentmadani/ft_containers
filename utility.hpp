@@ -37,10 +37,6 @@ namespace ft
     template <typename T> struct is_integral
     {
         static bool const val = false;
-        // operator value_type()
-        // {
-        //     return value;
-        // };
     };
     template <> struct is_integral<bool> { static bool const val = true;};
     template <> struct is_integral<char> { static bool const val = true;};

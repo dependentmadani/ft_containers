@@ -205,7 +205,7 @@ namespace ft
                     return ;
                 clear(node->left_child);
                 clear(node->right_child);
-                _allocator.destroy(node);
+                _allocator.destroy(&(node->value));
                 _allocator_node.deallocate(node, 1);
             }
 
@@ -276,8 +276,8 @@ namespace ft
             //it updates the values of height and balanced factor each time there is modification in the tree
             void update_bf_height(node_type* node)
             {
-                int left_side_height;
-                int right_side_height;
+                int left_side_height = 0;
+                int right_side_height = 0;
 
                 if (node->left_child == NULL)
                     left_side_height = -1;

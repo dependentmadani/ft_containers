@@ -18,7 +18,7 @@ namespace ft
         public:
             typedef Key                                                                                                                         key_type;
             typedef T                                                                                                                           mapped_type;
-            typedef typename ft::pair<key_type, mapped_type>                                                                                    value_type;
+            typedef typename ft::pair<const Key, T>                                                                                    value_type;
             typedef size_t                                                                                                                      size_type;
             typedef ptrdiff_t                                                                                                                   difference_type;
             typedef Compare                                                                                                                     key_compare;
@@ -42,8 +42,8 @@ namespace ft
                     Compare c;
                     value_compare( Compare cmp ): c(cmp) { };
             }                                                                                                                                   value_compare;
-            typedef typename ft::AVL<ft::pair<key_type, mapped_type> >                                                                          node_type;
-            typedef typename ft::avl_tree<ft::pair<key_type, mapped_type>, Compare, Allocator>                                                  tree_type;
+            typedef typename ft::AVL<ft::pair<const Key, T> >                                                                          node_type;
+            typedef typename ft::avl_tree<ft::pair<const Key, T>, Compare, Allocator>                                                  tree_type;
             typedef typename ft::Bidirectional_iterator<value_type, std::bidirectional_iterator_tag, tree_type, node_type>                      iterator;
             typedef typename ft::Bidirectional_iterator<const value_type, std::bidirectional_iterator_tag, const tree_type, const node_type>    const_iterator;
             typedef typename ft::reverse_iterator<iterator>                                                                                     reverse_iterator;
@@ -65,9 +65,7 @@ namespace ft
             map( InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator() ): _compare(comp), _allocator(alloc)
             {
                 for (;first != last; ++first)
-                {
                     _tree.insertion(*first);
-                }
             };
 
             //copy constructor
@@ -225,13 +223,13 @@ namespace ft
             //removes the elements in range [first, last) which must be a valid range in *this
             void erase(iterator first, iterator last)
             {
-                for (; first != last && first != end(); ++first)
-                    _tree.deletion(first.get_node()->value.first);
-                // ft::vector<int> v;
-                // for (; first != last; first++)
-                //     v.push_back(first.get_node()->value.first);
-                // for(ft::vector<int>::iterator it = v .begin(); it < v.end(); it++)
-                //     _tree.deletion(*it);
+                // for (; first != last && first != end(); ++first)
+                //     _tree.deletion(first.get_node()->value.first);
+                ft::vector<int> v;
+                for (; first != last; first++)
+                    v.push_back(first.get_node()->value.first);
+                for(ft::vector<int>::iterator it = v .begin(); it < v.end(); it++)
+                    _tree.deletion(*it);
             }
 
             //removes the element (if one exists) with the key equivalent to "key"
@@ -252,7 +250,7 @@ namespace ft
             }
 
             //return 1 if the key is available, otherwise 0 if not found
-            size_type count(const Key& key)
+            size_type count(const Key& key) const
             {
                 return _tree.available_in_tree(key);
             }
@@ -267,7 +265,9 @@ namespace ft
 
             const_iterator find(const Key& key) const
             {
-                return const_iterator(find(key));
+                if (_tree.available_in_tree(key))
+                    return const_iterator(_tree.find_node(key), &_tree);
+                return this->end();
             }
 
             //return a pair containing a itertors defining the wanted range.
