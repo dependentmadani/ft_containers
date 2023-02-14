@@ -15,6 +15,7 @@
 
 # include <memory>
 # include <stdexcept>
+# include <algorithm>
 # include "iterator.hpp"
 # include "iterator_traits.hpp"
 # include "reverse_iterator.hpp"
@@ -271,7 +272,7 @@ namespace ft
             }
             size_type max_size() const
             {
-                return this->_allocator.max_size();
+                return std::min((size_type)this->_allocator.max_size(), std::numeric_limits<size_type>::max()/2);
             }
 
             void reserve( size_type new_cap )
@@ -344,28 +345,31 @@ namespace ft
             //insert elements from range [first,last) before pos
             //this overload has the same effect as ovverload of previous function if InputIt is an intergral type.
             //The behavior is undefined if first and last are iterators into *this.
-            //It returns iteratorpoiting to the first element inserted, or pos if first == last.
             template<class InputIt>
             void insert ( iterator pos, InputIt first, InputIt last,
             typename ft::enable_if<!ft::is_integral<InputIt>::val, InputIt>::type* = NULL)
             {
                 size_type old_position = Iterator_difference(_begin, _end);
                 size_type position = 0;
-                iterator tmp = _begin;
-                while (tmp != pos)
+                iterator tmp_begin = _begin;
+                vector   tmp_vector;
+
+                while (tmp_begin != pos)
                 {
-                    ++tmp;
+                    ++tmp_begin;
                     position++;
                 }
-
-                resize(_size + Iterator_difference(first, last));
+                for (; first != last ; first++)
+                    tmp_vector.insert(tmp_vector.end(), *first);
+                resize(_size + tmp_vector.size());
                 iterator old_end = this->begin() + old_position;
                 pos = this->begin() + position;
                 iterator new_end = this->end();
                 while (old_end != pos)
                     *--new_end = *--old_end;
-                for (; first != last;)
-                    *pos++ = *first++;
+                iterator tmp_ite_begin = tmp_vector.begin(), tmp_ite_end = tmp_vector.end();
+                for (; tmp_ite_begin != tmp_ite_end; ++tmp_ite_begin)
+                    *pos++ = *tmp_ite_begin;
                 _end = _begin + _size;
             }
 
@@ -377,16 +381,16 @@ namespace ft
             //removes the elements in the range [first, last)
             iterator erase( iterator first , iterator last )
             {
-                size_type range = last - first;
-                size_type start = first - begin();
+                size_type range = Iterator_difference(first, last);
+                size_type start = Iterator_difference(begin(), first);
 
-				for (size_type i = 0; (i < range && i < _size); i++)
+ 				for (size_type i = 0; (i < range && i < _size); i++)
 				{
 					_allocator.destroy(_data + start + i);
 					if (start + range + i < _size)
 						_allocator.construct(&_data[i + start], _data[i+start+range]);
 				}
-				for (size_type i = start + range; i < _size; i++)
+                for (size_type i = start + range; i < _size && range ; i++)
 				{
 					_allocator.destroy(_data + i);
 					if (range + i < _size)
@@ -395,7 +399,6 @@ namespace ft
 				_size -= range;
                 _end = _begin + _size;
 				return iterator(_data + start);
-
             }
 
             void push_back( const T& value )
