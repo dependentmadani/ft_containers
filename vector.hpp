@@ -352,7 +352,7 @@ namespace ft
                 size_type old_position = Iterator_difference(_begin, _end);
                 size_type position = 0;
                 iterator tmp_begin = _begin;
-                vector   tmp_vector;
+                ft::vector<T>   tmp_vector;
 
                 while (tmp_begin != pos)
                 {

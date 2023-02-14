@@ -454,17 +454,21 @@ namespace ft
                         node_type* parent = node->parent;
                         if (node->left_child->height >= node->right_child->height)
                         {
-                            T s = max(node->left_child);
-                            _allocator.construct(&node->value, s);
+                            node_type* tmp = node->left_child;
+                            while (tmp && tmp->left_child != NULL)
+                                tmp = tmp->left_child;
+                            _allocator.construct(&node->value, tmp->value);
                             node->parent = parent;
-                            node->left_child = deletion(node->left_child, s.first);
+                            node->left_child = deletion(node->left_child, tmp->value.first);
                         }
                         else
                         {
-                            T s = min(node->right_child);
-                            _allocator.construct(&node->value, s);
+                            node_type* tmp = node->right_child;
+                            while (tmp && tmp->right_child != NULL)
+                                tmp = tmp->right_child;
+                            _allocator.construct(&node->value, tmp->value);
                             node->parent = parent;
-                            node->right_child = deletion(node->right_child, s.first);
+                            node->right_child = deletion(node->right_child, tmp->value.first);
                         }
                     }
                     else
@@ -476,7 +480,6 @@ namespace ft
                     }
                 }
                 update_bf_height(node);
-                // balance(node);
                 return balance(node);
             }
             

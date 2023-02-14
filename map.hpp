@@ -91,7 +91,7 @@ namespace ft
             };
 
             //return reference to the mapped value of the requested element
-            T& at(const Key& key) 
+            T& at(const Key& key)
             {
                 iterator tmp = lower_bound(key);
                 if (tmp == end() || key_compare()(key, (*tmp).first))
@@ -286,9 +286,9 @@ namespace ft
             iterator lower_bound( const Key& key)
             {
                 iterator tmp = this->end();
-                if (_compare(key, this->begin()->first) > 0)
+                if (!_tree.empty() && _compare(key, this->begin()->first) > 0)
                     return this->begin();
-                else if (_compare(key, this->rbegin()->first) > 0)
+                else if (!_tree.empty() && _compare(key, this->rbegin()->first) > 0)
                 {
                     if (_tree.available_in_tree(key))
                         return iterator(_tree.find_node(key), &_tree);
@@ -306,9 +306,9 @@ namespace ft
             const_iterator lower_bound( const Key& key) const
             {
                 const_iterator tmp = this->end();
-                if (_compare(key, this->begin()->first) > 0)
+                if (!_tree.empty() && _compare(key, this->begin()->first) > 0)
                     return this->begin();
-                else if (_compare(key, this->rbegin()->first) > 0)
+                else if (!_tree.empty() && _compare(key, this->rbegin()->first) > 0)
                 {
                     if (_tree.available_in_tree(key))
                         return const_iterator(_tree.find_node(key), &_tree);
