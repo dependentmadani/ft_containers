@@ -122,7 +122,9 @@ namespace ft
             iterator begin()
             {
                 node_type* b = _tree.root;
-                while (b != NULL && b->left_child != NULL)
+                if (b == NULL)
+                    return iterator(b, &_tree);
+                while (b->left_child != NULL)
                     b = b->left_child;
                 return iterator(b, &_tree);
             }
@@ -130,7 +132,9 @@ namespace ft
             const_iterator begin() const
             {
                 node_type* cb = _tree.root;
-                while (cb != NULL && cb->left_child != NULL)
+                if (cb == NULL)
+                    return const_iterator(cb, &_tree);
+                while (cb->left_child != NULL)
                     cb = cb->left_child;
                 return const_iterator(cb, &_tree);
             }
@@ -223,13 +227,13 @@ namespace ft
             //removes the elements in range [first, last) which must be a valid range in *this
             void erase(iterator first, iterator last)
             {
-                // for (; first != last && first != end(); ++first)
-                //     _tree.deletion(first.get_node()->value.first);
-                ft::vector<int> v;
-                for (; first != last; first++)
-                    v.push_back(first.get_node()->value.first);
-                for(ft::vector<int>::iterator it = v .begin(); it < v.end(); it++)
-                    _tree.deletion(*it);
+                for (; first != last && first != end(); ++first)
+                    _tree.deletion(first.get_node()->value.first);
+                // ft::vector<int> v;
+                // for (; first != last; first++)
+                //     v.push_back(first.get_node()->value.first);
+                // for(ft::vector<int>::iterator it = v .begin(); it < v.end(); it++)
+                //     _tree.deletion(*it);
             }
 
             //removes the element (if one exists) with the key equivalent to "key"
@@ -326,11 +330,11 @@ namespace ft
             //return first element which is > value. If not, return end()
             iterator upper_bound(const Key& key)
             {
-                if (this->count(key))
+                if (!_tree.empty() && this->count(key))
                     return ++iterator(_tree.find_node(key), &_tree);
-                else if (_compare(key, this->begin()->first) > 0)
+                else if (!_tree.empty() && _compare(key, this->begin()->first) > 0)
                     return this->begin();
-                else
+                else if (!_tree.empty())
                 {
                     iterator it = this->begin();
                     iterator ite = this->end();
