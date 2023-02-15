@@ -81,9 +81,9 @@ namespace ft
                 {
                     root = insertion(root, value);
                     node_number += 1;
-                    return root;
+                    return this->find_node(value.first);
                 }
-                return root;
+                return this->find_node(value.first);
             }
 
             //return the max value in the tree map
@@ -245,14 +245,14 @@ namespace ft
             {
                 if (node == NULL)
                 {
-                    root = _allocator_node.allocate(1);
-                    _allocator.construct(&root->value, value);
-                    root->height = 0;
-                    root->balanced_factor = 0;
-                    root->left_child = NULL;
-                    root->right_child = NULL;
-                    root->parent = NULL;
-                    return (root);
+                    node = _allocator_node.allocate(1);
+                    _allocator.construct(&node->value, value);
+                    node->height = 0;
+                    node->balanced_factor = 0;
+                    node->left_child = NULL;
+                    node->right_child = NULL;
+                    node->parent = NULL;
+                    return (node);
                 }
                 int checker = _compare(value.first, node->value.first);
                 if (checker == true)
