@@ -184,7 +184,7 @@ namespace ft
             //return the maximum number of elements
             size_type max_size() const
             {
-                return _allocator.max_size();
+                return std::min((size_type)this->_allocator.max_size(), std::numeric_limits<size_type>::max()/2);
             }
 
             //erases all elements from the container
@@ -207,7 +207,7 @@ namespace ft
             iterator insert(iterator pos, const value_type& value)
             {
                 (void)pos; //will not work with pos, cause the tree is balanced and the value will be in the appropriate position
-                return iterator(_tree.insertion(value), &_tree);
+                return iterator(_tree.insertion(value), &_tree); 
             }
 
             //inserts all elements from range [first, last) of the container using iterators
@@ -292,7 +292,7 @@ namespace ft
                 iterator tmp = this->end();
                 if (!_tree.empty() && _compare(key, this->begin()->first) > 0)
                     return this->begin();
-                else if (!_tree.empty() && _compare(key, this->rbegin()->first) > 0)
+                else if (!_tree.empty())
                 {
                     if (_tree.available_in_tree(key))
                         return iterator(_tree.find_node(key), &_tree);
@@ -304,6 +304,7 @@ namespace ft
                             return it;
                     }
                 }
+                    // std::cerr << "reach heeere " << key << std::endl;
                 return tmp;
             }
 
@@ -312,7 +313,7 @@ namespace ft
                 const_iterator tmp = this->end();
                 if (!_tree.empty() && _compare(key, this->begin()->first) > 0)
                     return this->begin();
-                else if (!_tree.empty() && _compare(key, this->rbegin()->first) > 0)
+                else if (!_tree.empty())
                 {
                     if (_tree.available_in_tree(key))
                         return const_iterator(_tree.find_node(key), &_tree);
@@ -349,11 +350,11 @@ namespace ft
 
             const_iterator upper_bound(const Key& key) const
             {
-                if (_tree.available_in_tree(key))
+                if (!_tree.empty() && _tree.available_in_tree(key))
                     return ++const_iterator(_tree.find_node(key), &_tree);
-                else if (_compare(key, this->begin()->first) > 0)
+                else if (!_tree.empty() && _compare(key, this->begin()->first) > 0)
                     return this->begin();
-                else
+                else if (!_tree.empty())
                 {
                     const_iterator it = this->begin();
                     const_iterator ite = this->end();

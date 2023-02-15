@@ -83,7 +83,7 @@ namespace ft
                     node_number += 1;
                     return root;
                 }
-                return NULL;
+                return root;
             }
 
             //return the max value in the tree map
@@ -268,9 +268,7 @@ namespace ft
                     tmp->parent = node;
                 }
                 update_bf_height(node);
-                // balance(node);
                 return balance(node);
-                // return node;
             }
 
             //it updates the values of height and balanced factor each time there is modification in the tree
