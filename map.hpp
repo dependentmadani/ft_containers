@@ -376,6 +376,5 @@ void swap(ft::map<Key, T, Compare, Alloc> &lhs, ft::map<Key, T, Compare, Alloc> 
 	lhs.swap(rhs);
 }
 } // namespace ft
-#include <map>
 
 #endif

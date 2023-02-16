@@ -35,9 +35,14 @@ namespace ft
                 node = other.node;
                 return (*this);
             }
-
-            bool operator== (const Bidirectional_iterator& rhs) {return node == rhs.node;};
-            bool operator!= (const Bidirectional_iterator& rhs) {return node != rhs.node;};
+            friend bool operator== (const Bidirectional_iterator<T, Category, tree_t, node_t>& lhs, const Bidirectional_iterator<T, Category, tree_t, node_t>& rhs)
+            {
+                return (lhs.get_node() == rhs.get_node());
+            }
+            friend bool operator!= (const Bidirectional_iterator<T, Category, tree_t, node_t>& lhs, const Bidirectional_iterator<T, Category, tree_t, node_t>& rhs)
+            {
+                return !(lhs.get_node() == rhs.get_node());
+            }
 
             reference operator* () const {return node->value;};
             pointer operator-> () const {return &(node->value);};
@@ -118,11 +123,12 @@ namespace ft
                 return tmp;
             }
 
-            node_type* get_node()
+            node_type* get_node() const
             {
                 return node;
             }
     };
+
 }
 
 #endif
