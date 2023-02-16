@@ -450,11 +450,11 @@ namespace ft
                     else if ( node->left_child != NULL && node->right_child != NULL )
                     {
                         node_type* parent = node->parent;
-                        if (node->left_child->height >= node->right_child->height)
+                        if (node->left_child->height > node->right_child->height)
                         {
-                            // node_type* tmp = node->left_child;
-                            // while (tmp->left_child != NULL)
-                            //     tmp = tmp->left_child;
+                        //     // node_type* tmp = node->left_child;
+                        //     // while (tmp->left_child != NULL)
+                        //     //     tmp = tmp->left_child1;
                             T tmp = max(node->left_child);
                             _allocator.destroy(&node->value);
                             _allocator.construct(&node->value, tmp);

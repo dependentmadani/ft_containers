@@ -199,8 +199,20 @@ class map {
 
 	// removes the elements in range [first, last) which must be a valid range in *this
 	void erase(iterator first, iterator last) {
-		for (; first != last && first != end(); ++first)
-			_tree.deletion(first.get_node()->value.first);
+		ft::map<Key, T> tmp;
+	
+		for (;first != last && first != end(); ++first)
+			tmp.insert(first.get_node()->value);
+		typename ft::map<Key, T>::iterator it = tmp.begin();
+		for (size_type i = 0; i < tmp.size(); ++i)
+			_tree.deletion((it)++.get_node()->value.first);
+
+		// for (; first != last && first != end(); ++first){
+		// 	// std::cerr << "before bullshiiiiiit "<< _tree.size_tree()  << " begining: " << first.get_node()->value.first<< std::endl;
+		// 	// std::cerr << "and laaast : " << last.get_node()->value.first << std::endl;
+		// 	_tree.deletion(first.get_node()->value.first);
+		// 	// std::cerr << "after bullshiiiiiit "<< _tree.size_tree() << std::endl;
+		// 	}
 		// ft::vector<int> v;
 		// for (; first != last; first++)
 		//     v.push_back(first.get_node()->value.first);
@@ -215,11 +227,9 @@ class map {
 
 	// swap the content of a container to another container
 	void swap(map &other) {
-		if (_tree.node_number && other._tree.node_number) {
-			std::swap(_compare, other._compare);
-			std::swap(_allocator, other._allocator);
-			_tree.swap(other._tree);
-		}
+		std::swap(_compare, other._compare);
+		std::swap(_allocator, other._allocator);
+		_tree.swap(other._tree);
 	}
 
 	// return 1 if the key is available, otherwise 0 if not found
@@ -376,5 +386,7 @@ void swap(ft::map<Key, T, Compare, Alloc> &lhs, ft::map<Key, T, Compare, Alloc> 
 	lhs.swap(rhs);
 }
 } // namespace ft
+
+#include <map>
 
 #endif

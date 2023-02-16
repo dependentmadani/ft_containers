@@ -35,9 +35,10 @@ namespace ft
                 node = other.node;
                 return (*this);
             }
+
             friend bool operator== (const Bidirectional_iterator<T, Category, tree_t, node_t>& lhs, const Bidirectional_iterator<T, Category, tree_t, node_t>& rhs)
             {
-                return (lhs.get_node() == rhs.get_node());
+                return (lhs.node == rhs.node);
             }
             friend bool operator!= (const Bidirectional_iterator<T, Category, tree_t, node_t>& lhs, const Bidirectional_iterator<T, Category, tree_t, node_t>& rhs)
             {
