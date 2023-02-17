@@ -163,7 +163,7 @@ class map {
 
 	// return the maximum number of elements
 	size_type max_size() const {
-		return std::min((size_type)this->_allocator.max_size(), std::numeric_limits<size_type>::max() / 2);
+		return std::min<size_type>(_tree.max_size(), std::numeric_limits<difference_type>::max());
 	}
 
 	// erases all elements from the container

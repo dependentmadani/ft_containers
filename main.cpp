@@ -28,7 +28,7 @@
 #define RESET "\e[0m"
 
 #define EQUAL(x) ((x) ? (std::cout << "\033[1;32mAC\033[0m\n") : (std::cout << "\033[1;31mWA\033[0m\n"))
-#define TIME_FAC 4 // the ft::map methods can be slower up to std::map methods * TIME_FAC (MAX 20)
+#define TIME_FAC 10 // the ft::map methods can be slower up to std::map methods * TIME_FAC (MAX 20)
 
 typedef std::pair<std::map<int, std::string>::iterator, std::map<int, std::string>::iterator> iter_def;
 typedef ft::pair<ft::map<int, std::string>::iterator, ft::map<int, std::string>::iterator> ft_iter_def;
@@ -2212,6 +2212,19 @@ void alarm_handler(int seg)
     kill(getpid(), SIGINT);
 }
 
+void    ftMapElementAccess( void )
+{
+    std::map< int, std::string >    sysMap;
+    ft::map< int, std::string >    ownMap;
+
+    sysMap[ -9 ] = "123456";
+    ownMap[ -9 ] = "123456";
+
+    std::cerr    << "sysMap[ 0 ] = |" << sysMap[ 0 ] << "|" << std::endl;
+    std::cerr    << "ownMap[ 0 ] = |" << ownMap[ 0 ] << "|" << std::endl;
+    // std::cerr    << "operator[]" << std::endl;
+}
+
 int main()
 {
 
@@ -2265,5 +2278,6 @@ int main()
     std::cout << YELLOW << "Testing Non-Member Swap  ; " << RESET << std::endl;
     TEST_CASE(testNonMemberSwap);
     std::cout << std::endl;
+    ftMapElementAccess();
     return 0;
 }

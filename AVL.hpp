@@ -145,6 +145,15 @@ namespace ft
                 root = NULL;
             }
 
+            size_t   max_size() const
+            {
+                // std::cout << "the size: " << sizeof(T) << " "<< sizeof(root) << std::endl;
+                // if (sizeof(T) >= 8 && sizeof(root) >= 8)
+                    // return std::numeric_limits<ptrdiff_t>::max() / (sizeof(T) + sizeof(root));
+                return std::min<size_t>(_allocator_node.max_size(), _allocator.max_size());
+                // return ((_allocator_node.max_size() / sizeof(root)) + (_allocator.max_size() / sizeof(T)));
+            }
+
             //return the value where there is the value
             map_value* searching(key_type& value)
             {
