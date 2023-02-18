@@ -14,8 +14,10 @@
 # define REVERSE_ITERATOR_HPP
 
 # include "iterator_traits.hpp"
-# include "map_iterator.hpp"
+# include "../map/map_iterator.hpp"
 # include "utility.hpp"
+# include "enable_if.hpp"
+# include "pair.hpp"
 
 namespace ft
 {
@@ -35,7 +37,7 @@ namespace ft
 
             reverse_iterator(): current() {};
             explicit reverse_iterator( iterator_type x ): current(x) {};
-            template<typename U> reverse_iterator( const reverse_iterator<U>& other ): current(other.base()) { };
+            template<typename U> reverse_iterator( const reverse_iterator<U>& other ): current(other.base()) {};
             // template<typename U> reverse_iterator& operator=( const reverse_iterator<U>& other )
             // {
             //     this->current = other.base();

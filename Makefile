@@ -1,37 +1,42 @@
 NAME = ft_containers
 
-SRCS = main.cpp
+SRCS_VECTOR = mains/main_vector.cpp
+SRCS_STACK = mains/main_stack.cpp
+SRCS_MAP =	mains/main_map.cpp
 
-INCLUDE = iterator.hpp \
-	iterator_traits.hpp \
-	reverse_iterator.hpp \
-	utility.hpp \
-	vector.hpp \
-	stack.hpp \
-	AVL.hpp \
-	map.hpp \
-	map_iterator.hpp \
+INCLUDE = utils/iterator.hpp \
+	utils/iterator_traits.hpp \
+	utils/reverse_iterator.hpp \
+	map/map.hpp \
+	utils/AVL.hpp \
+	stack/stack.hpp \
+	utils/utility.hpp \
+	vector/vector.hpp  \
+	map/map_iterator.hpp \
 
-OBJCS = $(SRCS:.cpp=.o)
+OBJCS_VECTOR = $(SRCS_VECTOR:.cpp=.o)
+OBJCS_STACK = $(SRCS_STACK:.cpp=.o)
+OBJCS_MAP = $(SRCS_MAP:.cpp=.o)
 
 CPP = c++ -std=c++98
 
-RM = /bin/rm -rf
-
 CFLAGS = -Wall -Wextra -Werror
 
-all: $(NAME)
+RM = /bin/rm -rf
 
-${NAME} : ${OBJCS} $(INCLUDE)
-	@ ${CPP} ${CFLAGS} ${SRCS} -o $@
+vector: $(OBJCS_VECTOR) $(INCLUDE)
+	@ ${CPP} ${CFLAGS} ${SRCS_VECTOR} -o $(NAME)
 
-%.o : %.cpp
-	$(CPP) $(CFLAGS) -c $< -o $@
+stack: $(OBJCS_STACK) $(INCLUDE)
+	@ ${CPP} ${CFLAGS} ${SRCS_STACK} -o $(NAME)
+
+map: $(OBJCS_MAP) $(INCLUDE)
+	@ ${CPP} ${CFLAGS} ${SRCS_MAP} -o $(NAME)
 
 clean :
-	@ ${RM} ${OBJCS}
+	@ ${RM} ${OBJCS_VECTOR} $(OBJCS_STACK) $(OBJCS_MAP)
 
 fclean : clean
 	@ ${RM} ${NAME}
 
-re: fclean all
+re: fclean vector stack map

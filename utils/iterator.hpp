@@ -73,10 +73,6 @@ namespace ft
     {
         return rhs + lhs;
     };
-        
-    // template<class It>
-    // random_access_iterator<It>& operator= (const It& rhs) { *it = rhs; return *this; }; // to reconsider
-
     
     /*
     The iterator structure is a base class from which all other iterator types can be derived.

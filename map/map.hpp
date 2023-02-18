@@ -1,13 +1,15 @@
 #ifndef MAP_HPP
-#define MAP_HPP
+# define MAP_HPP
 
-#include "AVL.hpp"
-#include "map_iterator.hpp"
-#include "reverse_iterator.hpp"
-#include "utility.hpp"
-#include "vector.hpp"
-#include <exception>
-#include <iostream>
+# include "map_iterator.hpp"
+# include "../utils/AVL.hpp"
+# include "../utils/reverse_iterator.hpp"
+# include "../utils/utility.hpp"
+# include "../utils/enable_if.hpp"
+# include "../utils/pair.hpp"
+# include "../vector/vector.hpp"
+# include <exception>
+# include <iostream>
 
 namespace ft {
 template <class Key, class T, class Compare = std::less<Key>,
@@ -206,18 +208,6 @@ class map {
 		typename ft::map<Key, T>::iterator it = tmp.begin();
 		for (size_type i = 0; i < tmp.size(); ++i)
 			_tree.deletion((it)++.get_node()->value.first);
-
-		// for (; first != last && first != end(); ++first){
-		// 	// std::cerr << "before bullshiiiiiit "<< _tree.size_tree()  << " begining: " << first.get_node()->value.first<< std::endl;
-		// 	// std::cerr << "and laaast : " << last.get_node()->value.first << std::endl;
-		// 	_tree.deletion(first.get_node()->value.first);
-		// 	// std::cerr << "after bullshiiiiiit "<< _tree.size_tree() << std::endl;
-		// 	}
-		// ft::vector<int> v;
-		// for (; first != last; first++)
-		//     v.push_back(first.get_node()->value.first);
-		// for(ft::vector<int>::iterator it = v .begin(); it < v.end(); it++)
-		//     _tree.deletion(*it);
 	}
 
 	// removes the element (if one exists) with the key equivalent to "key"
@@ -276,7 +266,6 @@ class map {
 					return it;
 			}
 		}
-		// std::cerr << "reach heeere " << key << std::endl;
 		return tmp;
 	}
 
@@ -387,6 +376,5 @@ void swap(ft::map<Key, T, Compare, Alloc> &lhs, ft::map<Key, T, Compare, Alloc> 
 }
 } // namespace ft
 
-#include <map>
 
 #endif

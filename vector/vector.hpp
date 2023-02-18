@@ -13,13 +13,15 @@
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
 
-#include <memory>
-#include <stdexcept>
-#include <algorithm>
-#include "iterator.hpp"
-#include "iterator_traits.hpp"
-#include "reverse_iterator.hpp"
-#include "utility.hpp"
+# include <memory>
+# include <stdexcept>
+# include <algorithm>
+# include "../utils/iterator.hpp"
+# include "../utils/iterator_traits.hpp"
+# include "../utils/reverse_iterator.hpp"
+# include "../utils/utility.hpp"
+# include "../utils/pair.hpp"
+# include "../utils/enable_if.hpp"
 
 namespace ft
 {
@@ -304,10 +306,8 @@ namespace ft
 
         void clear()
         {
-            // _allocator.deallocate(_data, _capacity);
             for (size_t i = 0; i < _size; i++)
                 _allocator.destroy(_data + i);
-            // _data = _allocator.allocate(_capacity);
             _begin = _data;
             _size = 0;
             _end = _data + _size;

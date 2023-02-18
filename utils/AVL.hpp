@@ -2,6 +2,8 @@
 # define AVL_HPP
 
 # include "utility.hpp"
+# include "enable_if.hpp"
+# include "pair.hpp"
 # include <memory>
 # include <functional>
 # include <algorithm>
@@ -117,9 +119,6 @@ namespace ft
             //get the height of a tree root, which is the number of edges between the root and the last leaf
             int height() const
             {
-                // if (root != NULL)
-                //     return root->height;
-                // return 0;
                 if (root == NULL)
                     return 0;
                 return root->height;
@@ -147,11 +146,7 @@ namespace ft
 
             size_t   max_size() const
             {
-                // std::cout << "the size: " << sizeof(T) << " "<< sizeof(root) << std::endl;
-                // if (sizeof(T) >= 8 && sizeof(root) >= 8)
-                    // return std::numeric_limits<ptrdiff_t>::max() / (sizeof(T) + sizeof(root));
                 return std::min<size_t>(_allocator_node.max_size(), _allocator.max_size());
-                // return ((_allocator_node.max_size() / sizeof(root)) + (_allocator.max_size() / sizeof(T)));
             }
 
             //return the value where there is the value
@@ -298,36 +293,6 @@ namespace ft
                 node->height = std::max(right_side_height, left_side_height) + 1;
             }            
 
-            // node_type* right_rotation(node_type* node){
-
-			// 	node_type *new_parent = node->left_child;
-			// 	node->left_child = new_parent->right_child;
-			// 	new_parent->right_child = node;
-			// 	//? update parent
-			// 	new_parent->parent = node->parent;
-			// 	node->parent = new_parent;
-			// 	if (node->left_child != NULL)
-			// 		node->left_child->parent = new_parent->right_child;
-			// 	update_bf_height(node);
-			// 	update_bf_height(new_parent);
-			// 	return (new_parent);
-			// }
-
-			// node_type* left_rotation(node_type* node){
-
-			// 	node_type *new_parent = node->right_child;
-			// 	node->right_child = new_parent->left_child;
-			// 	new_parent->left_child = node;
-			// 	//? update parent
-			// 	new_parent->parent = node->parent;
-			// 	node->parent = new_parent;
-			// 	if (node->right_child != NULL)
-			// 		node->right_child->parent = new_parent->left_child;
-			// 	update_bf_height(node);
-			// 	update_bf_height(new_parent);
-			// 	return (new_parent);
-			// }
-
             //make a right rotation to fix the balance
             node_type* right_rotation(node_type* node)
             {
@@ -461,9 +426,6 @@ namespace ft
                         node_type* parent = node->parent;
                         if (node->left_child->height > node->right_child->height)
                         {
-                        //     // node_type* tmp = node->left_child;
-                        //     // while (tmp->left_child != NULL)
-                        //     //     tmp = tmp->left_child1;
                             T tmp = max(node->left_child);
                             _allocator.destroy(&node->value);
                             _allocator.construct(&node->value, tmp);
@@ -472,9 +434,6 @@ namespace ft
                         }
                         else
                         {
-                            // node_type* tmp = node->right_child;
-                            // while (tmp->right_child != NULL)
-                            //     tmp = tmp->right_child;
                             T tmp = min(node->right_child);
                             _allocator.destroy(&node->value);
                             _allocator.construct(&node->value, tmp);
@@ -493,44 +452,6 @@ namespace ft
                 update_bf_height(node);
                 return balance(node);
             }
-            
-            // node_type* deletion(node_type* node, key_type value)
-            // {
-            //     if (node == NULL)
-            //         return NULL;
-            //     else if (_compare(value, node->value.first))
-            //         node->left_child = deletion(node->left_child, value);
-            //     else if (_compare(value, node->value.first) == false )
-            //         node->right_child = deletion(node->right_child, value);
-            //     else
-            //     {
-            //         if (node->left_child == NULL)
-            //         {
-            //             node_type* temp = node->right_child;
-            //             _allocator.destroy(&(node->value));
-            //             _allocator_node.deallocate(node, 1);
-            //             node = NULL;
-            //             return temp;
-            //         }
-            //         else if (node->right_child == NULL)
-            //         {
-            //             node_type* temp = node->left_child;
-            //             _allocator.destroy(&(node->value));
-            //             _allocator_node.deallocate(node, 1);
-            //             node = NULL;
-            //             return temp;
-            //         }
-            //         else
-            //         {
-            //             T temp = min(node->right_child);
-            //             node->value = temp;
-            //             node->right_child = deletion(node->right_child, temp.first);
-            //         }
-            //     }
-            //     update_bf_height(node);
-            //     balance(node);
-            //     return node;
-            // }
 
     };
 
