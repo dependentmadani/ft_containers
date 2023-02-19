@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main_stack.cpp                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mbadaoui <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/19 14:41:21 by mbadaoui          #+#    #+#             */
+/*   Updated: 2023/02/19 14:41:22 by mbadaoui         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../stack/stack.hpp"       // your stack path.
 #include "../vector/vector.hpp" // your vector path.
 #include "../utils/pair.hpp"  // path to ft::pair.
