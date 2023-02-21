@@ -43,7 +43,7 @@ RM = /bin/rm -rf
 
 all: $(NAME)
 
-all: $(OBJCS) $(INCLUDE)
+$(NAME): $(OBJCS) $(INCLUDE)
 	@ ${CPP} ${CFLAGS} ${SRCS} -o $(NAME)
 
 vector: $(OBJCS_VECTOR) $(INCLUDE)
