@@ -5773,7 +5773,9 @@ void	testRelationalOperators(void)
 int main()
 {
     {
-        std::cout << "----------- vector tests -----------" << std::endl;
+        std::cout << RED << "*************************************************************" << std::endl;
+        std::cout << RED << "*            ----------- vector tests -----------           *" << std::endl;
+        std::cout << RED << "*************************************************************" << std::endl;
         signal(SIGALRM, alarm_handler);
         iterator_tests();
         const_iterator_tests();
@@ -5782,7 +5784,9 @@ int main()
         vector_tests();
     }
     {
-        std::cout << "----------- stack tests -----------" << std::endl;
+        std::cout << RED << "*************************************************************" << std::endl;
+        std::cout << RED << "*            ----------- stack tests -----------            *" << std::endl;
+        std::cout << RED << "*************************************************************" << std::endl;
         signal(SIGALRM, alarm_handler);
 
         std::cout << YELLOW << "Testing Constructors;" << RESET << std::endl;
@@ -5795,7 +5799,9 @@ int main()
         TEST_CASE(testRelationalOperators);
     }
     {
-        std::cout << "----------- map tests -----------" << std::endl;
+        std::cout << RED << "*************************************************************" << std::endl;
+        std::cout << RED << "*            -----------   map  tests -----------           *" << std::endl;
+        std::cout << RED << "*************************************************************" << std::endl;
         signal(SIGALRM, alarm_handler);
 
         std::cout << YELLOW << "Testing Iterators;" << RESET << std::endl;

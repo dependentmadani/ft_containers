@@ -187,9 +187,8 @@ class map {
 
 	// returns a pair consisting of an iterator to the inserted element
 	ft::pair<iterator, bool> insert(const value_type &value) {
-		if (_tree.available_in_tree(value)) {
+		if (_tree.available_in_tree(value)) 
 			return ft::make_pair(iterator(_tree.find_node(value), &_tree), false);
-		}
 		return ft::make_pair(iterator(_tree.insertion(value), &_tree), true);
 	}
 
@@ -387,6 +386,5 @@ void swap(ft::map<Key, T, Compare, Alloc> &lhs, ft::map<Key, T, Compare, Alloc> 
 	lhs.swap(rhs);
 }
 } // namespace ft
-
 
 #endif

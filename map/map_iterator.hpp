@@ -56,7 +56,7 @@ namespace ft
             }
             friend bool operator!= (const Bidirectional_iterator<T, Category, tree_t, node_t>& lhs, const Bidirectional_iterator<T, Category, tree_t, node_t>& rhs)
             {
-                return !(lhs.get_node() == rhs.get_node());
+                return !(lhs.node == rhs.node);
             }
 
             reference operator* () const {return node->value;};

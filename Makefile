@@ -46,13 +46,19 @@ all: $(NAME)
 $(NAME): $(OBJCS) $(INCLUDE)
 	@ ${CPP} ${CFLAGS} ${SRCS} -o $(NAME)
 
-vector: $(OBJCS_VECTOR) $(INCLUDE)
+vector: $(NAME_VECTOR)
+
+$(NAME_VECTOR): $(OBJCS_VECTOR) $(INCLUDE)
 	@ ${CPP} ${CFLAGS} ${SRCS_VECTOR} -o $(NAME_VECTOR)
 
-stack: $(OBJCS_STACK) $(INCLUDE)
+stack: $(NAME_STACK)
+
+$(NAME_STACK): $(OBJCS_STACK) $(INCLUDE)
 	@ ${CPP} ${CFLAGS} ${SRCS_STACK} -o $(NAME_STACK)
 
-map: $(OBJCS_MAP) $(INCLUDE)
+map: $(NAME_MAP)
+
+$(NAME_MAP): $(OBJCS_MAP) $(INCLUDE)
 	@ ${CPP} ${CFLAGS} ${SRCS_MAP} -o $(NAME_MAP)
 
 %.o : %.cpp
