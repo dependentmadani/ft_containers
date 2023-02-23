@@ -212,13 +212,13 @@ class map {
 
 	// removes the elements in range [first, last) which must be a valid range in *this
 	void erase(iterator first, iterator last) {
-		ft::map<Key, T> tmp;
+		ft::vector<value_type> tmp;
 	
 		for (;first != last && first != end(); ++first)
-			tmp.insert(first.get_node()->value);
-		typename ft::map<Key, T>::iterator it = tmp.begin();
+			tmp.push_back(first.get_node()->value);
+		typename ft::vector<value_type>::iterator it = tmp.begin();
 		for (size_type i = 0; i < tmp.size(); ++i)
-			_tree.deletion((it)++.get_node()->value.first);
+			_tree.deletion((*(it)++).first);
 	}
 
 	// removes the element (if one exists) with the key equivalent to "key"

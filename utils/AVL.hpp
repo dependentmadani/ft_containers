@@ -92,7 +92,7 @@ namespace ft
                 if (!available_in_tree(root, value))
                 {
                     root = insertion(root, value);
-                    node_number += 1;
+                    node_number++;
                     return this->find_node(value.first);
                 }
                 return this->find_node(value.first);
@@ -124,14 +124,6 @@ namespace ft
             bool available_in_tree(key_type value) const
             {
                 return available_in_tree(root, value);
-            }
-
-            //get the height of a tree root, which is the number of edges between the root and the last leaf
-            int height() const
-            {
-                if (root == NULL)
-                    return 0;
-                return root->height;
             }
 
             //check if the tree is empty or not
@@ -181,7 +173,7 @@ namespace ft
                 if (available_in_tree(root, value))
                 {
                     root = deletion(root, value);
-                    node_number -= 1;
+                    node_number--;
                     return 1;
                 }
                 return 0;
@@ -216,10 +208,9 @@ namespace ft
                     return false;
                 if (node->value.first == value.first)
                     return true;
-                int check = _compare(value.first, node->value.first);
-                if (check == true)
+                if (_compare(value.first, node->value.first) == true)
                     return available_in_tree(node->left_child, value);
-                if (check == false)
+                if (_compare(value.first, node->value.first) == false)
                     return available_in_tree(node->right_child, value);
                 return true;
             }
@@ -231,10 +222,9 @@ namespace ft
                     return false;
                 if (node->value.first == value)
                     return true;
-                int check = _compare(value, node->value.first);
-                if (check == true)
+                if (_compare(value, node->value.first) == true)
                     return available_in_tree(node->left_child, value);
-                if (check == false)
+                if (_compare(value, node->value.first) == false)
                     return available_in_tree(node->right_child, value);
                 return true;
             }
@@ -243,7 +233,7 @@ namespace ft
             // by the public insertion function.
             node_type* insertion(node_type* node, T value)
             {
-                if (node == NULL)
+                if ( node == NULL )
                 {
                     node = _allocator_node.allocate(1);
                     _allocator.construct(&node->value, value);
@@ -254,8 +244,7 @@ namespace ft
                     node->parent = NULL;
                     return (node);
                 }
-                int checker = _compare(value.first, node->value.first);
-                if (checker == true)
+                if ( _compare(value.first, node->value.first) == true )
                 {
                     node_type* tmp = insertion(node->left_child, value);
                     node->left_child = tmp;
@@ -394,18 +383,27 @@ namespace ft
             {
                 if (node == NULL)
                     return NULL;
-                int checker = _compare(value, node->value.first);
-                if (checker == true)
+                if (_compare(value, node->value.first) == true)
                     node->left_child = deletion(node->left_child, value); // remove node->left_child != NULL if it didnt work
-                else if (checker == false && node->right_child != NULL && node->value.first != value)
+                else if (_compare(value, node->value.first) == false && node->right_child != NULL && node->value.first != value)
                     node->right_child = deletion(node->right_child, value); // check node->value.first != key if it didnt work
                 else
                 {
-                    //the case when there is one child, either left or right child
-                    if ( (node->left_child != NULL && node->right_child == NULL) 
-                        || (node->left_child == NULL && node->right_child != NULL) )
+                    //the two cases when there is one child, either left or right child
+                    if ( (node->left_child != NULL && node->right_child == NULL) )
                     {
-                        node_type* tmp = (node->left_child != NULL) ? node->left_child : node->right_child;
+                        node_type* tmp =node->left_child;
+                        root = tmp;
+                        root->parent = node->parent;
+                        tmp = NULL;
+                        _allocator.destroy(&(node->value));
+                        _allocator_node.deallocate(node, 1);
+                        node = NULL;
+                        return root;
+                    }
+                    else if ( node->left_child == NULL && node->right_child != NULL )
+                    {
+                        node_type* tmp = node->right_child;
                         root = tmp;
                         root->parent = node->parent;
                         tmp = NULL;
@@ -420,22 +418,11 @@ namespace ft
                     else if ( node->left_child != NULL && node->right_child != NULL )
                     {
                         node_type* parent = node->parent;
-                        if (node->left_child->height > node->right_child->height)
-                        {
-                            T tmp = max(node->left_child);
-                            _allocator.destroy(&node->value);
-                            _allocator.construct(&node->value, tmp);
-                            node->parent = parent;
-                            node->left_child = deletion(node->left_child, tmp.first);
-                        }
-                        else
-                        {
-                            T tmp = min(node->right_child);
-                            _allocator.destroy(&node->value);
-                            _allocator.construct(&node->value, tmp);
-                            node->parent = parent;
-                            node->right_child = deletion(node->right_child, tmp.first);
-                        }
+                        T tmp = min(node->right_child);
+                        _allocator.destroy(&node->value);
+                        _allocator.construct(&node->value, tmp);
+                        node->parent = parent;
+                        node->right_child = deletion(node->right_child, tmp.first);
                     }
                     else
                     {
