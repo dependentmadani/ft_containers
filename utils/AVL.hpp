@@ -22,8 +22,6 @@
 
 namespace ft
 {
-    #define SPACE 10
-
     template<class Pair>
     struct AVL
     {
@@ -197,20 +195,6 @@ namespace ft
                 std::swap(root, avl.root);
                 std::swap(node_number, avl.node_number);
             }
-
-            void print2D(node_type* node, int space)
-            {
-                if (node == NULL)
-                  return;
-                space += SPACE;
-                print2D(node->right_child, space);
-                std::cout << std::endl;
-                for (int i = SPACE; i < space; i++)
-                  std::cout << " ";
-                std::cout << node->value.first << std::endl;
-                print2D(node->left_child, space);
-            }
-
 
         private:
 
