@@ -129,7 +129,10 @@ namespace ft
                     _allocator.deallocate(_data, _capacity);
                 _capacity = other.capacity();
                 _size = other.size();
-                _data = _allocator.allocate(_capacity);
+                if (_capacity)
+                    _data = _allocator.allocate(_capacity);
+                else
+                    _data = NULL;
                 _begin = _data;
                 for (size_t i = 0; i < _size; ++i)
                 {
