@@ -67,7 +67,7 @@ namespace ft
         // for all storage management.
         explicit vector(size_type count, const T &value = T(), const Allocator &alloc = Allocator())
         {
-            if (count > max_size())
+            if (count > this->max_size())
                 throw std::length_error("length error");
             _data = NULL;
             _begin = NULL;
@@ -337,8 +337,9 @@ namespace ft
             iterator old_end = this->begin() + old_position;
             pos = this->begin() + position;
             iterator new_end = this->end();
-            while (old_end != pos)
+            while (old_end != pos){
                 *--new_end = *--old_end;
+            }
 
             while (count > 0)
             {
