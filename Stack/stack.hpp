@@ -13,7 +13,7 @@
 #ifndef STACK_HPP
 # define STACK_HPP
 
-# include "../vector/vector.hpp"
+# include "../Vector/vector.hpp"
 
 namespace ft
 {

@@ -13,9 +13,9 @@
 #ifndef MAIN_STACK_HPP
 # define MAIN_STACK_HPP
 
-#include "../stack/stack.hpp"       // your stack path.
-#include "../vector/vector.hpp" // your vector path.
-#include "../utils/pair.hpp"  // path to ft::pair.
+#include "../Stack/stack.hpp"       // your stack path.
+#include "../Vector/vector.hpp" // your vector path.
+#include "../Utils/pair.hpp"  // path to ft::pair.
 
 #include <vector>
 #include <stack>

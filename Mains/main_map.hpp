@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../map/map.hpp"       // your map path.
-#include "../vector/vector.hpp" // your vector path.
-#include "../utils/pair.hpp"  // path to ft::pair.
+#include "../Map/map.hpp"       // your map path.
+#include "../Vector/vector.hpp" // your vector path.
+#include "../Utils/pair.hpp"  // path to ft::pair.
 // #include "map-test-helper.hpp"
 #include <map>
 

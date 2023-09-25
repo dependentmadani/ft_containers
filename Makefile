@@ -15,20 +15,20 @@ NAME_VECTOR = ft_containers_vector
 NAME_STACK = ft_containers_stack
 NAME_MAP = ft_containers_map
 
-SRCS = mains/main.cpp
-SRCS_VECTOR = mains/main_vector.cpp
-SRCS_STACK = mains/main_stack.cpp
-SRCS_MAP =	mains/main_map.cpp
+SRCS = Mains/main.cpp
+SRCS_VECTOR = Mains/main_vector.cpp
+SRCS_STACK = Mains/main_stack.cpp
+SRCS_MAP =	Mains/main_map.cpp
 
-INCLUDE = utils/iterator.hpp \
-	utils/iterator_traits.hpp \
-	utils/reverse_iterator.hpp \
-	map/map.hpp \
-	utils/AVL.hpp \
-	stack/stack.hpp \
-	utils/utility.hpp \
-	vector/vector.hpp  \
-	map/map_iterator.hpp \
+INCLUDE = Utils/iterator.hpp \
+	Utils/iterator_traits.hpp \
+	Utils/reverse_iterator.hpp \
+	Map/map.hpp \
+	Utils/AVL.hpp \
+	Stack/stack.hpp \
+	Utils/utility.hpp \
+	Vector/vector.hpp  \
+	Map/map_iterator.hpp \
 
 OBJCS = $(SRCS:.cpp=.o)
 OBJCS_VECTOR = $(SRCS_VECTOR:.cpp=.o)
